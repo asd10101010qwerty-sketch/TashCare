@@ -461,3 +461,411 @@ regForm.addEventListener('submit', async (e) => {
     submitBtnText.textContent = t.btnSubmit;
   }
 });
+
+// ===================================================================
+// Eco Trash Cleanup Mini-Game & Coin Shop Logic
+// ===================================================================
+
+const COIN_STORAGE_KEY = 'tashcare_coins';
+const STAT_CLEANED_KEY = 'tashcare_cleaned_count';
+const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
+
+// DOM Elements for Routing & Game
+const landingView = document.getElementById('landingView');
+const gameView = document.getElementById('gameView');
+const gameNavBtn = document.getElementById('gameNavBtn');
+const gameMobileNavBtn = document.getElementById('gameMobileNavBtn');
+const brandLogoLink = document.getElementById('brandLogoLink');
+const btnBackHome = document.getElementById('btnBackHome');
+
+// Coin and stats displays
+const gameCoinBalance = document.getElementById('gameCoinBalance');
+const navCoinPill = document.getElementById('navCoinPill');
+const mobileCoinPill = document.getElementById('mobileCoinPill');
+const drawerCoinBadge = document.getElementById('drawerCoinBadge');
+
+const trashCountVal = document.getElementById('trashCountVal');
+const parkCleanVal = document.getElementById('parkCleanVal');
+const cleanlinessVal = document.getElementById('cleanlinessVal');
+const respawnTrashBtn = document.getElementById('respawnTrashBtn');
+const parkArena = document.getElementById('parkArena');
+const trashContainer = document.getElementById('trashContainer');
+
+// Shop & Modal elements
+const shopModal = document.getElementById('shopModal');
+const shopModalTitle = document.getElementById('shopModalTitle');
+const shopModalSubtitle = document.getElementById('shopModalSubtitle');
+const voucherCodeDisplay = document.getElementById('voucherCodeDisplay');
+const copyVoucherBtn = document.getElementById('copyVoucherBtn');
+const copyVoucherTxt = document.getElementById('copyVoucherTxt');
+
+// Trash SVG Icons (Pure SVG - Rule 5 compliant)
+const TRASH_TYPES = [
+  {
+    type: 'plastic-bottle',
+    name: 'Пластиковая бутылка',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 2h4v3h-4z"/>
+      <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
+      <line x1="8" y1="12" x2="16" y2="12"/>
+      <line x1="8" y1="16" x2="16" y2="16"/>
+    </svg>`
+  },
+  {
+    type: 'soda-can',
+    name: 'Жестяная банка',
+    svg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5" rx="6" ry="3"/>
+      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
+      <path d="M6 12c0 1.66 2.69 3 6 3s6-1.34 6-3"/>
+    </svg>`
+  },
+  {
+    type: 'coffee-cup',
+    name: 'Одноразовый стаканчик',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+      <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
+      <line x1="6" y1="2" x2="6" y2="5"/>
+      <line x1="10" y1="2" x2="10" y2="5"/>
+      <line x1="14" y1="2" x2="14" y2="5"/>
+    </svg>`
+  },
+  {
+    type: 'plastic-bag',
+    name: 'Пластиковый пакет',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
+      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
+      <path d="M10 12a2 2 0 0 0 4 0"/>
+    </svg>`
+  },
+  {
+    type: 'glass-bottle',
+    name: 'Стеклянная бутылка',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
+      <line x1="11" y1="13" x2="13" y2="13"/>
+    </svg>`
+  },
+  {
+    type: 'snack-wrapper',
+    name: 'Фантик от конфет',
+    svg: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
+    </svg>`
+  }
+];
+
+// Web Audio API Synthesizer for collect chime
+let audioCtx = null;
+function playCollectChime() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) {
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    // Friendly rising chime (587Hz D5 -> 880Hz A5)
+    osc.frequency.setValueAtTime(587.33, now);
+    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.12);
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.32);
+  } catch (e) {
+    // Audio context may be restricted by autoplay policy until gesture
+  }
+}
+
+// Coins state helpers
+function getStoredCoins() {
+  const val = parseInt(localStorage.getItem(COIN_STORAGE_KEY), 10);
+  return isNaN(val) ? 0 : Math.max(0, val);
+}
+
+function getCleanedCount() {
+  const val = parseInt(localStorage.getItem(STAT_CLEANED_KEY), 10);
+  return isNaN(val) ? 0 : Math.max(0, val);
+}
+
+function updateCoinDisplays() {
+  const coins = getStoredCoins();
+  const cleaned = getCleanedCount();
+
+  if (gameCoinBalance) gameCoinBalance.textContent = coins.toLocaleString();
+  if (navCoinPill) navCoinPill.textContent = `${coins} 🪙`;
+  if (mobileCoinPill) mobileCoinPill.textContent = coins;
+  if (drawerCoinBadge) drawerCoinBadge.textContent = `${coins} 🪙`;
+  if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
+}
+
+function addCoins(amount = 1) {
+  const current = getStoredCoins();
+  const next = current + amount;
+  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
+
+  const cleaned = getCleanedCount() + amount;
+  localStorage.setItem(STAT_CLEANED_KEY, cleaned.toString());
+
+  updateCoinDisplays();
+  updateCleanlinessProgress();
+}
+
+function spendCoins(amount) {
+  const current = getStoredCoins();
+  if (current < amount) return false;
+  const next = current - amount;
+  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
+  updateCoinDisplays();
+  return true;
+}
+
+// Router between Landing Page and Mini-Game View
+function switchView(target) {
+  const isGame = target === 'game' || window.location.hash === '#game';
+
+  if (isGame) {
+    if (landingView) landingView.style.display = 'none';
+    if (gameView) {
+      gameView.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (gameNavBtn) gameNavBtn.classList.add('active');
+
+    // Ensure initial trash is on the field
+    if (trashContainer && trashContainer.children.length === 0) {
+      spawnInitialTrash(8);
+    }
+  } else {
+    if (gameView) gameView.style.display = 'none';
+    if (landingView) landingView.style.display = 'block';
+    if (gameNavBtn) gameNavBtn.classList.remove('active');
+  }
+
+  // Close mobile drawer on navigation
+  if (typeof closeDrawer === 'function') {
+    closeDrawer();
+  }
+}
+
+window.addEventListener('hashchange', () => {
+  switchView(window.location.hash === '#game' ? 'game' : 'landing');
+});
+
+// Home links
+if (brandLogoLink) {
+  brandLogoLink.addEventListener('click', (e) => {
+    if (window.location.hash === '#game') {
+      e.preventDefault();
+      window.location.hash = '';
+      switchView('landing');
+    }
+  });
+}
+
+if (btnBackHome) {
+  btnBackHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.hash = '';
+    switchView('landing');
+  });
+}
+
+// Park Trash Game Mechanics
+function updateCleanlinessProgress() {
+  const cleaned = getCleanedCount();
+  const pct = Math.min(100, Math.round((cleaned / (cleaned + 10)) * 100));
+  if (cleanlinessVal) cleanlinessVal.textContent = `${pct}%`;
+  if (trashCountVal && trashContainer) {
+    trashCountVal.textContent = trashContainer.children.length;
+  }
+}
+
+function spawnTrashItem() {
+  if (!trashContainer) return;
+
+  const itemData = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
+  const itemEl = document.createElement('div');
+  itemEl.className = 'trash-item';
+  itemEl.setAttribute('role', 'button');
+  itemEl.setAttribute('tabindex', '0');
+  itemEl.setAttribute('title', `Убрать: ${itemData.name} (+1 TashCoin)`);
+  itemEl.innerHTML = itemData.svg;
+
+  // Random position within safe arena bounds
+  // (Left between 8% and 82%, Top between 14% and 74%)
+  const left = Math.floor(8 + Math.random() * 74);
+  const top = Math.floor(14 + Math.random() * 60);
+  const rotation = Math.floor(-35 + Math.random() * 70);
+
+  itemEl.style.left = `${left}%`;
+  itemEl.style.top = `${top}%`;
+  itemEl.style.transform = `rotate(${rotation}deg)`;
+
+  const onCollect = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (itemEl.classList.contains('collected')) return;
+    itemEl.classList.add('collected');
+
+    // Play chime sound
+    playCollectChime();
+
+    // Spawn floating +1 indicator
+    const rect = itemEl.getBoundingClientRect();
+    const arenaRect = parkArena.getBoundingClientRect();
+    const floatEl = document.createElement('div');
+    floatEl.className = 'floating-coin-plus';
+    floatEl.textContent = '+1 🪙';
+    floatEl.style.left = `${rect.left - arenaRect.left + 12}px`;
+    floatEl.style.top = `${rect.top - arenaRect.top - 6}px`;
+    parkArena.appendChild(floatEl);
+
+    setTimeout(() => {
+      if (floatEl.parentNode) floatEl.remove();
+    }, 800);
+
+    // Add +1 coin
+    addCoins(1);
+
+    // Remove trash item from DOM after pop animation
+    setTimeout(() => {
+      if (itemEl.parentNode) itemEl.remove();
+      updateCleanlinessProgress();
+
+      // Automatically spawn a new piece of trash after a short delay
+      setTimeout(() => {
+        if (trashContainer && trashContainer.children.length < 12) {
+          spawnTrashItem();
+        }
+      }, 1400);
+    }, 320);
+  };
+
+  itemEl.addEventListener('click', onCollect);
+  itemEl.addEventListener('touchstart', onCollect, { passive: false });
+  itemEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      onCollect(e);
+    }
+  });
+
+  trashContainer.appendChild(itemEl);
+  updateCleanlinessProgress();
+}
+
+function spawnInitialTrash(count = 8) {
+  if (!trashContainer) return;
+  trashContainer.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    spawnTrashItem();
+  }
+}
+
+if (respawnTrashBtn) {
+  respawnTrashBtn.addEventListener('click', () => {
+    spawnInitialTrash(8);
+  });
+}
+
+// Coin Shop Handlers
+window.handleShopBuy = function(itemId, price, title) {
+  const currentCoins = getStoredCoins();
+
+  if (currentCoins < price) {
+    const diff = price - currentCoins;
+    alert(`Вам не хватает ${diff} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
+    return;
+  }
+
+  // Deduct coins
+  const success = spendCoins(price);
+  if (!success) return;
+
+  // Generate unique redemption promo voucher
+  const randA = Math.floor(1000 + Math.random() * 9000);
+  const randB = Math.floor(1000 + Math.random() * 9000);
+  const voucherCode = `TC-${randA}-${randB}`;
+
+  // Save order to history
+  try {
+    const orders = JSON.parse(localStorage.getItem(ORDERS_STORAGE_KEY) || '[]');
+    orders.push({
+      id: itemId,
+      title,
+      price,
+      code: voucherCode,
+      date: new Date().toISOString()
+    });
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  } catch (err) {
+    console.error('Order save error:', err);
+  }
+
+  // Show modal
+  if (shopModalTitle) shopModalTitle.textContent = `Вы обменяли: ${title}`;
+  if (shopModalSubtitle) shopModalSubtitle.textContent = `С вашего баланса успешно списано ${price} TashCoin.`;
+  if (voucherCodeDisplay) voucherCodeDisplay.textContent = voucherCode;
+
+  if (shopModal) {
+    shopModal.style.display = 'flex';
+    shopModal.setAttribute('aria-hidden', 'false');
+  }
+};
+
+window.closeShopModal = function() {
+  if (shopModal) {
+    shopModal.style.display = 'none';
+    shopModal.setAttribute('aria-hidden', 'true');
+  }
+};
+
+window.copyVoucherCode = function() {
+  if (!voucherCodeDisplay) return;
+  const text = voucherCodeDisplay.textContent.trim();
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (copyVoucherTxt) copyVoucherTxt.textContent = 'Скопировано!';
+      setTimeout(() => {
+        if (copyVoucherTxt) copyVoucherTxt.textContent = 'Копировать';
+      }, 2000);
+    });
+  } else {
+    // Fallback
+    const input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    input.remove();
+    if (copyVoucherTxt) copyVoucherTxt.textContent = 'Скопировано!';
+    setTimeout(() => {
+      if (copyVoucherTxt) copyVoucherTxt.textContent = 'Копировать';
+    }, 2000);
+  }
+};
+
+// Initialize coins and router on load
+updateCoinDisplays();
+updateCleanlinessProgress();
+
+if (window.location.hash === '#game') {
+  switchView('game');
+}
