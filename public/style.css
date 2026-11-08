@@ -1443,16 +1443,15 @@ footer {
   to { transform: rotate(360deg); }
 }
 
-/* Scroll reveal classes */
+/* Scroll reveal classes - Always visible by default for 100% reliable content rendering */
 .reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .reveal-on-scroll.revealed {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* Ensure Hero section is immediately visible on initial page load */
@@ -1869,10 +1868,14 @@ footer {
    Eco Trash Cleanup Mini-Game & Coin Shop Styles
    =================================================================== */
 
-.game-view {
-  min-height: calc(100vh - 80px);
+.game-view,
+.game-section {
+  min-height: auto;
+  padding-top: 3.5rem;
   padding-bottom: 5rem;
-  animation: fadeIn 0.3s ease;
+  border-top: 1px solid var(--border-color);
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 150, 105, 0.04) 100%);
+  position: relative;
 }
 
 @keyframes fadeIn {

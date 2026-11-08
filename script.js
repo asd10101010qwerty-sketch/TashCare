@@ -73,7 +73,7 @@ const TRANSLATIONS = {
 
     // Eco Game & Shop Translations
     gameNavLabel: 'Игра',
-    btnBackHome: 'На главную',
+    btnBackHome: 'Наверх к сообществу',
     gameBalanceLabel: 'Баланс:',
     gameBadge: 'Эко-игра TashCare • Сортируй мусор',
     gameTitle: 'Убери мусор — сохрани парки Ташкента!',
@@ -193,7 +193,7 @@ const TRANSLATIONS = {
 
     // Eco Game & Shop Translations
     gameNavLabel: 'Game',
-    btnBackHome: 'Back to Home',
+    btnBackHome: 'Back to Community',
     gameBalanceLabel: 'Balance:',
     gameBadge: 'TashCare Eco-Game • Sort Trash',
     gameTitle: 'Clean Up Tashkent Parks & Earn Coins!',
@@ -313,7 +313,7 @@ const TRANSLATIONS = {
 
     // Eco Game & Shop Translations
     gameNavLabel: 'O\'yin',
-    btnBackHome: 'Bosh sahifaga',
+    btnBackHome: 'Tepaga / Jamiyatga',
     gameBalanceLabel: 'Balans:',
     gameBadge: 'TashCare Eko-o\'yini • Chiqindilarni saralash',
     gameTitle: 'Chiqindilarni tozalang va parklarni asrang!',
@@ -685,9 +685,10 @@ const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
 
 // DOM Elements for Routing & Game
 const landingView = document.getElementById('landingView');
-const gameView = document.getElementById('gameView');
+const gameView = document.getElementById('game') || document.getElementById('gameView');
 const gameNavBtn = document.getElementById('gameNavBtn');
 const gameMobileNavBtn = document.getElementById('gameMobileNavBtn');
+const drawerGameLink = document.getElementById('drawerGameLink');
 const brandLogoLink = document.getElementById('brandLogoLink');
 const btnBackHome = document.getElementById('btnBackHome');
 
@@ -947,56 +948,76 @@ function spendCoins(amount) {
   return true;
 }
 
-// Router between Landing Page and Mini-Game View
-function switchView(target) {
-  const isGame = target === 'game' || window.location.hash === '#game';
-
-  if (isGame) {
-    if (landingView) landingView.style.display = 'none';
-    if (gameView) {
-      gameView.style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+// Router between Landing Page and Mini-Game View (smooth scroll without hiding main website)
+function scrollToGame() {
+  const gameElem = document.getElementById('game') || document.getElementById('gameView');
+  if (gameElem) {
+    if (gameElem.style.display === 'none') {
+      gameElem.style.display = 'block';
     }
-    if (gameNavBtn) gameNavBtn.classList.add('active');
-
-    // Ensure initial trash is on the field
-    if (trashContainer && trashContainer.children.length === 0) {
-      spawnInitialTrash(8);
-    }
-  } else {
-    if (gameView) gameView.style.display = 'none';
-    if (landingView) landingView.style.display = 'block';
-    if (gameNavBtn) gameNavBtn.classList.remove('active');
+    gameElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
-  // Close mobile drawer on navigation
+  if (gameNavBtn) gameNavBtn.classList.add('active');
+  if (trashContainer && trashContainer.children.length === 0) {
+    spawnInitialTrash(8);
+  }
   if (typeof closeDrawer === 'function') {
     closeDrawer();
   }
 }
 
+function scrollToHome() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (gameNavBtn) gameNavBtn.classList.remove('active');
+  if (typeof closeDrawer === 'function') {
+    closeDrawer();
+  }
+}
+
+function switchView(target) {
+  const isGame = target === 'game' || window.location.hash === '#game';
+  if (isGame) {
+    scrollToGame();
+  } else {
+    scrollToHome();
+  }
+}
+
 window.addEventListener('hashchange', () => {
-  switchView(window.location.hash === '#game' ? 'game' : 'landing');
+  if (window.location.hash === '#game') {
+    scrollToGame();
+  } else {
+    scrollToHome();
+  }
 });
 
 // Home links
 if (brandLogoLink) {
   brandLogoLink.addEventListener('click', (e) => {
-    if (window.location.hash === '#game') {
-      e.preventDefault();
-      window.location.hash = '';
-      switchView('landing');
-    }
+    e.preventDefault();
+    history.pushState(null, '', window.location.pathname);
+    scrollToHome();
   });
 }
 
 if (btnBackHome) {
   btnBackHome.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.hash = '';
-    switchView('landing');
+    history.pushState(null, '', window.location.pathname);
+    scrollToHome();
   });
 }
+
+// Game navigation buttons
+[gameNavBtn, gameMobileNavBtn, drawerGameLink].forEach(btn => {
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      history.pushState(null, '', '#game');
+      scrollToGame();
+    });
+  }
+});
 
 // Park Trash Game Mechanics
 function updateCleanlinessProgress() {
@@ -1358,10 +1379,16 @@ window.copyVoucherCode = function() {
   }
 };
 
-// Initialize coins and router on load
+// Initialize coins, trash arena and router on load
 updateCoinDisplays();
 updateCleanlinessProgress();
 
+if (trashContainer && trashContainer.children.length === 0) {
+  spawnInitialTrash(8);
+}
+
 if (window.location.hash === '#game') {
-  switchView('game');
+  setTimeout(() => {
+    scrollToGame();
+  }, 150);
 }
