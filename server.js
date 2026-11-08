@@ -15,6 +15,7 @@ const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '6712132603';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'waEnoi2-cBzL!9z';
 const NORMAL_BOT_TOKEN = process.env.NORMAL_BOT_TOKEN || '9245077944:AAHOOk-iOIpqeSh1Zo4a5Op3WVoeK9vO9C0';
 const TASHCARE_CHANNEL = process.env.TASHCARE_CHANNEL || 'https://t.me/tashcareuz';
+const INSTAGRAM_URL = process.env.INSTAGRAM_URL || 'https://instagram.com/ecotash_official';
 
 // Initialize Express App
 const app = express();
@@ -33,7 +34,7 @@ let normalBotInstance;
 let adminBotInstance;
 
 try {
-  normalBotInstance = createNormalBot(NORMAL_BOT_TOKEN, TASHCARE_CHANNEL);
+  normalBotInstance = createNormalBot(NORMAL_BOT_TOKEN, TASHCARE_CHANNEL, INSTAGRAM_URL);
   adminBotInstance = createAdminBot(
     ADMIN_BOT_TOKEN,
     ADMIN_CHAT_ID,
@@ -171,6 +172,7 @@ app.get('/api/info', async (req, res) => {
       status: 'ok',
       community: 'TashCare',
       channelUrl: TASHCARE_CHANNEL,
+      instagramUrl: INSTAGRAM_URL,
       bio: 'Добро пожаловать в наше волонтерское сообщество! Здесь мы объединяем людей, которые хотят делать добрые дела, помогать окружающим и менять мир к лучшему.',
       initiatives: [
         'Экологические проекты и высадка деревьев совместно с «Yashil Makon»',

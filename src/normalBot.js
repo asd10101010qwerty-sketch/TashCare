@@ -1,7 +1,7 @@
 const { Telegraf } = require('telegraf');
 const storage = require('./storage');
 
-function createNormalBot(token, channelUrl = 'https://t.me/tashcareuz') {
+function createNormalBot(token, channelUrl = 'https://t.me/tashcareuz', instagramUrl = 'https://instagram.com/ecotash_official') {
   if (!token) {
     throw new Error('Normal Bot token is required.');
   }
@@ -27,20 +27,25 @@ function createNormalBot(token, channelUrl = 'https://t.me/tashcareuz') {
 Добро пожаловать в официальный бот волонтерского сообщества TashCare.
 
 Здесь мы делимся новостями и анонсами волонтерских инициатив в Ташкенте:
-• Экологические проекты и высадка деревьев совместно с «Yashil Makon»
 • Помощь приютам для бездомных животных (приют «Второй Шанс»)
-• Социальные акции, адресная помощь и забота о городе
+• Молодежные эко-акции и забота о городе
 • Поддержка для школьников и студентов: выдача официальных справок за участие в мероприятиях
 
-Официальный Telegram-канал сообщества:
+Официальный Telegram-канал:
 ${channelUrl}
+
+Официальный Instagram:
+${instagramUrl}
 
 Введите /help, чтобы просмотреть список доступных команд.`;
 
       await ctx.reply(welcomeText, {
         reply_markup: {
           inline_keyboard: [
-            [{ text: 'Подписаться на канал TashCare', url: channelUrl }]
+            [
+              { text: 'Канал TashCare', url: channelUrl },
+              { text: 'Instagram @ecotash_official', url: instagramUrl }
+            ]
           ]
         }
       });
@@ -60,7 +65,8 @@ ${channelUrl}
 /contacts - Контакты координаторов
 /help - Справка
 
-Официальный канал: ${channelUrl}`;
+Официальный канал: ${channelUrl}
+Instagram: ${instagramUrl}`;
       await ctx.reply(helpText);
     } catch (err) {
       console.error('Error handling /help in Normal Bot:', err.message);
@@ -74,13 +80,12 @@ ${channelUrl}
 `О сообществе TashCare:
 
 Наша миссия:
-Объединять жителей Ташкента вокруг экологических, социальных и благотворительных инициатив.
+Объединять жителей Ташкента вокруг экологических и благотворительных инициатив.
 
 Ключевые направления:
-1. Эко-клуб и проект «Yashil Makon» - посадка деревьев, уборка парков и озеленение города.
-2. Помощь животным - поддержка приютов («Второй Шанс»), закупка кормов и уход.
-3. Социальная помощь - адресная поддержка нуждающихся семей и пожилых людей.
-4. Молодежные инициативы - совместные мероприятия и волонтерские тренинги.
+1. Помощь животным - поддержка приютов («Второй Шанс»), закупка кормов и уход.
+2. Эко-инициативы - озеленение столичных парков и забота об экологии города.
+3. Молодежные инициативы - совместные волонтерские тренинги и мероприятия.
 
 Для школьников и студентов:
 Предоставляются официальные справки об участии в волонтерских мероприятиях для школы или университета.`;
@@ -88,7 +93,10 @@ ${channelUrl}
       await ctx.reply(aboutText, {
         reply_markup: {
           inline_keyboard: [
-            [{ text: 'Перейти в канал TashCare', url: channelUrl }]
+            [
+              { text: 'Канал TashCare', url: channelUrl },
+              { text: 'Instagram @ecotash_official', url: instagramUrl }
+            ]
           ]
         }
       });
@@ -104,8 +112,18 @@ ${channelUrl}
 `Контакты сообщества TashCare:
 
 Официальный Telegram-канал: ${channelUrl}
+Instagram: ${instagramUrl}
 Координатор регистрации: @Amisha_SSlando (Амирбек)`;
-      await ctx.reply(contactsText);
+      await ctx.reply(contactsText, {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: 'Канал TashCare', url: channelUrl },
+              { text: 'Instagram @ecotash_official', url: instagramUrl }
+            ]
+          ]
+        }
+      });
     } catch (err) {
       console.error('Error handling /contacts in Normal Bot:', err.message);
     }
