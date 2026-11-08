@@ -128,7 +128,15 @@ const TRANSLATIONS = {
     modalSuccessTitle: 'Награда успешно оформлена!',
     modalSuccessDesc: 'Вы обменяли коины на',
     modalContactDesc: 'Для получения награды покажите этот код нашему координатору <strong>@Amisha_SSlando</strong> в Telegram для согласования получения приза в Ташкенте.',
-    modalCloseBtn: 'Понятно, закрыть'
+    modalCloseBtn: 'Понятно, закрыть',
+    modalScreenshotHeading: 'Теперь заскриньте и киньте @Amisha_SSlando',
+    modalScreenshotSub: 'Сделайте скриншот этого окна и скиньте нашему координатору @Amisha_SSlando в Telegram для получения приза.',
+    modalItemLabel: 'Товар / Награда:',
+    modalCoordLabel: 'Координатор:',
+    modalUserLabel: 'Ваш Telegram:',
+    modalStatusLabel: 'Статус:',
+    modalStatusPending: 'Ожидает выдачи',
+    modalBtnSend: 'Кинуть @Amisha_SSlando'
   },
   en: {
     heroBadge: 'Official Volunteering Community • Tashkent',
@@ -248,7 +256,15 @@ const TRANSLATIONS = {
     modalSuccessTitle: 'Reward Claimed Successfully!',
     modalSuccessDesc: 'You have exchanged coins for',
     modalContactDesc: 'To claim your reward, show this code to our coordinator <strong>@Amisha_SSlando</strong> on Telegram to arrange pickup in Tashkent.',
-    modalCloseBtn: 'Got it, close'
+    modalCloseBtn: 'Got it, close',
+    modalScreenshotHeading: 'Now take a screenshot and send to @Amisha_SSlando',
+    modalScreenshotSub: 'Take a screenshot of this window and send it to coordinator @Amisha_SSlando on Telegram to claim your prize.',
+    modalItemLabel: 'Item / Reward:',
+    modalCoordLabel: 'Coordinator:',
+    modalUserLabel: 'Your Telegram:',
+    modalStatusLabel: 'Status:',
+    modalStatusPending: 'Pending claim',
+    modalBtnSend: 'Send to @Amisha_SSlando'
   },
   uz: {
     heroBadge: 'Rasmiy ko\'ngillilar jamoasi • Toshkent',
@@ -368,7 +384,15 @@ const TRANSLATIONS = {
     modalSuccessTitle: 'Sovrin muvaffaqiyatli rasmiylashtirildi!',
     modalSuccessDesc: 'Siz tangalaringizni quyidagiga almashtirdingiz:',
     modalContactDesc: 'Sovrinni olish uchun ushbu kodni Telegram orqali koordinatormiz <strong>@Amisha_SSlando</strong> ga yuboring.',
-    modalCloseBtn: 'Tushunarli, yopish'
+    modalCloseBtn: 'Tushunarli, yopish',
+    modalScreenshotHeading: 'Endi skrinshot qiling va @Amisha_SSlando ga tashlang',
+    modalScreenshotSub: 'Ushbu oynani skrinshot qiling va sovg\'ani olish uchun koordinator @Amisha_SSlando ga yuboring.',
+    modalItemLabel: 'Sovrin:',
+    modalCoordLabel: 'Koordinator:',
+    modalUserLabel: 'Sizning Telegramingiz:',
+    modalStatusLabel: 'Holat:',
+    modalStatusPending: 'Berilishi kutilmoqda',
+    modalBtnSend: '@Amisha_SSlando ga tashlash'
   }
 };
 
@@ -909,6 +933,7 @@ regForm.addEventListener('submit', async (e) => {
 
     if (response.ok && data.success) {
       usernameInput.value = '';
+      localStorage.setItem('tashcare_registered_user', cleanUsername);
       // Display required clear success message in the selected language
       showAlert('success', t.successMessage, true);
     } else {
@@ -1315,7 +1340,9 @@ window.handleShopBuy = function(itemId, price, title) {
 
   // Save order to history
   try {
-    const orders = JSON.parse(localStorage.getItem(ORDERS_STORAGE_KEY) || '[]');
+    let orders = [];
+    const parsed = JSON.parse(localStorage.getItem(ORDERS_STORAGE_KEY) || '[]');
+    if (Array.isArray(parsed)) orders = parsed;
     orders.push({
       id: itemId,
       title,
@@ -1338,6 +1365,43 @@ window.handleShopBuy = function(itemId, price, title) {
     shopModalSubtitle.textContent = sub;
   }
   if (voucherCodeDisplay) voucherCodeDisplay.textContent = voucherCode;
+
+  // Set item title and details in modal
+  const modalItemVal = document.getElementById('modalItemVal');
+  if (modalItemVal) modalItemVal.textContent = title;
+
+  // Retrieve user's registered username from localStorage or input
+  const storedUser = localStorage.getItem('tashcare_registered_user') || (usernameInput ? usernameInput.value.trim().replace(/^@/, '') : '');
+  const modalUserVal = document.getElementById('modalUserVal');
+  if (modalUserVal) {
+    modalUserVal.textContent = storedUser ? `@${storedUser}` : (currentLang === 'en' ? '(Not specified)' : (currentLang === 'uz' ? '(Ko\'rsatilmagan)' : '(Не указан)'));
+  }
+
+  // Localize modal text
+  const t = TRANSLATIONS[currentLang];
+  const modalScreenshotHeading = document.getElementById('modalScreenshotHeading');
+  if (modalScreenshotHeading && t.modalScreenshotHeading) modalScreenshotHeading.textContent = t.modalScreenshotHeading;
+
+  const modalScreenshotSub = document.getElementById('modalScreenshotSub');
+  if (modalScreenshotSub && t.modalScreenshotSub) modalScreenshotSub.textContent = t.modalScreenshotSub;
+
+  const modalItemLabel = document.getElementById('modalItemLabel');
+  if (modalItemLabel && t.modalItemLabel) modalItemLabel.textContent = t.modalItemLabel;
+
+  const modalCoordLabel = document.getElementById('modalCoordLabel');
+  if (modalCoordLabel && t.modalCoordLabel) modalCoordLabel.textContent = t.modalCoordLabel;
+
+  const modalUserLabel = document.getElementById('modalUserLabel');
+  if (modalUserLabel && t.modalUserLabel) modalUserLabel.textContent = t.modalUserLabel;
+
+  const modalStatusLabel = document.getElementById('modalStatusLabel');
+  if (modalStatusLabel && t.modalStatusLabel) modalStatusLabel.textContent = t.modalStatusLabel;
+
+  const modalStatusVal = document.getElementById('modalStatusVal');
+  if (modalStatusVal && t.modalStatusPending) modalStatusVal.textContent = t.modalStatusPending;
+
+  const btnModalTgText = document.getElementById('btnModalTgText');
+  if (btnModalTgText && t.modalBtnSend) btnModalTgText.textContent = t.modalBtnSend;
 
   if (shopModal) {
     shopModal.style.display = 'flex';

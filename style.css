@@ -2820,7 +2820,89 @@ footer {
 .modal-subtitle {
   font-size: 0.95rem;
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Prominent Screenshot Notice Callout */
+.screenshot-prompt-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(16, 185, 129, 0.14));
+  border: 2px dashed #f59e0b;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.15rem;
+  text-align: left;
+}
+
+.screenshot-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+.screenshot-text-content {
+  flex: 1;
+}
+
+.screenshot-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+  line-height: 1.25;
+}
+
+.screenshot-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.voucher-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.15rem;
+  text-align: left;
+}
+
+.voucher-detail-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.voucher-detail-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.voucher-detail-val {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.voucher-detail-val.accent {
+  color: var(--accent);
 }
 
 .voucher-box {
@@ -2998,5 +3080,17 @@ footer {
   .trash-item {
     width: 48px;
     height: 48px;
+  }
+
+  .screenshot-prompt-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.65rem;
+    padding: 0.85rem;
+  }
+
+  .voucher-details-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 }
