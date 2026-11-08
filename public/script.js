@@ -201,6 +201,7 @@ let currentTheme = localStorage.getItem('tashcare_theme') || 'light';
 
 // DOM Elements
 const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeToggleMobileBtn = document.getElementById('themeToggleMobileBtn');
 const langSelect = document.getElementById('langSelect');
 const regForm = document.getElementById('regForm');
 const usernameInput = document.getElementById('usernameInput');
@@ -211,19 +212,31 @@ const alertIcon = document.getElementById('alertIcon');
 const alertMessage = document.getElementById('alertMessage');
 const alertAction = document.getElementById('alertAction');
 
+// Mobile Drawer Elements
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileDrawer = document.getElementById('mobileDrawer');
+const drawerBackdrop = document.getElementById('drawerBackdrop');
+const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+const drawerRegLink = document.getElementById('drawerRegLink');
+const drawerLangBtns = document.querySelectorAll('.drawer-lang-btn');
+
 // --- THEME MANAGEMENT ---
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('tashcare_theme', theme);
   currentTheme = theme;
-  if (theme === 'dark') {
-    themeToggleBtn.innerHTML = ICONS.sun;
-    themeToggleBtn.setAttribute('title', 'Switch to Light Mode');
-    themeToggleBtn.setAttribute('aria-label', 'Switch to Light Mode');
-  } else {
-    themeToggleBtn.innerHTML = ICONS.moon;
-    themeToggleBtn.setAttribute('title', 'Switch to Dark Mode');
-    themeToggleBtn.setAttribute('aria-label', 'Switch to Dark Mode');
+  const icon = theme === 'dark' ? ICONS.sun : ICONS.moon;
+  const title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+  if (themeToggleBtn) {
+    themeToggleBtn.innerHTML = icon;
+    themeToggleBtn.setAttribute('title', title);
+    themeToggleBtn.setAttribute('aria-label', title);
+  }
+  if (themeToggleMobileBtn) {
+    themeToggleMobileBtn.innerHTML = icon;
+    themeToggleMobileBtn.setAttribute('title', title);
+    themeToggleMobileBtn.setAttribute('aria-label', title);
   }
 }
 
@@ -240,14 +253,66 @@ if (!localStorage.getItem('tashcare_theme')) {
   applyTheme(currentTheme);
 }
 
-themeToggleBtn.addEventListener('click', toggleTheme);
+if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+if (themeToggleMobileBtn) themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+// --- MOBILE DRAWER MANAGEMENT ---
+function openDrawer() {
+  if (!mobileDrawer) return;
+  mobileDrawer.classList.add('open');
+  mobileDrawer.setAttribute('aria-hidden', 'false');
+  if (hamburgerBtn) {
+    hamburgerBtn.classList.add('active');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+  }
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  if (!mobileDrawer) return;
+  mobileDrawer.classList.remove('open');
+  mobileDrawer.setAttribute('aria-hidden', 'true');
+  if (hamburgerBtn) {
+    hamburgerBtn.classList.remove('active');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+  }
+  document.body.style.overflow = '';
+}
+
+if (hamburgerBtn) {
+  hamburgerBtn.addEventListener('click', () => {
+    if (mobileDrawer.classList.contains('open')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
+}
+
+if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+
+if (drawerRegLink) {
+  drawerRegLink.addEventListener('click', () => {
+    closeDrawer();
+  });
+}
 
 // --- MULTI-LANGUAGE MANAGEMENT ---
 function updateLanguage(lang) {
   if (!TRANSLATIONS[lang]) lang = 'ru';
   currentLang = lang;
   localStorage.setItem('tashcare_lang', lang);
-  langSelect.value = lang;
+  if (langSelect) langSelect.value = lang;
+
+  // Sync drawer buttons active state
+  drawerLangBtns.forEach(btn => {
+    if (btn.getAttribute('data-lang') === lang) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
 
   const t = TRANSLATIONS[lang];
 
@@ -268,19 +333,33 @@ function updateLanguage(lang) {
   });
 
   // Update active alert message if present
-  if (alertBox.style.display !== 'none' && alertBox.classList.contains('alert-success')) {
+  if (alertBox && alertBox.style.display !== 'none' && alertBox.classList.contains('alert-success')) {
     alertMessage.textContent = t.successMessage;
   }
 }
 
-langSelect.addEventListener('change', (e) => {
-  updateLanguage(e.target.value);
+if (langSelect) {
+  langSelect.addEventListener('change', (e) => {
+    updateLanguage(e.target.value);
+  });
+}
+
+drawerLangBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.getAttribute('data-lang');
+    updateLanguage(lang);
+  });
 });
 
 // Initialize Language
 updateLanguage(currentLang);
 
 // --- SCROLL REVEAL OBSERVER ---
+// Immediately reveal hero elements so they are never blank
+document.querySelectorAll('.hero .reveal-on-scroll').forEach(el => {
+  el.classList.add('revealed');
+});
+
 const revealObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -289,11 +368,11 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
     }
   });
 }, {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
+  threshold: 0.08,
+  rootMargin: '0px 0px -20px 0px'
 });
 
-document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+document.querySelectorAll('.reveal-on-scroll:not(.revealed)').forEach((el) => {
   revealObserver.observe(el);
 });
 
