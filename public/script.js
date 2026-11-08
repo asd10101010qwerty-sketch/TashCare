@@ -69,7 +69,66 @@ const TRANSLATIONS = {
     bannerSubtitle: 'Официальные анонсы выездов, фотоотчеты, опросы и теплая атмосфера единомышленников.',
     bannerBtn: 'Открыть канал @tashcareuz',
     navChannel: 'Telegram Канал',
-    footerRights: 'Все права защищены.'
+    footerRights: 'Все права защищены.',
+
+    // Eco Game & Shop Translations
+    gameNavLabel: 'Игра',
+    btnBackHome: 'На главную',
+    gameBalanceLabel: 'Баланс:',
+    gameBadge: 'Эко-игра TashCare • Сортируй мусор',
+    gameTitle: 'Убери мусор — сохрани парки Ташкента!',
+    gameSubtitle: 'Зажимай и перетаскивай мусор с поляны прямо в подходящий ящик внизу. За каждый утилизированный предмет ты получаешь <strong>+1 TashCoin</strong>. Трать накопленные коины в магазине наград прямо под игрой!',
+    gameStatTrash: 'Мусора на поляне',
+    gameStatCleaned: 'Собрано предметов',
+    gameStatCleanliness: 'Чистота парка',
+    btnRespawn: 'Новый мусор',
+    arenaTag: 'Парковая зона «Tashkent EcoPark»',
+    arenaTip: 'Зажми мусор и тащи его в ящик внизу 👇',
+    binsDockTitle: 'Ящики раздельного сбора (тащите мусор сюда):',
+
+    binPlasticTag: '🔵 Синий ящик',
+    binPlasticTitle: 'Пластик',
+    binPlasticHint: 'Бутылки, пакеты',
+
+    binGlassTag: '🟢 Зеленый ящик',
+    binGlassTitle: 'Стекло & Металл',
+    binGlassHint: 'Бутылки, банки',
+
+    binPaperTag: '🟡 Желтый ящик',
+    binPaperTitle: 'Бумага & Прочее',
+    binPaperHint: 'Стаканы, фантики',
+
+    binDropTarget: 'Бросай сюда',
+
+    shopBadge: 'Награды за эко-коины',
+    shopTitle: 'Магазин волонтерских наград',
+    shopSubtitle: 'Обменивайте заработанные TashCoin на памятный мерч, полезные эко-товары и именные справки. <em>(Цены и список товаров настраиваются администратором).</em>',
+
+    shopItem1Cat: 'Эко-Мерч',
+    shopItem1Title: 'Фирменный эко-стикерпак',
+    shopItem1Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
+
+    shopItem2Cat: 'Аксессуар',
+    shopItem2Title: 'Металлический значок TashCare',
+    shopItem2Desc: 'Памятный значок волонтера с эмалью «Хранитель природы Ташкента» на одежду или рюкзак.',
+
+    shopItem3Cat: 'Эко-Товары',
+    shopItem3Title: 'Хлопковый шоппер TashCare',
+    shopItem3Desc: 'Вместительная сумка из плотного 100% органического хлопка для экологичных покупок без пакетов.',
+
+    shopItem4Cat: 'Эко-Товары',
+    shopItem4Title: 'Термобутылка для воды 500 мл',
+    shopItem4Desc: 'Вакуумная нержавеющая бутылка, удерживающая температуру напитков на субботниках и эко-выездах.',
+
+    shopItem5Cat: 'Документы',
+    shopItem5Title: 'Именной сертификат волонтера',
+    shopItem5Desc: 'Официальный бумажный и цифровой сертификат почетного волонтера с печатью сообщества для школы и вуза.',
+
+    btnExchange: 'Обменять',
+    modalSuccessTitle: 'Награда успешно оформлена!',
+    modalSuccessDesc: 'Вы обменяли коины на',
+    modalContactDesc: 'Для получения награды покажите этот код нашему координатору <strong>@Amisha_SSlando</strong> в Telegram для согласования получения приза в Ташкенте.',
+    modalCloseBtn: 'Понятно, закрыть'
   },
   en: {
     heroBadge: 'Official Volunteering Community • Tashkent',
@@ -130,7 +189,66 @@ const TRANSLATIONS = {
     bannerSubtitle: 'Follow announcements, view live photo reports from weekend drives, and chat with local volunteers.',
     bannerBtn: 'Open @tashcareuz Channel',
     navChannel: 'Telegram Channel',
-    footerRights: 'All rights reserved.'
+    footerRights: 'All rights reserved.',
+
+    // Eco Game & Shop Translations
+    gameNavLabel: 'Game',
+    btnBackHome: 'Back to Home',
+    gameBalanceLabel: 'Balance:',
+    gameBadge: 'TashCare Eco-Game • Sort Trash',
+    gameTitle: 'Clean Up Tashkent Parks & Earn Coins!',
+    gameSubtitle: 'Hold and drag trash items from the park meadow directly into the correct recycling bin below. Each recycled item earns <strong>+1 TashCoin</strong>. Spend your coins on exclusive rewards in the shop!',
+    gameStatTrash: 'Trash in Meadow',
+    gameStatCleaned: 'Items Cleaned',
+    gameStatCleanliness: 'Park Cleanliness',
+    btnRespawn: 'Spawn Trash',
+    arenaTag: 'Park Area «Tashkent EcoPark»',
+    arenaTip: 'Hold trash and drag it into the matching bin below 👇',
+    binsDockTitle: 'Recycling Bins (drag and drop trash here):',
+
+    binPlasticTag: '🔵 Blue Bin',
+    binPlasticTitle: 'Plastic',
+    binPlasticHint: 'Bottles, bags',
+
+    binGlassTag: '🟢 Green Bin',
+    binGlassTitle: 'Glass & Metal',
+    binGlassHint: 'Bottles, cans',
+
+    binPaperTag: '🟡 Yellow Bin',
+    binPaperTitle: 'Paper & Other',
+    binPaperHint: 'Cups, wrappers',
+
+    binDropTarget: 'Drop here',
+
+    shopBadge: 'Eco-Coin Rewards',
+    shopTitle: 'Volunteer Reward Shop',
+    shopSubtitle: 'Exchange your earned TashCoins for exclusive community merch, eco-friendly goods, and official certificates.',
+
+    shopItem1Cat: 'Eco-Merch',
+    shopItem1Title: 'TashCare Vinyl Sticker Pack',
+    shopItem1Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
+
+    shopItem2Cat: 'Accessory',
+    shopItem2Title: 'TashCare Enamel Metal Pin',
+    shopItem2Desc: 'Commemorative enamel volunteer badge «Guardian of Tashkent Nature» for backpacks and jackets.',
+
+    shopItem3Cat: 'Eco-Goods',
+    shopItem3Title: 'Cotton Shopper Bag',
+    shopItem3Desc: 'Spacious 100% organic heavy cotton tote for eco-friendly shopping without plastic bags.',
+
+    shopItem4Cat: 'Eco-Goods',
+    shopItem4Title: 'Thermal Water Bottle 500ml',
+    shopItem4Desc: 'Vacuum insulated stainless steel bottle keeping drinks hot or cold during outdoor drives.',
+
+    shopItem5Cat: 'Documents',
+    shopItem5Title: 'Official Volunteer Certificate',
+    shopItem5Desc: 'Official sealed paper and digital honorary certificate for school, lyceum, or university credit.',
+
+    btnExchange: 'Redeem',
+    modalSuccessTitle: 'Reward Claimed Successfully!',
+    modalSuccessDesc: 'You have exchanged coins for',
+    modalContactDesc: 'To claim your reward, show this code to our coordinator <strong>@Amisha_SSlando</strong> on Telegram to arrange pickup in Tashkent.',
+    modalCloseBtn: 'Got it, close'
   },
   uz: {
     heroBadge: 'Rasmiy ko\'ngillilar jamoasi • Toshkent',
@@ -191,7 +309,66 @@ const TRANSLATIONS = {
     bannerSubtitle: 'Barcha yangiliklar, hashar e\'lonlari va hisobotlar Telegram kanalimizda.',
     bannerBtn: '@tashcareuz kanalini ochish',
     navChannel: 'Telegram Kanal',
-    footerRights: 'Barcha huquqlar himoyalangan.'
+    footerRights: 'Barcha huquqlar himoyalangan.',
+
+    // Eco Game & Shop Translations
+    gameNavLabel: 'O\'yin',
+    btnBackHome: 'Bosh sahifaga',
+    gameBalanceLabel: 'Balans:',
+    gameBadge: 'TashCare Eko-o\'yini • Chiqindilarni saralash',
+    gameTitle: 'Chiqindilarni tozalang va parklarni asrang!',
+    gameSubtitle: 'Maydondagi chiqindilarni ushlab, quyidagi to\'g\'ri qutiga tortib tashlang. Har bir saralangan buyum uchun <strong>+1 TashCoin</strong> olasiz. Tangalarni sovrinlar do\'konida sarflang!',
+    gameStatTrash: 'Maydondagi chiqindi',
+    gameStatCleaned: 'Yig\'ilgan buyumlar',
+    gameStatCleanliness: 'Park tozaligi',
+    btnRespawn: 'Yangi chiqindi',
+    arenaTag: '«Toshkent EkoPark» hududi',
+    arenaTip: 'Chiqindini ushlab, pastdagi qutiga torting 👇',
+    binsDockTitle: 'Saralash qutilari (chiqindini shu yerga tashlang):',
+
+    binPlasticTag: '🔵 Ko\'k quti',
+    binPlasticTitle: 'Plastik',
+    binPlasticHint: 'Butilkalar, paketlar',
+
+    binGlassTag: '🟢 Yashil quti',
+    binGlassTitle: 'Shisha va Metall',
+    binGlassHint: 'Butilkalar, bankalar',
+
+    binPaperTag: '🟡 Sariq quti',
+    binPaperTitle: 'Qog\'oz va Boshqa',
+    binPaperHint: 'Stakanlar, o\'ramlar',
+
+    binDropTarget: 'Shu yerga tashlang',
+
+    shopBadge: 'Eko-tanga sovrinlari',
+    shopTitle: 'Ko\'ngillilar sovrinlar do\'koni',
+    shopSubtitle: 'To\'plangan TashCoin tangalarini esdalik sovg\'alar, eko-mahsulotlar va rasmiy ma\'lumotnomalarga almashtiring.',
+
+    shopItem1Cat: 'Eko-Merch',
+    shopItem1Title: 'TashCare stikerlar to\'plami',
+    shopItem1Desc: 'Noutbuk, termos va telefon g\'iloflari uchun suvga chidamli yorqin stikerlar.',
+
+    shopItem2Cat: 'Aksessuar',
+    shopItem2Title: 'TashCare metall nishoni',
+    shopItem2Desc: 'Kiyim va ryukzaklar uchun «Toshkent tabiatini asrovchi» esdalik nishoni.',
+
+    shopItem3Cat: 'Eko-Mahsulot',
+    shopItem3Title: 'Paxtali shopper sumkasi',
+    shopItem3Desc: 'Polietilen paketlarsiz xaridlar qilish uchun 100% tabiiy paxtadan tikilgan qulay sumka.',
+
+    shopItem4Cat: 'Eko-Mahsulot',
+    shopItem4Title: 'Termobutulka 500 ml',
+    shopItem4Desc: 'Eko-tadbirlarda ichimlik haroratini saqlab beruvchi zanglamas po\'lat termobutulka.',
+
+    shopItem5Cat: 'Hujjatlar',
+    shopItem5Title: 'Rasmiy ko\'ngilli sertifikati',
+    shopItem5Desc: 'Maktab, litsey va oliygohlarga taqdim etiladigan rasmiy muhrli faxriy sertifikat.',
+
+    btnExchange: 'Almashtirish',
+    modalSuccessTitle: 'Sovrin muvaffaqiyatli rasmiylashtirildi!',
+    modalSuccessDesc: 'Siz tangalaringizni quyidagiga almashtirdingiz:',
+    modalContactDesc: 'Sovrinni olish uchun ushbu kodni Telegram orqali koordinatormiz <strong>@Amisha_SSlando</strong> ga yuboring.',
+    modalCloseBtn: 'Tushunarli, yopish'
   }
 };
 
@@ -299,11 +476,26 @@ if (drawerRegLink) {
 }
 
 // --- MULTI-LANGUAGE MANAGEMENT ---
+const gameLangSelect = document.getElementById('gameLangSelect');
+
+function getTrashName(itemData, lang) {
+  if (lang === 'en') return itemData.nameEn || itemData.name;
+  if (lang === 'uz') return itemData.nameUz || itemData.name;
+  return itemData.nameRu || itemData.name;
+}
+
+function getBadgeText(itemData, lang) {
+  if (lang === 'en') return itemData.badgeEn || 'Blue';
+  if (lang === 'uz') return itemData.badgeUz || 'Ko\'k';
+  return itemData.badgeRu || 'Синий';
+}
+
 function updateLanguage(lang) {
   if (!TRANSLATIONS[lang]) lang = 'ru';
   currentLang = lang;
   localStorage.setItem('tashcare_lang', lang);
   if (langSelect) langSelect.value = lang;
+  if (gameLangSelect) gameLangSelect.value = lang;
 
   // Sync drawer buttons active state
   drawerLangBtns.forEach(btn => {
@@ -336,10 +528,30 @@ function updateLanguage(lang) {
   if (alertBox && alertBox.style.display !== 'none' && alertBox.classList.contains('alert-success')) {
     alertMessage.textContent = t.successMessage;
   }
+
+  // Update existing trash items on meadow so badges match new language immediately!
+  document.querySelectorAll('.trash-item').forEach(itemEl => {
+    const itemType = itemEl.dataset.type;
+    const itemData = TRASH_TYPES.find(item => item.type === itemType);
+    const badgeEl = itemEl.querySelector('.trash-color-badge');
+    if (itemData && badgeEl) {
+      badgeEl.textContent = getBadgeText(itemData, lang);
+      itemEl.setAttribute('title', `${lang === 'en' ? 'Drag and drop' : (lang === 'uz' ? 'Tortib tashlang' : 'Зажми и тащи')}: ${getTrashName(itemData, lang)}`);
+    }
+  });
+
+  // Update coin displays to keep SVG coin intact
+  updateCoinDisplays();
 }
 
 if (langSelect) {
   langSelect.addEventListener('change', (e) => {
+    updateLanguage(e.target.value);
+  });
+}
+
+if (gameLangSelect) {
+  gameLangSelect.addEventListener('change', (e) => {
     updateLanguage(e.target.value);
   });
 }
@@ -502,11 +714,18 @@ const copyVoucherTxt = document.getElementById('copyVoucherTxt');
 
 // Trash Items with Categories & Pure SVGs (Rule 5 compliant)
 const TRASH_TYPES = [
+  // 🔵 Blue: Plastic
   {
     type: 'plastic-bottle',
-    name: 'Пластиковая бутылка',
+    nameRu: 'Пластиковая бутылка',
+    nameEn: 'Plastic Bottle',
+    nameUz: 'Plastik shisha',
     bin: 'plastic',
-    svg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    color: 'blue',
+    badgeRu: '🔵 Синий (Пластик)',
+    badgeEn: '🔵 Blue (Plastic)',
+    badgeUz: '🔵 Ko\'k (Plastik)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10 2h4v3h-4z"/>
       <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
       <line x1="8" y1="12" x2="16" y2="12"/>
@@ -515,38 +734,64 @@ const TRASH_TYPES = [
   },
   {
     type: 'plastic-bag',
-    name: 'Пластиковый пакет',
+    nameRu: 'Пластиковый пакет',
+    nameEn: 'Plastic Bag',
+    nameUz: 'Polietilen paket',
     bin: 'plastic',
-    svg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    color: 'blue',
+    badgeRu: '🔵 Синий (Пакет)',
+    badgeEn: '🔵 Blue (Bag)',
+    badgeUz: '🔵 Ko\'k (Paket)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
       <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
       <path d="M10 12a2 2 0 0 0 4 0"/>
     </svg>`
   },
-  {
-    type: 'soda-can',
-    name: 'Жестяная банка',
-    bin: 'glass-metal',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <ellipse cx="12" cy="5" rx="6" ry="3"/>
-      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
-      <path d="M6 12c0 1.66 2.69 3 6 3s6-1.34 6-3"/>
-    </svg>`
-  },
+  // 🟢 Green: Glass & Metal
   {
     type: 'glass-bottle',
-    name: 'Стеклянная бутылка',
+    nameRu: 'Стеклянная бутылка',
+    nameEn: 'Glass Bottle',
+    nameUz: 'Shisha butilka',
     bin: 'glass-metal',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    color: 'green',
+    badgeRu: '🟢 Зеленый (Стекло)',
+    badgeEn: '🟢 Green (Glass)',
+    badgeUz: '🟢 Yashil (Shisha)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
       <line x1="11" y1="13" x2="13" y2="13"/>
     </svg>`
   },
   {
+    type: 'soda-can',
+    nameRu: 'Жестяная банка',
+    nameEn: 'Soda Can',
+    nameUz: 'Konserva bankasi',
+    bin: 'glass-metal',
+    color: 'green',
+    badgeRu: '🟢 Зеленый (Банка)',
+    badgeEn: '🟢 Green (Can)',
+    badgeUz: '🟢 Yashil (Banka)',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5" rx="6" ry="3"/>
+      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
+      <line x1="6" y1="12" x2="18" y2="12"/>
+    </svg>`
+  },
+  // 🟡 Yellow: Paper & Other
+  {
     type: 'coffee-cup',
-    name: 'Одноразовый стаканчик',
+    nameRu: 'Бумажный стаканчик',
+    nameEn: 'Paper Coffee Cup',
+    nameUz: 'Qog\'oz stakan',
     bin: 'paper-other',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    color: 'yellow',
+    badgeRu: '🟡 Желтый (Бумага)',
+    badgeEn: '🟡 Yellow (Paper)',
+    badgeUz: '🟡 Sariq (Qog\'oz)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
       <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
       <line x1="6" y1="2" x2="6" y2="5"/>
@@ -556,26 +801,31 @@ const TRASH_TYPES = [
   },
   {
     type: 'snack-wrapper',
-    name: 'Фантик от конфет',
+    nameRu: 'Обертка / Фантик',
+    nameEn: 'Snack Wrapper',
+    nameUz: 'Konfet o\'rami',
     bin: 'paper-other',
-    svg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    color: 'yellow',
+    badgeRu: '🟡 Желтый (Обертка)',
+    badgeEn: '🟡 Yellow (Wrapper)',
+    badgeUz: '🟡 Sariq (O\'ram)',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
     </svg>`
   }
 ];
 
-// Web Audio API Synthesizer for collect chime
+// Pure SVG Coin HTML for consistent crisp rendering (Rule 5 compliant)
+const COIN_SVG_HTML = `<svg class="coin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#coinGrad)" stroke="#b45309" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="#fef3c7" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M12 7v10M9 9.5h5a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h5" stroke="#78350f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// Web Audio API Synthesizer for collect chime & wrong bin buzzer
 let audioCtx = null;
 function playCollectChime() {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
-    if (!audioCtx) {
-      audioCtx = new AudioContextClass();
-    }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+    if (!audioCtx) audioCtx = new AudioContextClass();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
 
     const now = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
@@ -595,7 +845,35 @@ function playCollectChime() {
     osc.start(now);
     osc.stop(now + 0.32);
   } catch (e) {
-    // Audio context may be restricted by autoplay policy until gesture
+    // Audio context may be restricted by browser policy
+  }
+}
+
+function playErrorBuzzer() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) audioCtx = new AudioContextClass();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.linearRampToValueAtTime(85, now + 0.28);
+
+    gain.gain.setValueAtTime(0.22, now);
+    gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.28);
+  } catch (e) {
+    // Audio context may be restricted by browser policy
   }
 }
 
@@ -641,9 +919,9 @@ function updateCoinDisplays() {
   const cleaned = getCleanedCount();
 
   if (gameCoinBalance) gameCoinBalance.textContent = coins.toLocaleString();
-  if (navCoinPill) navCoinPill.textContent = `${coins} 🪙`;
-  if (mobileCoinPill) mobileCoinPill.textContent = coins;
-  if (drawerCoinBadge) drawerCoinBadge.textContent = `${coins} 🪙`;
+  if (navCoinPill) navCoinPill.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
+  if (mobileCoinPill) mobileCoinPill.textContent = coins.toLocaleString();
+  if (drawerCoinBadge) drawerCoinBadge.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
   if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
   updateBinDisplays();
 }
@@ -730,30 +1008,39 @@ function updateCleanlinessProgress() {
   }
 }
 
-// Drag & Drop Trash Item Creator
+// Drag & Drop Trash Item Creator with Colors and Badges
 function spawnTrashItem() {
   if (!trashContainer) return;
 
   const itemData = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
   const itemEl = document.createElement('div');
   itemEl.className = 'trash-item';
+  itemEl.dataset.type = itemData.type;
   itemEl.setAttribute('role', 'button');
   itemEl.setAttribute('tabindex', '0');
-  itemEl.setAttribute('title', `Зажми и тащи: ${itemData.name} в ящик`);
-  itemEl.innerHTML = itemData.svg;
+  itemEl.setAttribute('title', `${currentLang === 'en' ? 'Drag and drop' : (currentLang === 'uz' ? 'Tortib tashlang' : 'Зажми и тащи')}: ${getTrashName(itemData, currentLang)}`);
+
+  itemEl.innerHTML = `
+    <div class="trash-svg-wrapper">
+      ${itemData.svg}
+    </div>
+    <div class="trash-color-badge badge-${itemData.color}">
+      ${getBadgeText(itemData, currentLang)}
+    </div>
+  `;
 
   // Random position within safe arena grass bounds
-  const left = Math.floor(8 + Math.random() * 74);
-  const top = Math.floor(12 + Math.random() * 55);
-  const rotation = Math.floor(-30 + Math.random() * 60);
+  const left = Math.floor(6 + Math.random() * 76);
+  const top = Math.floor(10 + Math.random() * 52);
+  const rotation = Math.floor(-25 + Math.random() * 50);
 
   itemEl.style.left = `${left}%`;
   itemEl.style.top = `${top}%`;
   itemEl.style.transform = `rotate(${rotation}deg)`;
 
   let isDragging = false;
-  let offsetX = 27;
-  let offsetY = 27;
+  let offsetX = 38;
+  let offsetY = 34;
 
   const onPointerDown = (e) => {
     if (itemEl.classList.contains('sucked-in')) return;
@@ -832,15 +1119,19 @@ function spawnTrashItem() {
       });
 
       if (targetBin) {
-        // Success: Item recycled into bin!
-        handleItemRecycled(itemEl, itemData, targetBin);
+        // STRICT FILTER: If item category doesn't match target bin, REJECT!
+        if (itemData.bin !== targetBin.dataset.bin) {
+          handleWrongBin(itemEl, itemData, targetBin, left, top);
+        } else {
+          handleItemRecycled(itemEl, itemData, targetBin);
+        }
       } else {
         // Released outside bins: ensure it stays on visible grass
         const currentArenaRect = parkArena.getBoundingClientRect();
         const curX = upEvt.clientX - currentArenaRect.left;
         const curY = upEvt.clientY - currentArenaRect.top;
 
-        if (curX < 15 || curX > currentArenaRect.width - 40 || curY < 15 || curY > currentArenaRect.height - 40) {
+        if (curX < 15 || curX > currentArenaRect.width - 50 || curY < 15 || curY > currentArenaRect.height - 50) {
           // Reset to safe inner bounds
           itemEl.style.left = `${left}%`;
           itemEl.style.top = `${top}%`;
@@ -862,6 +1153,52 @@ function spawnTrashItem() {
   updateCleanlinessProgress();
 }
 
+// Handle dropping an item into the wrong bin (Strict Rejection)
+function handleWrongBin(itemEl, itemData, targetBin, startLeft, startTop) {
+  // 1. Play wrong bin buzzer sound
+  playErrorBuzzer();
+
+  // 2. Shake bin with red border & glow
+  targetBin.classList.add('bin-rejected');
+  setTimeout(() => {
+    targetBin.classList.remove('bin-rejected');
+  }, 500);
+
+  // 3. Floating wrong bin error banner
+  let targetColorText = '';
+  if (itemData.bin === 'plastic') {
+    targetColorText = currentLang === 'en' ? 'Blue Bin (Plastic) 🔵' : (currentLang === 'uz' ? 'Ko\'k quti (Plastik) 🔵' : 'Синий ящик (Пластик) 🔵');
+  } else if (itemData.bin === 'glass-metal') {
+    targetColorText = currentLang === 'en' ? 'Green Bin (Glass/Metal) 🟢' : (currentLang === 'uz' ? 'Yashil quti (Shisha/Bankalar) 🟢' : 'Зеленый ящик (Стекло/Банки) 🟢');
+  } else {
+    targetColorText = currentLang === 'en' ? 'Yellow Bin (Paper/Other) 🟡' : (currentLang === 'uz' ? 'Sariq quti (Qog\'oz/Boshqa) 🟡' : 'Желтый ящик (Бумага/Прочее) 🟡');
+  }
+
+  const alertMsg = currentLang === 'en'
+    ? `❌ Wrong bin! Needs: ${targetColorText}`
+    : (currentLang === 'uz'
+      ? `❌ Noto'g'ri quti! Kerak: ${targetColorText}`
+      : `❌ Не тот ящик! Нужен: ${targetColorText}`);
+
+  const floatAlert = document.createElement('div');
+  floatAlert.className = 'floating-alert-wrong';
+  floatAlert.textContent = alertMsg;
+  targetBin.appendChild(floatAlert);
+
+  setTimeout(() => {
+    if (floatAlert.parentNode) floatAlert.remove();
+  }, 1600);
+
+  // 4. Smoothly spring item back to original meadow grass position
+  itemEl.style.transition = 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  itemEl.style.left = `${startLeft}%`;
+  itemEl.style.top = `${startTop}%`;
+  setTimeout(() => {
+    itemEl.style.transition = '';
+  }, 400);
+}
+
+// Handle dropping an item into the correct bin (Success)
 function handleItemRecycled(itemEl, itemData, targetBin) {
   if (itemEl.classList.contains('sucked-in')) return;
   itemEl.classList.add('sucked-in');
@@ -879,7 +1216,7 @@ function handleItemRecycled(itemEl, itemData, targetBin) {
   const binType = targetBin.dataset.bin;
   incrementBinCount(binType);
 
-  // Spawn floating coin animation out of the bin
+  // Spawn floating coin animation out of the bin with SVG coin
   const arenaCard = document.querySelector('.park-arena-card');
   if (arenaCard) {
     const binRect = targetBin.getBoundingClientRect();
@@ -887,11 +1224,11 @@ function handleItemRecycled(itemEl, itemData, targetBin) {
     const floatEl = document.createElement('div');
     floatEl.className = 'floating-coin-plus';
 
-    const isMatch = (itemData.bin === binType);
-    floatEl.textContent = isMatch ? '+1 🪙 Идеально!' : '+1 🪙';
+    const successText = currentLang === 'en' ? 'Sorted!' : (currentLang === 'uz' ? 'To\'g\'ri!' : 'Идеально!');
+    floatEl.innerHTML = `+1 ${COIN_SVG_HTML} <span style="margin-left: 2px;">${successText}</span>`;
 
-    floatEl.style.left = `${binRect.left - cardRect.left + (binRect.width / 2) - 35}px`;
-    floatEl.style.top = `${binRect.top - cardRect.top - 12}px`;
+    floatEl.style.left = `${binRect.left - cardRect.left + (binRect.width / 2) - 45}px`;
+    floatEl.style.top = `${binRect.top - cardRect.top - 16}px`;
 
     arenaCard.appendChild(floatEl);
     setTimeout(() => {
@@ -936,7 +1273,12 @@ window.handleShopBuy = function(itemId, price, title) {
 
   if (currentCoins < price) {
     const diff = price - currentCoins;
-    alert(`Вам не хватает ${diff} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
+    const msg = currentLang === 'en'
+      ? `You need ${diff} more TashCoin! Clean up more trash in the park meadow to earn coins.`
+      : (currentLang === 'uz'
+        ? `Sizga yana ${diff} ta TashCoin yetishmayapti! Tangalar yig'ish uchun parkdagi chiqindilarni tozalang.`
+        : `Вам не хватает ${diff} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
+    alert(msg);
     return;
   }
 
@@ -964,9 +1306,15 @@ window.handleShopBuy = function(itemId, price, title) {
     console.error('Order save error:', err);
   }
 
-  // Show modal
-  if (shopModalTitle) shopModalTitle.textContent = `Вы обменяли: ${title}`;
-  if (shopModalSubtitle) shopModalSubtitle.textContent = `С вашего баланса успешно списано ${price} TashCoin.`;
+  // Show modal with localized header
+  if (shopModalTitle) {
+    const heading = currentLang === 'en' ? `You redeemed: ${title}` : (currentLang === 'uz' ? `Siz almashtirdingiz: ${title}` : `Вы обменяли: ${title}`);
+    shopModalTitle.textContent = heading;
+  }
+  if (shopModalSubtitle) {
+    const sub = currentLang === 'en' ? `Successfully charged ${price} TashCoin from your balance.` : (currentLang === 'uz' ? `Balansingizdan ${price} TashCoin muvaffaqiyatli yechildi.` : `С вашего баланса успешно списано ${price} TashCoin.`);
+    shopModalSubtitle.textContent = sub;
+  }
   if (voucherCodeDisplay) voucherCodeDisplay.textContent = voucherCode;
 
   if (shopModal) {
@@ -985,12 +1333,14 @@ window.closeShopModal = function() {
 window.copyVoucherCode = function() {
   if (!voucherCodeDisplay) return;
   const text = voucherCodeDisplay.textContent.trim();
+  const copiedLabel = currentLang === 'en' ? 'Copied!' : (currentLang === 'uz' ? 'Nusxalandi!' : 'Скопировано!');
+  const defaultLabel = currentLang === 'en' ? 'Copy' : (currentLang === 'uz' ? 'Nusxalash' : 'Копировать');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (copyVoucherTxt) copyVoucherTxt.textContent = 'Скопировано!';
+      if (copyVoucherTxt) copyVoucherTxt.textContent = copiedLabel;
       setTimeout(() => {
-        if (copyVoucherTxt) copyVoucherTxt.textContent = 'Копировать';
+        if (copyVoucherTxt) copyVoucherTxt.textContent = defaultLabel;
       }, 2000);
     });
   } else {
@@ -1001,9 +1351,9 @@ window.copyVoucherCode = function() {
     input.select();
     document.execCommand('copy');
     input.remove();
-    if (copyVoucherTxt) copyVoucherTxt.textContent = 'Скопировано!';
+    if (copyVoucherTxt) copyVoucherTxt.textContent = copiedLabel;
     setTimeout(() => {
-      if (copyVoucherTxt) copyVoucherTxt.textContent = 'Копировать';
+      if (copyVoucherTxt) copyVoucherTxt.textContent = defaultLabel;
     }, 2000);
   }
 };
