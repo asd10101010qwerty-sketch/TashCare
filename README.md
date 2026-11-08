@@ -52,7 +52,7 @@ git push -u origin main
 2. Выберите ваш GitHub-репозиторий.
 3. В разделе **Environment Variables** добавьте следующие переменные:
    - `ADMIN_BOT_TOKEN` = `9058761160:AAHZ_gYGxM6Dgw3tGZ7R1zYxSLvtAsxiXPo`
-   - `ADMIN_CHAT_ID` = `7234943242`
+   - `ADMIN_CHAT_ID` = `6712132603`
    - `ADMIN_PASSWORD` = `waEnoi2-cBzL!9z`
    - `NORMAL_BOT_TOKEN` = `9245077944:AAHOOk-iOIpqeSh1Zo4a5Op3WVoeK9vO9C0`
    - `TASHCARE_CHANNEL` = `https://t.me/tashcareuz`
@@ -92,7 +92,7 @@ npm run dev
 - **👑 Admin Bot**: `@Tashcare_bot`
   - Токен: `9058761160:AAHZ_gYGxM6Dgw3tGZ7R1zYxSLvtAsxiXPo`
   - Пароль: `waEnoi2-cBzL!9z`
-  - ID администратора по умолчанию: `7234943242` (@Sprint383)
+  - ID администратора по умолчанию: `6712132603`
   - Команды: `/start`, `/announcement`, `/stats`, `/cancel`, `/help`
   - Мгновенные уведомления о каждой регистрации волонтера на сайте.
   - Рассылка новостей всем подписчикам User Bot.

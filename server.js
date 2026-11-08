@@ -11,7 +11,7 @@ const { createAdminBot } = require('./src/adminBot');
 // Configuration
 const PORT = process.env.PORT || 3000;
 const ADMIN_BOT_TOKEN = process.env.ADMIN_BOT_TOKEN || '9058761160:AAHZ_gYGxM6Dgw3tGZ7R1zYxSLvtAsxiXPo';
-const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '7234943242';
+const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '6712132603';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'waEnoi2-cBzL!9z';
 const NORMAL_BOT_TOKEN = process.env.NORMAL_BOT_TOKEN || '9245077944:AAHOOk-iOIpqeSh1Zo4a5Op3WVoeK9vO9C0';
 const TASHCARE_CHANNEL = process.env.TASHCARE_CHANNEL || 'https://t.me/tashcareuz';

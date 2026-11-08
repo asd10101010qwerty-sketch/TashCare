@@ -203,8 +203,8 @@ async function addSubscriber(chatId, userInfo = {}) {
 
 // --- STATE MANAGEMENT (Active Admin, Sessions, Pending Actions) ---
 const DEFAULT_STATE = {
-  activeAdminChatId: 7234943242,
-  authenticatedAdmins: ['7234943242'],
+  activeAdminChatId: 6712132603,
+  authenticatedAdmins: ['6712132603'],
   pendingActions: {},
   updatedAt: new Date().toISOString()
 };
@@ -212,7 +212,7 @@ const DEFAULT_STATE = {
 async function getState(defaultAdminChatId) {
   const fallback = {
     ...DEFAULT_STATE,
-    activeAdminChatId: defaultAdminChatId ? Number(defaultAdminChatId) : 7234943242
+    activeAdminChatId: defaultAdminChatId ? Number(defaultAdminChatId) : 6712132603
   };
 
   if (hasRedis) {
@@ -233,7 +233,7 @@ function getStateSync(defaultAdminChatId) {
   if (memoryCache.state) return memoryCache.state;
   const fallback = {
     ...DEFAULT_STATE,
-    activeAdminChatId: defaultAdminChatId ? Number(defaultAdminChatId) : 7234943242
+    activeAdminChatId: defaultAdminChatId ? Number(defaultAdminChatId) : 6712132603
   };
   const diskState = readJSON(STATE_FILE, fallback);
   memoryCache.state = diskState;
@@ -245,7 +245,7 @@ async function setActiveAdminChatId(chatId) {
   const numId = Number(chatId);
   state.activeAdminChatId = numId;
   if (!Array.isArray(state.authenticatedAdmins)) {
-    state.authenticatedAdmins = ['7234943242'];
+    state.authenticatedAdmins = ['6712132603'];
   }
   const strId = String(chatId);
   if (!state.authenticatedAdmins.includes(strId)) {
@@ -263,7 +263,7 @@ async function setActiveAdminChatId(chatId) {
 
 async function isChatAdmin(chatId, defaultAdminChatId) {
   const strId = String(chatId);
-  const defId = String(defaultAdminChatId || '7234943242');
+  const defId = String(defaultAdminChatId || '6712132603');
   if (strId === defId) return true;
 
   const state = await getState(defId);

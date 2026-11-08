@@ -13,7 +13,7 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
     console.error(`[AdminBot Error] for ${ctx.updateType}:`, err.message);
   });
 
-  const DEFAULT_ADMIN_ID = String(defaultAdminChatId || '7234943242');
+  const DEFAULT_ADMIN_ID = String(defaultAdminChatId || '6712132603');
   const PASSWORD = String(adminPassword || 'waEnoi2-cBzL!9z').trim();
 
   // Helper to check authentication
