@@ -1,0 +1,28 @@
+{
+  "name": "tashcare-platform",
+  "version": "1.0.0",
+  "description": "TashCare Volunteering Community Web Application and Telegram Bots",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "tashcare",
+    "telegram-bot",
+    "express",
+    "volunteer"
+  ],
+  "author": "TashCare Community",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^2.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
