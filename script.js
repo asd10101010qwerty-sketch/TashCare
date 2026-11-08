@@ -376,6 +376,256 @@ const TRANSLATIONS = {
 let currentLang = localStorage.getItem('tashcare_lang') || 'ru';
 let currentTheme = localStorage.getItem('tashcare_theme') || 'light';
 
+const COIN_STORAGE_KEY = 'tashcare_coins';
+const STAT_CLEANED_KEY = 'tashcare_cleaned_count';
+const BINS_STORAGE_KEY = 'tashcare_bin_counts';
+const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
+
+// DOM Elements for Routing & Game
+const landingView = document.getElementById('landingView');
+const gameView = document.getElementById('game') || document.getElementById('gameView');
+const gameNavBtn = document.getElementById('gameNavBtn');
+const gameMobileNavBtn = document.getElementById('gameMobileNavBtn');
+const drawerGameLink = document.getElementById('drawerGameLink');
+const brandLogoLink = document.getElementById('brandLogoLink');
+const btnBackHome = document.getElementById('btnBackHome');
+
+// Coin and stats displays
+const gameCoinBalance = document.getElementById('gameCoinBalance');
+const navCoinPill = document.getElementById('navCoinPill');
+const mobileCoinPill = document.getElementById('mobileCoinPill');
+const drawerCoinBadge = document.getElementById('drawerCoinBadge');
+
+const trashCountVal = document.getElementById('trashCountVal');
+const parkCleanVal = document.getElementById('parkCleanVal');
+const cleanlinessVal = document.getElementById('cleanlinessVal');
+const respawnTrashBtn = document.getElementById('respawnTrashBtn');
+const parkArena = document.getElementById('parkArena');
+const trashContainer = document.getElementById('trashContainer');
+
+// Shop & Modal elements
+const shopModal = document.getElementById('shopModal');
+const shopModalTitle = document.getElementById('shopModalTitle');
+const shopModalSubtitle = document.getElementById('shopModalSubtitle');
+const voucherCodeDisplay = document.getElementById('voucherCodeDisplay');
+const copyVoucherBtn = document.getElementById('copyVoucherBtn');
+const copyVoucherTxt = document.getElementById('copyVoucherTxt');
+
+// Trash Items with Categories & Pure SVGs (Rule 5 compliant)
+const TRASH_TYPES = [
+  // 🔵 Blue: Plastic
+  {
+    type: 'plastic-bottle',
+    nameRu: 'Пластиковая бутылка',
+    nameEn: 'Plastic Bottle',
+    nameUz: 'Plastik shisha',
+    bin: 'plastic',
+    color: 'blue',
+    badgeRu: '🔵 Синий (Пластик)',
+    badgeEn: '🔵 Blue (Plastic)',
+    badgeUz: '🔵 Ko\'k (Plastik)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 2h4v3h-4z"/>
+      <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
+      <line x1="8" y1="12" x2="16" y2="12"/>
+      <line x1="8" y1="16" x2="16" y2="16"/>
+    </svg>`
+  },
+  {
+    type: 'plastic-bag',
+    nameRu: 'Пластиковый пакет',
+    nameEn: 'Plastic Bag',
+    nameUz: 'Polietilen paket',
+    bin: 'plastic',
+    color: 'blue',
+    badgeRu: '🔵 Синий (Пакет)',
+    badgeEn: '🔵 Blue (Bag)',
+    badgeUz: '🔵 Ko\'k (Paket)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
+      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
+      <path d="M10 12a2 2 0 0 0 4 0"/>
+    </svg>`
+  },
+  // 🟢 Green: Glass & Metal
+  {
+    type: 'glass-bottle',
+    nameRu: 'Стеклянная бутылка',
+    nameEn: 'Glass Bottle',
+    nameUz: 'Shisha butilka',
+    bin: 'glass-metal',
+    color: 'green',
+    badgeRu: '🟢 Зеленый (Стекло)',
+    badgeEn: '🟢 Green (Glass)',
+    badgeUz: '🟢 Yashil (Shisha)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
+      <line x1="11" y1="13" x2="13" y2="13"/>
+    </svg>`
+  },
+  {
+    type: 'soda-can',
+    nameRu: 'Жестяная банка',
+    nameEn: 'Soda Can',
+    nameUz: 'Konserva bankasi',
+    bin: 'glass-metal',
+    color: 'green',
+    badgeRu: '🟢 Зеленый (Банка)',
+    badgeEn: '🟢 Green (Can)',
+    badgeUz: '🟢 Yashil (Banka)',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5" rx="6" ry="3"/>
+      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
+      <line x1="6" y1="12" x2="18" y2="12"/>
+    </svg>`
+  },
+  // 🟡 Yellow: Paper & Other
+  {
+    type: 'coffee-cup',
+    nameRu: 'Бумажный стаканчик',
+    nameEn: 'Paper Coffee Cup',
+    nameUz: 'Qog\'oz stakan',
+    bin: 'paper-other',
+    color: 'yellow',
+    badgeRu: '🟡 Желтый (Бумага)',
+    badgeEn: '🟡 Yellow (Paper)',
+    badgeUz: '🟡 Sariq (Qog\'oz)',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+      <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
+      <line x1="6" y1="2" x2="6" y2="5"/>
+      <line x1="10" y1="2" x2="10" y2="5"/>
+      <line x1="14" y1="2" x2="14" y2="5"/>
+    </svg>`
+  },
+  {
+    type: 'snack-wrapper',
+    nameRu: 'Обертка / Фантик',
+    nameEn: 'Snack Wrapper',
+    nameUz: 'Konfet o\'rami',
+    bin: 'paper-other',
+    color: 'yellow',
+    badgeRu: '🟡 Желтый (Обертка)',
+    badgeEn: '🟡 Yellow (Wrapper)',
+    badgeUz: '🟡 Sariq (O\'ram)',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
+    </svg>`
+  }
+];
+
+// Pure SVG Coin HTML for consistent crisp rendering (Rule 5 compliant)
+const COIN_SVG_HTML = `<svg class="coin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#coinGrad)" stroke="#b45309" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="#fef3c7" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M12 7v10M9 9.5h5a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h5" stroke="#78350f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// Web Audio API Synthesizer for collect chime & wrong bin buzzer
+let audioCtx = null;
+function playCollectChime() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) audioCtx = new AudioContextClass();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    // Friendly rising chime (587Hz D5 -> 880Hz A5)
+    osc.frequency.setValueAtTime(587.33, now);
+    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.12);
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.32);
+  } catch (e) {
+    // Audio context may be restricted by browser policy
+  }
+}
+
+function playErrorBuzzer() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) audioCtx = new AudioContextClass();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.linearRampToValueAtTime(85, now + 0.28);
+
+    gain.gain.setValueAtTime(0.22, now);
+    gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.28);
+  } catch (e) {
+    // Audio context may be restricted by browser policy
+  }
+}
+
+// Coins state helpers
+function getStoredCoins() {
+  const val = parseInt(localStorage.getItem(COIN_STORAGE_KEY), 10);
+  return isNaN(val) ? 0 : Math.max(0, val);
+}
+
+function getCleanedCount() {
+  const val = parseInt(localStorage.getItem(STAT_CLEANED_KEY), 10);
+  return isNaN(val) ? 0 : Math.max(0, val);
+}
+
+function getBinCounts() {
+  try {
+    return JSON.parse(localStorage.getItem(BINS_STORAGE_KEY) || '{}');
+  } catch (e) {
+    return {};
+  }
+}
+
+function incrementBinCount(binType) {
+  const counts = getBinCounts();
+  counts[binType] = (counts[binType] || 0) + 1;
+  localStorage.setItem(BINS_STORAGE_KEY, JSON.stringify(counts));
+  updateBinDisplays();
+}
+
+function updateBinDisplays() {
+  const counts = getBinCounts();
+  const plasticCount = document.getElementById('binPlasticCount');
+  const glassCount = document.getElementById('binGlassCount');
+  const paperCount = document.getElementById('binPaperCount');
+
+  if (plasticCount) plasticCount.textContent = (counts['plastic'] || 0).toLocaleString();
+  if (glassCount) glassCount.textContent = (counts['glass-metal'] || 0).toLocaleString();
+  if (paperCount) paperCount.textContent = (counts['paper-other'] || 0).toLocaleString();
+}
+
+function updateCoinDisplays() {
+  const coins = getStoredCoins();
+  const cleaned = getCleanedCount();
+
+  if (gameCoinBalance) gameCoinBalance.textContent = coins.toLocaleString();
+  if (navCoinPill) navCoinPill.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
+  if (mobileCoinPill) mobileCoinPill.textContent = coins.toLocaleString();
+  if (drawerCoinBadge) drawerCoinBadge.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
+  if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
+  updateBinDisplays();
+}
+
+
 // DOM Elements
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 const themeToggleMobileBtn = document.getElementById('themeToggleMobileBtn');
@@ -677,255 +927,6 @@ regForm.addEventListener('submit', async (e) => {
 // ===================================================================
 // Eco Trash Cleanup Mini-Game & Coin Shop Logic
 // ===================================================================
-
-const COIN_STORAGE_KEY = 'tashcare_coins';
-const STAT_CLEANED_KEY = 'tashcare_cleaned_count';
-const BINS_STORAGE_KEY = 'tashcare_bin_counts';
-const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
-
-// DOM Elements for Routing & Game
-const landingView = document.getElementById('landingView');
-const gameView = document.getElementById('game') || document.getElementById('gameView');
-const gameNavBtn = document.getElementById('gameNavBtn');
-const gameMobileNavBtn = document.getElementById('gameMobileNavBtn');
-const drawerGameLink = document.getElementById('drawerGameLink');
-const brandLogoLink = document.getElementById('brandLogoLink');
-const btnBackHome = document.getElementById('btnBackHome');
-
-// Coin and stats displays
-const gameCoinBalance = document.getElementById('gameCoinBalance');
-const navCoinPill = document.getElementById('navCoinPill');
-const mobileCoinPill = document.getElementById('mobileCoinPill');
-const drawerCoinBadge = document.getElementById('drawerCoinBadge');
-
-const trashCountVal = document.getElementById('trashCountVal');
-const parkCleanVal = document.getElementById('parkCleanVal');
-const cleanlinessVal = document.getElementById('cleanlinessVal');
-const respawnTrashBtn = document.getElementById('respawnTrashBtn');
-const parkArena = document.getElementById('parkArena');
-const trashContainer = document.getElementById('trashContainer');
-
-// Shop & Modal elements
-const shopModal = document.getElementById('shopModal');
-const shopModalTitle = document.getElementById('shopModalTitle');
-const shopModalSubtitle = document.getElementById('shopModalSubtitle');
-const voucherCodeDisplay = document.getElementById('voucherCodeDisplay');
-const copyVoucherBtn = document.getElementById('copyVoucherBtn');
-const copyVoucherTxt = document.getElementById('copyVoucherTxt');
-
-// Trash Items with Categories & Pure SVGs (Rule 5 compliant)
-const TRASH_TYPES = [
-  // 🔵 Blue: Plastic
-  {
-    type: 'plastic-bottle',
-    nameRu: 'Пластиковая бутылка',
-    nameEn: 'Plastic Bottle',
-    nameUz: 'Plastik shisha',
-    bin: 'plastic',
-    color: 'blue',
-    badgeRu: '🔵 Синий (Пластик)',
-    badgeEn: '🔵 Blue (Plastic)',
-    badgeUz: '🔵 Ko\'k (Plastik)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10 2h4v3h-4z"/>
-      <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
-      <line x1="8" y1="12" x2="16" y2="12"/>
-      <line x1="8" y1="16" x2="16" y2="16"/>
-    </svg>`
-  },
-  {
-    type: 'plastic-bag',
-    nameRu: 'Пластиковый пакет',
-    nameEn: 'Plastic Bag',
-    nameUz: 'Polietilen paket',
-    bin: 'plastic',
-    color: 'blue',
-    badgeRu: '🔵 Синий (Пакет)',
-    badgeEn: '🔵 Blue (Bag)',
-    badgeUz: '🔵 Ko\'k (Paket)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
-      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
-      <path d="M10 12a2 2 0 0 0 4 0"/>
-    </svg>`
-  },
-  // 🟢 Green: Glass & Metal
-  {
-    type: 'glass-bottle',
-    nameRu: 'Стеклянная бутылка',
-    nameEn: 'Glass Bottle',
-    nameUz: 'Shisha butilka',
-    bin: 'glass-metal',
-    color: 'green',
-    badgeRu: '🟢 Зеленый (Стекло)',
-    badgeEn: '🟢 Green (Glass)',
-    badgeUz: '🟢 Yashil (Shisha)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
-      <line x1="11" y1="13" x2="13" y2="13"/>
-    </svg>`
-  },
-  {
-    type: 'soda-can',
-    nameRu: 'Жестяная банка',
-    nameEn: 'Soda Can',
-    nameUz: 'Konserva bankasi',
-    bin: 'glass-metal',
-    color: 'green',
-    badgeRu: '🟢 Зеленый (Банка)',
-    badgeEn: '🟢 Green (Can)',
-    badgeUz: '🟢 Yashil (Banka)',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <ellipse cx="12" cy="5" rx="6" ry="3"/>
-      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
-      <line x1="6" y1="12" x2="18" y2="12"/>
-    </svg>`
-  },
-  // 🟡 Yellow: Paper & Other
-  {
-    type: 'coffee-cup',
-    nameRu: 'Бумажный стаканчик',
-    nameEn: 'Paper Coffee Cup',
-    nameUz: 'Qog\'oz stakan',
-    bin: 'paper-other',
-    color: 'yellow',
-    badgeRu: '🟡 Желтый (Бумага)',
-    badgeEn: '🟡 Yellow (Paper)',
-    badgeUz: '🟡 Sariq (Qog\'oz)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-      <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
-      <line x1="6" y1="2" x2="6" y2="5"/>
-      <line x1="10" y1="2" x2="10" y2="5"/>
-      <line x1="14" y1="2" x2="14" y2="5"/>
-    </svg>`
-  },
-  {
-    type: 'snack-wrapper',
-    nameRu: 'Обертка / Фантик',
-    nameEn: 'Snack Wrapper',
-    nameUz: 'Konfet o\'rami',
-    bin: 'paper-other',
-    color: 'yellow',
-    badgeRu: '🟡 Желтый (Обертка)',
-    badgeEn: '🟡 Yellow (Wrapper)',
-    badgeUz: '🟡 Sariq (O\'ram)',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
-    </svg>`
-  }
-];
-
-// Pure SVG Coin HTML for consistent crisp rendering (Rule 5 compliant)
-const COIN_SVG_HTML = `<svg class="coin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#coinGrad)" stroke="#b45309" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="#fef3c7" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M12 7v10M9 9.5h5a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h5" stroke="#78350f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-// Web Audio API Synthesizer for collect chime & wrong bin buzzer
-let audioCtx = null;
-function playCollectChime() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioCtx) audioCtx = new AudioContextClass();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sine';
-    // Friendly rising chime (587Hz D5 -> 880Hz A5)
-    osc.frequency.setValueAtTime(587.33, now);
-    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.12);
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.32);
-  } catch (e) {
-    // Audio context may be restricted by browser policy
-  }
-}
-
-function playErrorBuzzer() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioCtx) audioCtx = new AudioContextClass();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.linearRampToValueAtTime(85, now + 0.28);
-
-    gain.gain.setValueAtTime(0.22, now);
-    gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.28);
-  } catch (e) {
-    // Audio context may be restricted by browser policy
-  }
-}
-
-// Coins state helpers
-function getStoredCoins() {
-  const val = parseInt(localStorage.getItem(COIN_STORAGE_KEY), 10);
-  return isNaN(val) ? 0 : Math.max(0, val);
-}
-
-function getCleanedCount() {
-  const val = parseInt(localStorage.getItem(STAT_CLEANED_KEY), 10);
-  return isNaN(val) ? 0 : Math.max(0, val);
-}
-
-function getBinCounts() {
-  try {
-    return JSON.parse(localStorage.getItem(BINS_STORAGE_KEY) || '{}');
-  } catch (e) {
-    return {};
-  }
-}
-
-function incrementBinCount(binType) {
-  const counts = getBinCounts();
-  counts[binType] = (counts[binType] || 0) + 1;
-  localStorage.setItem(BINS_STORAGE_KEY, JSON.stringify(counts));
-  updateBinDisplays();
-}
-
-function updateBinDisplays() {
-  const counts = getBinCounts();
-  const plasticCount = document.getElementById('binPlasticCount');
-  const glassCount = document.getElementById('binGlassCount');
-  const paperCount = document.getElementById('binPaperCount');
-
-  if (plasticCount) plasticCount.textContent = (counts['plastic'] || 0).toLocaleString();
-  if (glassCount) glassCount.textContent = (counts['glass-metal'] || 0).toLocaleString();
-  if (paperCount) paperCount.textContent = (counts['paper-other'] || 0).toLocaleString();
-}
-
-function updateCoinDisplays() {
-  const coins = getStoredCoins();
-  const cleaned = getCleanedCount();
-
-  if (gameCoinBalance) gameCoinBalance.textContent = coins.toLocaleString();
-  if (navCoinPill) navCoinPill.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
-  if (mobileCoinPill) mobileCoinPill.textContent = coins.toLocaleString();
-  if (drawerCoinBadge) drawerCoinBadge.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
-  if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
-  updateBinDisplays();
-}
 
 function addCoins(amount = 1) {
   const current = getStoredCoins();
