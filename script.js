@@ -468,6 +468,7 @@ regForm.addEventListener('submit', async (e) => {
 
 const COIN_STORAGE_KEY = 'tashcare_coins';
 const STAT_CLEANED_KEY = 'tashcare_cleaned_count';
+const BINS_STORAGE_KEY = 'tashcare_bin_counts';
 const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
 
 // DOM Elements for Routing & Game
@@ -499,12 +500,13 @@ const voucherCodeDisplay = document.getElementById('voucherCodeDisplay');
 const copyVoucherBtn = document.getElementById('copyVoucherBtn');
 const copyVoucherTxt = document.getElementById('copyVoucherTxt');
 
-// Trash SVG Icons (Pure SVG - Rule 5 compliant)
+// Trash Items with Categories & Pure SVGs (Rule 5 compliant)
 const TRASH_TYPES = [
   {
     type: 'plastic-bottle',
     name: 'Пластиковая бутылка',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    bin: 'plastic',
+    svg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10 2h4v3h-4z"/>
       <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
       <line x1="8" y1="12" x2="16" y2="12"/>
@@ -512,18 +514,39 @@ const TRASH_TYPES = [
     </svg>`
   },
   {
+    type: 'plastic-bag',
+    name: 'Пластиковый пакет',
+    bin: 'plastic',
+    svg: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
+      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
+      <path d="M10 12a2 2 0 0 0 4 0"/>
+    </svg>`
+  },
+  {
     type: 'soda-can',
     name: 'Жестяная банка',
-    svg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    bin: 'glass-metal',
+    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <ellipse cx="12" cy="5" rx="6" ry="3"/>
       <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
       <path d="M6 12c0 1.66 2.69 3 6 3s6-1.34 6-3"/>
     </svg>`
   },
   {
+    type: 'glass-bottle',
+    name: 'Стеклянная бутылка',
+    bin: 'glass-metal',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
+      <line x1="11" y1="13" x2="13" y2="13"/>
+    </svg>`
+  },
+  {
     type: 'coffee-cup',
     name: 'Одноразовый стаканчик',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    bin: 'paper-other',
+    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
       <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
       <line x1="6" y1="2" x2="6" y2="5"/>
@@ -532,26 +555,10 @@ const TRASH_TYPES = [
     </svg>`
   },
   {
-    type: 'plastic-bag',
-    name: 'Пластиковый пакет',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
-      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
-      <path d="M10 12a2 2 0 0 0 4 0"/>
-    </svg>`
-  },
-  {
-    type: 'glass-bottle',
-    name: 'Стеклянная бутылка',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
-      <line x1="11" y1="13" x2="13" y2="13"/>
-    </svg>`
-  },
-  {
     type: 'snack-wrapper',
     name: 'Фантик от конфет',
-    svg: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    bin: 'paper-other',
+    svg: `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
     </svg>`
   }
@@ -603,6 +610,32 @@ function getCleanedCount() {
   return isNaN(val) ? 0 : Math.max(0, val);
 }
 
+function getBinCounts() {
+  try {
+    return JSON.parse(localStorage.getItem(BINS_STORAGE_KEY) || '{}');
+  } catch (e) {
+    return {};
+  }
+}
+
+function incrementBinCount(binType) {
+  const counts = getBinCounts();
+  counts[binType] = (counts[binType] || 0) + 1;
+  localStorage.setItem(BINS_STORAGE_KEY, JSON.stringify(counts));
+  updateBinDisplays();
+}
+
+function updateBinDisplays() {
+  const counts = getBinCounts();
+  const plasticCount = document.getElementById('binPlasticCount');
+  const glassCount = document.getElementById('binGlassCount');
+  const paperCount = document.getElementById('binPaperCount');
+
+  if (plasticCount) plasticCount.textContent = (counts['plastic'] || 0).toLocaleString();
+  if (glassCount) glassCount.textContent = (counts['glass-metal'] || 0).toLocaleString();
+  if (paperCount) paperCount.textContent = (counts['paper-other'] || 0).toLocaleString();
+}
+
 function updateCoinDisplays() {
   const coins = getStoredCoins();
   const cleaned = getCleanedCount();
@@ -612,6 +645,7 @@ function updateCoinDisplays() {
   if (mobileCoinPill) mobileCoinPill.textContent = coins;
   if (drawerCoinBadge) drawerCoinBadge.textContent = `${coins} 🪙`;
   if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
+  updateBinDisplays();
 }
 
 function addCoins(amount = 1) {
@@ -696,6 +730,7 @@ function updateCleanlinessProgress() {
   }
 }
 
+// Drag & Drop Trash Item Creator
 function spawnTrashItem() {
   if (!trashContainer) return;
 
@@ -704,70 +739,181 @@ function spawnTrashItem() {
   itemEl.className = 'trash-item';
   itemEl.setAttribute('role', 'button');
   itemEl.setAttribute('tabindex', '0');
-  itemEl.setAttribute('title', `Убрать: ${itemData.name} (+1 TashCoin)`);
+  itemEl.setAttribute('title', `Зажми и тащи: ${itemData.name} в ящик`);
   itemEl.innerHTML = itemData.svg;
 
-  // Random position within safe arena bounds
-  // (Left between 8% and 82%, Top between 14% and 74%)
+  // Random position within safe arena grass bounds
   const left = Math.floor(8 + Math.random() * 74);
-  const top = Math.floor(14 + Math.random() * 60);
-  const rotation = Math.floor(-35 + Math.random() * 70);
+  const top = Math.floor(12 + Math.random() * 55);
+  const rotation = Math.floor(-30 + Math.random() * 60);
 
   itemEl.style.left = `${left}%`;
   itemEl.style.top = `${top}%`;
   itemEl.style.transform = `rotate(${rotation}deg)`;
 
-  const onCollect = (e) => {
+  let isDragging = false;
+  let offsetX = 27;
+  let offsetY = 27;
+
+  const onPointerDown = (e) => {
+    if (itemEl.classList.contains('sucked-in')) return;
+    if (e.button !== undefined && e.button !== 0) return; // Primary pointer only
+
     e.preventDefault();
     e.stopPropagation();
 
-    if (itemEl.classList.contains('collected')) return;
-    itemEl.classList.add('collected');
+    isDragging = true;
+    itemEl.classList.add('dragging');
 
-    // Play chime sound
-    playCollectChime();
+    // Show awaiting glow on all bins
+    const bins = document.querySelectorAll('.drop-zone-bin');
+    bins.forEach(b => b.classList.add('awaiting-drop'));
 
-    // Spawn floating +1 indicator
-    const rect = itemEl.getBoundingClientRect();
+    const itemRect = itemEl.getBoundingClientRect();
+    offsetX = e.clientX - itemRect.left;
+    offsetY = e.clientY - itemRect.top;
+
     const arenaRect = parkArena.getBoundingClientRect();
-    const floatEl = document.createElement('div');
-    floatEl.className = 'floating-coin-plus';
-    floatEl.textContent = '+1 🪙';
-    floatEl.style.left = `${rect.left - arenaRect.left + 12}px`;
-    floatEl.style.top = `${rect.top - arenaRect.top - 6}px`;
-    parkArena.appendChild(floatEl);
 
-    setTimeout(() => {
-      if (floatEl.parentNode) floatEl.remove();
-    }, 800);
+    const updatePosition = (clientX, clientY) => {
+      const posX = clientX - arenaRect.left - offsetX;
+      const posY = clientY - arenaRect.top - offsetY;
 
-    // Add +1 coin
-    addCoins(1);
+      itemEl.style.left = `${posX}px`;
+      itemEl.style.top = `${posY}px`;
 
-    // Remove trash item from DOM after pop animation
-    setTimeout(() => {
-      if (itemEl.parentNode) itemEl.remove();
-      updateCleanlinessProgress();
-
-      // Automatically spawn a new piece of trash after a short delay
-      setTimeout(() => {
-        if (trashContainer && trashContainer.children.length < 12) {
-          spawnTrashItem();
+      // Check collision with drop bins
+      let hovered = null;
+      bins.forEach(bin => {
+        const r = bin.getBoundingClientRect();
+        if (clientX >= r.left - 12 && clientX <= r.right + 12 &&
+            clientY >= r.top - 12 && clientY <= r.bottom + 15) {
+          hovered = bin;
         }
-      }, 1400);
-    }, 320);
+      });
+
+      bins.forEach(bin => {
+        if (bin === hovered) bin.classList.add('bin-hovered');
+        else bin.classList.remove('bin-hovered');
+      });
+    };
+
+    updatePosition(e.clientX, e.clientY);
+
+    const onPointerMove = (moveEvt) => {
+      if (!isDragging) return;
+      moveEvt.preventDefault();
+      updatePosition(moveEvt.clientX, moveEvt.clientY);
+    };
+
+    const onPointerUp = (upEvt) => {
+      if (!isDragging) return;
+      isDragging = false;
+      itemEl.classList.remove('dragging');
+
+      // Clear bin highlights
+      bins.forEach(b => {
+        b.classList.remove('awaiting-drop');
+        b.classList.remove('bin-hovered');
+      });
+
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      // Check if dropped onto any bin
+      let targetBin = null;
+      bins.forEach(bin => {
+        const r = bin.getBoundingClientRect();
+        if (upEvt.clientX >= r.left - 15 && upEvt.clientX <= r.right + 15 &&
+            upEvt.clientY >= r.top - 15 && upEvt.clientY <= r.bottom + 20) {
+          targetBin = bin;
+        }
+      });
+
+      if (targetBin) {
+        // Success: Item recycled into bin!
+        handleItemRecycled(itemEl, itemData, targetBin);
+      } else {
+        // Released outside bins: ensure it stays on visible grass
+        const currentArenaRect = parkArena.getBoundingClientRect();
+        const curX = upEvt.clientX - currentArenaRect.left;
+        const curY = upEvt.clientY - currentArenaRect.top;
+
+        if (curX < 15 || curX > currentArenaRect.width - 40 || curY < 15 || curY > currentArenaRect.height - 40) {
+          // Reset to safe inner bounds
+          itemEl.style.left = `${left}%`;
+          itemEl.style.top = `${top}%`;
+        } else {
+          itemEl.style.left = `${curX - offsetX}px`;
+          itemEl.style.top = `${curY - offsetY}px`;
+        }
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
   };
 
-  itemEl.addEventListener('click', onCollect);
-  itemEl.addEventListener('touchstart', onCollect, { passive: false });
-  itemEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      onCollect(e);
-    }
-  });
+  itemEl.addEventListener('pointerdown', onPointerDown);
 
   trashContainer.appendChild(itemEl);
   updateCleanlinessProgress();
+}
+
+function handleItemRecycled(itemEl, itemData, targetBin) {
+  if (itemEl.classList.contains('sucked-in')) return;
+  itemEl.classList.add('sucked-in');
+
+  // Trigger bounce animation on bin
+  targetBin.classList.add('bin-swallow');
+  setTimeout(() => {
+    targetBin.classList.remove('bin-swallow');
+  }, 450);
+
+  // Play audio chime
+  playCollectChime();
+
+  // Increment bin specific count
+  const binType = targetBin.dataset.bin;
+  incrementBinCount(binType);
+
+  // Spawn floating coin animation out of the bin
+  const arenaCard = document.querySelector('.park-arena-card');
+  if (arenaCard) {
+    const binRect = targetBin.getBoundingClientRect();
+    const cardRect = arenaCard.getBoundingClientRect();
+    const floatEl = document.createElement('div');
+    floatEl.className = 'floating-coin-plus';
+
+    const isMatch = (itemData.bin === binType);
+    floatEl.textContent = isMatch ? '+1 🪙 Идеально!' : '+1 🪙';
+
+    floatEl.style.left = `${binRect.left - cardRect.left + (binRect.width / 2) - 35}px`;
+    floatEl.style.top = `${binRect.top - cardRect.top - 12}px`;
+
+    arenaCard.appendChild(floatEl);
+    setTimeout(() => {
+      if (floatEl.parentNode) floatEl.remove();
+    }, 850);
+  }
+
+  // Add +1 TashCoin
+  addCoins(1);
+
+  // Remove trash DOM node after suck-in animation
+  setTimeout(() => {
+    if (itemEl.parentNode) itemEl.remove();
+    updateCleanlinessProgress();
+
+    // Spawn replacement trash on grass after a brief pause
+    setTimeout(() => {
+      if (trashContainer && trashContainer.children.length < 10) {
+        spawnTrashItem();
+      }
+    }, 1200);
+  }, 320);
 }
 
 function spawnInitialTrash(count = 8) {

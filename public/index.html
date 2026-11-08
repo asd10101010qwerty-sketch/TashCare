@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -431,11 +431,11 @@
             <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
             <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
           </svg>
-          <span>Эко-игра TashCare • Очисти поляну</span>
+          <span>Эко-игра TashCare • Сортируй мусор</span>
         </div>
         <h1 class="game-title">Убери мусор — сохрани парки Ташкента!</h1>
         <p class="game-subtitle">
-          Нажимай или тапай по мусору на поляне, чтобы убрать его. За каждый собранный предмет ты получаешь <strong>+1 TashCoin</strong>. Трать накопленные коины в магазине наград прямо внизу!
+          Зажимай и перетаскивай мусор с поляны прямо в подходящий ящик внизу. За каждый утилизированный предмет ты получаешь <strong>+1 TashCoin</strong>. Трать накопленные коины в магазине наград прямо под игрой!
         </p>
 
         <!-- Live Game Stats Grid -->
@@ -466,7 +466,7 @@
         </div>
       </section>
 
-      <!-- Interactive Park Arena -->
+      <!-- Interactive Park Arena with Drag-to-Bins Mechanics -->
       <section class="game-arena-section container">
         <div class="park-arena-card">
           <div class="park-arena-topbar">
@@ -474,12 +474,12 @@
               <span class="arena-dot"></span>
               <span>Парковая зона «Tashkent EcoPark»</span>
             </div>
-            <div class="arena-tip">Тапай по мусору на полянке 👇</div>
+            <div class="arena-tip">Зажми мусор и тащи его в ящик внизу 👇</div>
           </div>
 
-          <!-- Arena Stage -->
+          <!-- Arena Meadow Stage -->
           <div id="parkArena" class="park-arena" aria-label="Игровая поляна">
-            <!-- Decorative Vector Scenery (Trees & Recycle Bins) -->
+            <!-- Decorative Vector Trees -->
             <div class="park-scenery" aria-hidden="true">
               <div class="scenery-tree tree-1">
                 <svg viewBox="0 0 80 120" width="80" height="120" fill="none">
@@ -496,26 +496,75 @@
                   <circle cx="42" cy="32" r="18" fill="#10b981" fill-opacity="0.85"/>
                 </svg>
               </div>
-              <div class="scenery-bins">
-                <div class="scenery-bin bin-plastic" title="Контейнер для пластика">
-                  <svg width="26" height="32" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
-                    <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z"/>
-                    <path d="M2 5h20M9 2h6"/>
-                  </svg>
-                  <span>Пластик</span>
-                </div>
-                <div class="scenery-bin bin-glass" title="Контейнер для стекла">
-                  <svg width="26" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                    <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z"/>
-                    <path d="M2 5h20M9 2h6"/>
-                  </svg>
-                  <span>Стекло</span>
-                </div>
-              </div>
             </div>
 
-            <!-- Dynamic Trash Container (Where clickable trash items are injected) -->
+            <!-- Dynamic Draggable Trash Container -->
             <div id="trashContainer" class="trash-container"></div>
+          </div>
+
+          <!-- Interactive Sorting Bins Dock (Drop Targets) -->
+          <div class="park-bins-dock" id="parkBinsDock">
+            <div class="bins-dock-bar">
+              <span class="dock-label">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>Ящики раздельного сбора (тащите мусор сюда):</span>
+              </span>
+            </div>
+
+            <div class="bins-container">
+              <!-- Bin 1: Plastic -->
+              <div class="drop-zone-bin bin-plastic" data-bin="plastic" id="binPlastic" role="region" aria-label="Ящик для пластика">
+                <div class="bin-counter-badge" id="binPlasticCount" title="Собрано пластика">0</div>
+                <div class="bin-icon-wrapper">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z"/>
+                    <path d="M2 5h20M9 2h6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                  </svg>
+                </div>
+                <div class="bin-info">
+                  <span class="bin-title">Пластик</span>
+                  <span class="bin-hint">Бутылки, пакеты</span>
+                </div>
+                <div class="bin-drop-target">Бросай сюда</div>
+              </div>
+
+              <!-- Bin 2: Glass & Metal -->
+              <div class="drop-zone-bin bin-glass" data-bin="glass-metal" id="binGlass" role="region" aria-label="Ящик для стекла и металла">
+                <div class="bin-counter-badge" id="binGlassCount" title="Собрано стекла и металла">0</div>
+                <div class="bin-icon-wrapper">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z"/>
+                    <path d="M2 5h20M9 2h6"/>
+                    <path d="M12 11v6"/>
+                  </svg>
+                </div>
+                <div class="bin-info">
+                  <span class="bin-title">Стекло & Металл</span>
+                  <span class="bin-hint">Бутылки, банки</span>
+                </div>
+                <div class="bin-drop-target">Бросай сюда</div>
+              </div>
+
+              <!-- Bin 3: Paper & Wrappers -->
+              <div class="drop-zone-bin bin-paper" data-bin="paper-other" id="binPaper" role="region" aria-label="Ящик для бумаги и оберток">
+                <div class="bin-counter-badge" id="binPaperCount" title="Собрано бумаги и прочего">0</div>
+                <div class="bin-icon-wrapper">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z"/>
+                    <path d="M2 5h20M9 2h6"/>
+                    <circle cx="12" cy="14" r="2"/>
+                  </svg>
+                </div>
+                <div class="bin-info">
+                  <span class="bin-title">Бумага & Прочее</span>
+                  <span class="bin-hint">Стаканы, фантики</span>
+                </div>
+                <div class="bin-drop-target">Бросай сюда</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -734,6 +783,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

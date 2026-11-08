@@ -2108,10 +2108,9 @@ footer {
 .park-arena {
   position: relative;
   width: 100%;
-  height: 480px;
+  height: 360px;
   background: linear-gradient(180deg, #dcfce7 0%, #bbf7d0 50%, #86efac 100%);
   overflow: hidden;
-  cursor: crosshair;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -2120,7 +2119,7 @@ footer {
   background: linear-gradient(180deg, #064e3b 0%, #065f46 50%, #047857 100%);
 }
 
-/* Decorative Park Scenery */
+/* Decorative Park Trees */
 .park-scenery {
   position: absolute;
   inset: 0;
@@ -2139,43 +2138,11 @@ footer {
 
 .tree-2 {
   bottom: 25px;
-  right: 180px;
+  right: 50px;
   opacity: 0.85;
 }
 
-.scenery-bins {
-  position: absolute;
-  bottom: 20px;
-  right: 25px;
-  display: flex;
-  gap: 12px;
-}
-
-.scenery-bin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="dark"] .scenery-bin {
-  background: rgba(15, 23, 42, 0.75);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.scenery-bin span {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-/* Dynamic Trash Items */
+/* Dynamic Draggable Trash Items */
 .trash-container {
   position: absolute;
   inset: 0;
@@ -2185,33 +2152,48 @@ footer {
 
 .trash-item {
   position: absolute;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: grab;
   transform-origin: center center;
   transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
   animation: trashFloat 3s infinite ease-in-out;
-  touch-action: manipulation;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 10;
 }
 
 .trash-item svg {
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
   transition: transform 0.15s ease;
+  pointer-events: none;
 }
 
 .trash-item:hover {
-  transform: scale(1.22) rotate(6deg);
+  transform: scale(1.18) rotate(4deg);
 }
 
 .trash-item:hover svg {
-  filter: drop-shadow(0 6px 14px rgba(5, 150, 105, 0.45));
+  filter: drop-shadow(0 8px 16px rgba(5, 150, 105, 0.45));
 }
 
-.trash-item.collected {
-  animation: collectPop 0.35s forwards cubic-bezier(0.16, 1, 0.3, 1);
+/* While being dragged */
+.trash-item.dragging {
+  cursor: grabbing !important;
+  animation: none !important;
+  transition: none !important;
+  transform: scale(1.3) rotate(8deg) !important;
+  z-index: 9999 !important;
+  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.45)) !important;
+}
+
+/* While being sucked into a bin */
+.trash-item.sucked-in {
+  animation: trashSuckIn 0.35s forwards cubic-bezier(0.16, 1, 0.3, 1) !important;
   pointer-events: none;
 }
 
@@ -2220,10 +2202,190 @@ footer {
   50% { transform: translateY(-6px) rotate(4deg); }
 }
 
-@keyframes collectPop {
-  0% { transform: scale(1.1); opacity: 1; }
-  50% { transform: scale(1.4) translateY(-15px); opacity: 0.8; }
-  100% { transform: scale(0.2) translateY(-30px); opacity: 0; }
+@keyframes trashSuckIn {
+  0% { transform: scale(1.2); opacity: 1; }
+  50% { transform: scale(0.6) translateY(25px); opacity: 0.8; }
+  100% { transform: scale(0) translateY(50px); opacity: 0; }
+}
+
+/* Interactive Bins Dock */
+.park-bins-dock {
+  background: var(--bg-tertiary);
+  border-top: 1.5px solid var(--border-color);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.bins-dock-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.dock-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bins-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.drop-zone-bin {
+  position: relative;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.bin-counter-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.bin-icon-wrapper {
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.bin-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bin-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.bin-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.bin-drop-target {
+  margin-top: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+/* Bin 1: Plastic */
+.bin-plastic {
+  border-color: rgba(2, 132, 199, 0.35);
+}
+.bin-plastic .bin-icon-wrapper {
+  color: #0284c7;
+}
+
+/* Bin 2: Glass & Metal */
+.bin-glass {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+.bin-glass .bin-icon-wrapper {
+  color: #10b981;
+}
+
+/* Bin 3: Paper & Wrappers */
+.bin-paper {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+.bin-paper .bin-icon-wrapper {
+  color: #f59e0b;
+}
+
+/* When a trash item is currently being dragged on the screen */
+.drop-zone-bin.awaiting-drop {
+  border-style: solid;
+  border-width: 2px;
+  animation: binAwaitingPulse 1.6s infinite ease-in-out;
+}
+
+@keyframes binAwaitingPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* When item is hovered directly over the bin */
+.drop-zone-bin.bin-hovered {
+  transform: translateY(-8px) scale(1.04);
+  border-style: solid;
+  border-width: 2.5px;
+}
+
+.bin-plastic.bin-hovered {
+  border-color: #0284c7;
+  background: rgba(2, 132, 199, 0.1);
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
+}
+
+.bin-glass.bin-hovered {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+}
+
+.bin-paper.bin-hovered {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
+}
+
+.drop-zone-bin.bin-hovered .bin-drop-target {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 800;
+  transform: scale(1.05);
+}
+
+.drop-zone-bin.bin-hovered .bin-icon-wrapper {
+  transform: scale(1.18) translateY(-3px);
+}
+
+/* Bin swallow bounce animation when item is dropped inside */
+.drop-zone-bin.bin-swallow {
+  animation: binSwallowBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes binSwallowBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15) translateY(-6px); }
+  60% { transform: scale(0.95); }
+  100% { transform: scale(1) translateY(0); }
 }
 
 /* Floating +1 Coin Animation */
@@ -2235,7 +2397,7 @@ footer {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   animation: floatUpFade 0.8s forwards ease-out;
-  z-index: 10;
+  z-index: 1000;
   white-space: nowrap;
 }
 
@@ -2619,17 +2781,56 @@ footer {
   }
 }
 
+@media (max-width: 640px) {
+  .park-arena {
+    height: 290px;
+  }
+
+  .park-bins-dock {
+    padding: 0.9rem 0.75rem 1rem;
+  }
+
+  .bins-container {
+    gap: 0.5rem;
+  }
+
+  .drop-zone-bin {
+    padding: 0.85rem 0.35rem 0.75rem;
+  }
+
+  .bin-title {
+    font-size: 0.82rem;
+  }
+
+  .bin-hint {
+    display: none;
+  }
+
+  .bin-drop-target {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .bin-icon-wrapper svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .bin-counter-badge {
+    top: 4px;
+    right: 4px;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+  }
+}
+
 @media (max-width: 480px) {
   .park-arena {
-    height: 330px;
+    height: 270px;
   }
 
   .trash-item {
-    width: 44px;
-    height: 44px;
-  }
-
-  .scenery-bins {
-    display: none;
+    width: 48px;
+    height: 48px;
   }
 }
