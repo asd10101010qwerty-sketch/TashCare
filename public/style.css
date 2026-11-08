@@ -971,10 +971,8 @@ body {
   border-radius: var(--radius-lg);
   padding: 3.5rem 3rem;
   box-shadow: var(--card-shadow);
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 3.5rem;
-  align-items: center;
+  max-width: 860px;
+  margin: 0 auto;
   position: relative;
   overflow: hidden;
 }
