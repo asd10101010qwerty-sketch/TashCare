@@ -105,24 +105,24 @@ const TRANSLATIONS = {
     shopSubtitle: 'Обменивайте заработанные TashCoin на памятный мерч, полезные эко-товары и именные справки. <em>(Цены и список товаров настраиваются администратором).</em>',
 
     shopItem1Cat: 'Эко-Мерч',
-    shopItem1Title: 'Фирменный эко-стикерпак',
-    shopItem1Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
+    shopItem1Title: 'Футболка TashCare',
+    shopItem1Desc: 'Фирменная хлопковая футболка сообщества из 100% органического эко-хлопка с логотипом.',
 
-    shopItem2Cat: 'Аксессуар',
-    shopItem2Title: 'Металлический значок TashCare',
-    shopItem2Desc: 'Памятный значок волонтера с эмалью «Хранитель природы Ташкента» на одежду или рюкзак.',
+    shopItem2Cat: 'Посуда & Мерч',
+    shopItem2Title: 'Кружка TashCare',
+    shopItem2Desc: 'Качественная керамическая кружка для чая и кофе с фирменным эко-дизайном сообщества.',
 
-    shopItem3Cat: 'Эко-Товары',
-    shopItem3Title: 'Хлопковый шоппер TashCare',
-    shopItem3Desc: 'Вместительная сумка из плотного 100% органического хлопка для экологичных покупок без пакетов.',
+    shopItem3Cat: 'Канцелярия',
+    shopItem3Title: 'Эко-ручка TashCare',
+    shopItem3Desc: 'Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.',
 
-    shopItem4Cat: 'Эко-Товары',
-    shopItem4Title: 'Термобутылка для воды 500 мл',
-    shopItem4Desc: 'Вакуумная нержавеющая бутылка, удерживающая температуру напитков на субботниках и эко-выездах.',
+    shopItem4Cat: 'Эко-Мерч',
+    shopItem4Title: 'Стикерпак TashCare',
+    shopItem4Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
 
-    shopItem5Cat: 'Документы',
-    shopItem5Title: 'Именной сертификат волонтера',
-    shopItem5Desc: 'Официальный бумажный и цифровой сертификат почетного волонтера с печатью сообщества для школы и вуза.',
+    shopItem5Cat: 'Эко-Вклад',
+    shopItem5Title: '1 кг мусора',
+    shopItem5Desc: 'Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.',
 
     btnExchange: 'Обменять',
     modalSuccessTitle: 'Награда успешно оформлена!',
@@ -233,24 +233,24 @@ const TRANSLATIONS = {
     shopSubtitle: 'Exchange your earned TashCoins for exclusive community merch, eco-friendly goods, and official certificates.',
 
     shopItem1Cat: 'Eco-Merch',
-    shopItem1Title: 'TashCare Vinyl Sticker Pack',
-    shopItem1Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
+    shopItem1Title: 'TashCare T-Shirt',
+    shopItem1Desc: 'Official 100% organic eco-cotton branded community T-shirt with TashCare logo.',
 
-    shopItem2Cat: 'Accessory',
-    shopItem2Title: 'TashCare Enamel Metal Pin',
-    shopItem2Desc: 'Commemorative enamel volunteer badge «Guardian of Tashkent Nature» for backpacks and jackets.',
+    shopItem2Cat: 'Ceramics & Merch',
+    shopItem2Title: 'TashCare Ceramic Mug',
+    shopItem2Desc: 'High-quality ceramic mug for coffee or tea with official TashCare eco-design.',
 
-    shopItem3Cat: 'Eco-Goods',
-    shopItem3Title: 'Cotton Shopper Bag',
-    shopItem3Desc: 'Spacious 100% organic heavy cotton tote for eco-friendly shopping without plastic bags.',
+    shopItem3Cat: 'Eco-Stationery',
+    shopItem3Title: 'TashCare Eco-Pen',
+    shopItem3Desc: 'Eco-friendly ballpoint pen made from recycled kraft paper and biodegradable materials.',
 
-    shopItem4Cat: 'Eco-Goods',
-    shopItem4Title: 'Thermal Water Bottle 500ml',
-    shopItem4Desc: 'Vacuum insulated stainless steel bottle keeping drinks hot or cold during outdoor drives.',
+    shopItem4Cat: 'Eco-Merch',
+    shopItem4Title: 'TashCare Sticker Pack',
+    shopItem4Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
 
-    shopItem5Cat: 'Documents',
-    shopItem5Title: 'Official Volunteer Certificate',
-    shopItem5Desc: 'Official sealed paper and digital honorary certificate for school, lyceum, or university credit.',
+    shopItem5Cat: 'Eco-Action',
+    shopItem5Title: '1 kg of Trash',
+    shopItem5Desc: 'Official credit voucher for submitting 1 kg of sorted recyclable trash from Tashkent parks.',
 
     btnExchange: 'Redeem',
     modalSuccessTitle: 'Reward Claimed Successfully!',
@@ -361,24 +361,24 @@ const TRANSLATIONS = {
     shopSubtitle: 'To\'plangan TashCoin tangalarini esdalik sovg\'alar, eko-mahsulotlar va rasmiy ma\'lumotnomalarga almashtiring.',
 
     shopItem1Cat: 'Eko-Merch',
-    shopItem1Title: 'TashCare stikerlar to\'plami',
-    shopItem1Desc: 'Noutbuk, termos va telefon g\'iloflari uchun suvga chidamli yorqin stikerlar.',
+    shopItem1Title: 'TashCare futbolkasi',
+    shopItem1Desc: 'TashCare logotipi tushirilgan 100% tabiiy organik paxtadan tikilgan jamoaviy futbolka.',
 
-    shopItem2Cat: 'Aksessuar',
-    shopItem2Title: 'TashCare metall nishoni',
-    shopItem2Desc: 'Kiyim va ryukzaklar uchun «Toshkent tabiatini asrovchi» esdalik nishoni.',
+    shopItem2Cat: 'Idish-tovoq',
+    shopItem2Title: 'TashCare krujkasi',
+    shopItem2Desc: 'TashCare ramzi tushirilgan choy va kofe uchun sifatli sopol krujka.',
 
-    shopItem3Cat: 'Eko-Mahsulot',
-    shopItem3Title: 'Paxtali shopper sumkasi',
-    shopItem3Desc: 'Polietilen paketlarsiz xaridlar qilish uchun 100% tabiiy paxtadan tikilgan qulay sumka.',
+    shopItem3Cat: 'Kanselyariya',
+    shopItem3Title: 'TashCare eko-ruchkasi',
+    shopItem3Desc: 'Qayta ishlangan kraft qog\'oz va bio-parchalanuvchi materiallardan tayyorlangan sharikli ruchka.',
 
-    shopItem4Cat: 'Eko-Mahsulot',
-    shopItem4Title: 'Termobutulka 500 ml',
-    shopItem4Desc: 'Eko-tadbirlarda ichimlik haroratini saqlab beruvchi zanglamas po\'lat termobutulka.',
+    shopItem4Cat: 'Eko-Merch',
+    shopItem4Title: 'TashCare stikerlar to\'plami',
+    shopItem4Desc: 'Noutbuk, telefon va termoslar uchun suvga chidamli yorqin stikerlar to\'plami.',
 
-    shopItem5Cat: 'Hujjatlar',
-    shopItem5Title: 'Rasmiy ko\'ngilli sertifikati',
-    shopItem5Desc: 'Maktab, litsey va oliygohlarga taqdim etiladigan rasmiy muhrli faxriy sertifikat.',
+    shopItem5Cat: 'Eko-Hissa',
+    shopItem5Title: '1 kg chiqindi',
+    shopItem5Desc: 'Toshkent parklaridan 1 kg saralangan chiqindini qayta ishlashga topshirish sertifikati.',
 
     btnExchange: 'Almashtirish',
     modalSuccessTitle: 'Sovrin muvaffaqiyatli rasmiylashtirildi!',
@@ -1057,7 +1057,8 @@ function updateCleanlinessProgress() {
 
 // Drag & Drop Trash Item Creator with Colors and Badges
 function spawnTrashItem() {
-  if (!trashContainer) return;
+  const container = trashContainer || document.getElementById('trashContainer');
+  if (!container) return;
 
   const itemData = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
   const itemEl = document.createElement('div');
@@ -1107,7 +1108,8 @@ function spawnTrashItem() {
     offsetX = e.clientX - itemRect.left;
     offsetY = e.clientY - itemRect.top;
 
-    const arenaRect = parkArena.getBoundingClientRect();
+    const arena = parkArena || document.getElementById('parkArena');
+    const arenaRect = arena ? arena.getBoundingClientRect() : { left: 0, top: 0, width: 600, height: 360 };
 
     const updatePosition = (clientX, clientY) => {
       const posX = clientX - arenaRect.left - offsetX;
@@ -1174,7 +1176,8 @@ function spawnTrashItem() {
         }
       } else {
         // Released outside bins: ensure it stays on visible grass
-        const currentArenaRect = parkArena.getBoundingClientRect();
+        const currentArena = parkArena || document.getElementById('parkArena');
+        const currentArenaRect = currentArena ? currentArena.getBoundingClientRect() : { left: 0, top: 0, width: 600, height: 360 };
         const curX = upEvt.clientX - currentArenaRect.left;
         const curY = upEvt.clientY - currentArenaRect.top;
 
@@ -1196,7 +1199,7 @@ function spawnTrashItem() {
 
   itemEl.addEventListener('pointerdown', onPointerDown);
 
-  trashContainer.appendChild(itemEl);
+  container.appendChild(itemEl);
   updateCleanlinessProgress();
 }
 
@@ -1301,11 +1304,13 @@ function handleItemRecycled(itemEl, itemData, targetBin) {
 }
 
 function spawnInitialTrash(count = 8) {
-  if (!trashContainer) return;
-  trashContainer.innerHTML = '';
+  const container = trashContainer || document.getElementById('trashContainer');
+  if (!container) return;
+  container.innerHTML = '';
   for (let i = 0; i < count; i++) {
     spawnTrashItem();
   }
+  updateCleanlinessProgress();
 }
 
 if (respawnTrashBtn) {
@@ -1321,10 +1326,10 @@ window.handleShopBuy = function(itemId, price, title) {
   if (currentCoins < price) {
     const diff = price - currentCoins;
     const msg = currentLang === 'en'
-      ? `You need ${diff} more TashCoin! Clean up more trash in the park meadow to earn coins.`
+      ? `You need ${diff.toLocaleString()} more TashCoin! Clean up more trash in the park meadow to earn coins.`
       : (currentLang === 'uz'
-        ? `Sizga yana ${diff} ta TashCoin yetishmayapti! Tangalar yig'ish uchun parkdagi chiqindilarni tozalang.`
-        : `Вам не хватает ${diff} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
+        ? `Sizga yana ${diff.toLocaleString()} ta TashCoin yetishmayapti! Tangalar yig'ish uchun parkdagi chiqindilarni tozalang.`
+        : `Вам не хватает ${diff.toLocaleString()} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
     alert(msg);
     return;
   }
@@ -1338,6 +1343,9 @@ window.handleShopBuy = function(itemId, price, title) {
   const randB = Math.floor(1000 + Math.random() * 9000);
   const voucherCode = `TC-${randA}-${randB}`;
 
+  // Retrieve user's registered username from localStorage or input
+  const storedUser = localStorage.getItem('tashcare_registered_user') || (usernameInput ? usernameInput.value.trim().replace(/^@/, '') : '');
+
   // Save order to history
   try {
     let orders = [];
@@ -1348,11 +1356,39 @@ window.handleShopBuy = function(itemId, price, title) {
       title,
       price,
       code: voucherCode,
+      username: storedUser,
       date: new Date().toISOString()
     });
     localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
   } catch (err) {
     console.error('Order save error:', err);
+  }
+
+  // Dispatch order to server and Telegram Admin Bot with voucher code and Ready button
+  try {
+    const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+    fetch(`${apiBase}/api/redeem-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        itemId,
+        title,
+        price,
+        code: voucherCode,
+        username: storedUser
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log('[Shop] Order notification delivered to Admin Bot:', data);
+      })
+      .catch(err => {
+        console.warn('[Shop] Notice syncing order to server:', err);
+      });
+  } catch (syncErr) {
+    console.warn('[Shop] Order sync skipped:', syncErr);
   }
 
   // Show modal with localized header
@@ -1361,7 +1397,7 @@ window.handleShopBuy = function(itemId, price, title) {
     shopModalTitle.textContent = heading;
   }
   if (shopModalSubtitle) {
-    const sub = currentLang === 'en' ? `Successfully charged ${price} TashCoin from your balance.` : (currentLang === 'uz' ? `Balansingizdan ${price} TashCoin muvaffaqiyatli yechildi.` : `С вашего баланса успешно списано ${price} TashCoin.`);
+    const sub = currentLang === 'en' ? `Successfully charged ${price.toLocaleString()} TashCoin from your balance.` : (currentLang === 'uz' ? `Balansingizdan ${price.toLocaleString()} TashCoin muvaffaqiyatli yechildi.` : `С вашего баланса успешно списано ${price.toLocaleString()} TashCoin.`);
     shopModalSubtitle.textContent = sub;
   }
   if (voucherCodeDisplay) voucherCodeDisplay.textContent = voucherCode;
@@ -1370,8 +1406,6 @@ window.handleShopBuy = function(itemId, price, title) {
   const modalItemVal = document.getElementById('modalItemVal');
   if (modalItemVal) modalItemVal.textContent = title;
 
-  // Retrieve user's registered username from localStorage or input
-  const storedUser = localStorage.getItem('tashcare_registered_user') || (usernameInput ? usernameInput.value.trim().replace(/^@/, '') : '');
   const modalUserVal = document.getElementById('modalUserVal');
   if (modalUserVal) {
     modalUserVal.textContent = storedUser ? `@${storedUser}` : (currentLang === 'en' ? '(Not specified)' : (currentLang === 'uz' ? '(Ko\'rsatilmagan)' : '(Не указан)'));
@@ -1444,13 +1478,29 @@ window.copyVoucherCode = function() {
   }
 };
 
-// Initialize coins, trash arena and router on load
-updateCoinDisplays();
-updateCleanlinessProgress();
+// Ensure trash and coins are initialized under all lifecycle conditions
+function ensureGameInitialized() {
+  updateCoinDisplays();
+  updateCleanlinessProgress();
 
-if (trashContainer && trashContainer.children.length === 0) {
-  spawnInitialTrash(8);
+  const container = trashContainer || document.getElementById('trashContainer');
+  if (container && container.children.length === 0) {
+    spawnInitialTrash(8);
+  }
 }
+
+// 1. Immediate call
+ensureGameInitialized();
+
+// 2. DOMContentLoaded call
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', ensureGameInitialized);
+} else {
+  ensureGameInitialized();
+}
+
+// 3. Window load call
+window.addEventListener('load', ensureGameInitialized);
 
 if (window.location.hash === '#game') {
   setTimeout(() => {

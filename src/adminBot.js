@@ -260,6 +260,49 @@ ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(
     }
   });
 
+  // Callback Query Handlers for Orders
+  bot.action(/^claim_order:(.+)$/, async (ctx) => {
+    try {
+      const fromId = String(ctx.from.id);
+      const isAuth = await checkAdminAuth(fromId);
+      if (!ALL_ADMIN_IDS.includes(fromId) && !isAuth) {
+        return ctx.answerCbQuery('У вас нет прав администратора.');
+      }
+
+      const code = ctx.match[1];
+      const adminName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || fromId);
+      await storage.markOrderCompleted(code, adminName);
+
+      const oldText = ctx.callbackQuery.message?.text || '';
+      const dateStr = new Date().toLocaleString();
+
+      const updatedText = oldText + `\n\n✅ <b>ВЫДАНО (Готово)</b>\n👤 Выдал: ${adminName}\n⏰ Время: ${dateStr}`;
+
+      try {
+        await ctx.editMessageText(updatedText, {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: `✅ Выдано (${adminName})`, callback_data: 'order_already_done' }]
+            ]
+          }
+        });
+      } catch (editErr) {
+        console.warn('[AdminBot] Notice editing order message text:', editErr.message);
+      }
+
+      await ctx.answerCbQuery('✅ Награда успешно отмечена как выданная!');
+      console.log(`[AdminBot] Order ${code} marked as completed by admin ${adminName}`);
+    } catch (err) {
+      console.error('[AdminBot] Error claiming order:', err.message);
+      await ctx.answerCbQuery('Произошла ошибка при обновлении статуса.').catch(() => {});
+    }
+  });
+
+  bot.action('order_already_done', async (ctx) => {
+    await ctx.answerCbQuery('Эта награда уже была выдана волонтеру. ✅').catch(() => {});
+  });
+
   // Function to notify all active and authorized admins when a user registers on the website
   async function notifyAdminNewUser(username, metadata = {}) {
     const state = await storage.getState();
@@ -306,9 +349,68 @@ ID: <code>${metadata.id || 'N/A'}</code>
     return sentCount > 0;
   }
 
+  // Function to notify all active and authorized admins when a user redeems a shop reward
+  async function notifyAdminNewOrder(orderData) {
+    const state = await storage.getState();
+    const adminTargets = Array.from(new Set([
+      ...ALL_ADMIN_IDS,
+      ...(state.authenticatedAdmins || []),
+      state.activeAdminChatId ? String(state.activeAdminChatId) : null
+    ].filter(Boolean)));
+
+    const cleanUser = (orderData.username || '').replace(/^@/, '').trim();
+    const safeUser = cleanUser ? `@${cleanUser}` : 'Не указан';
+    const dateStr = orderData.date ? new Date(orderData.date).toLocaleString() : new Date().toLocaleString();
+    const safeTitle = (orderData.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const safePrice = Number(orderData.price || 0).toLocaleString();
+    const code = orderData.code;
+
+    const messageHtml = 
+`🛍️ <b>Новая покупка в магазине наград TashCare!</b>
+
+📦 <b>Товар:</b> ${safeTitle}
+💰 <b>Цена:</b> ${safePrice} TashCoin
+🔑 <b>Код выдачи:</b> <code>${code}</code>
+👤 <b>Волонтер:</b> ${safeUser}
+📅 <b>Дата покупки:</b> ${dateStr}
+
+Статус: ⏳ <i>Ожидает выдачи</i>
+
+<i>Нажмите кнопку «✅ Готово» ниже, когда выдадите приз волонтеру:</i>`;
+
+    const inlineKeyboard = [
+      [{ text: '✅ Готово', callback_data: `claim_order:${code}` }]
+    ];
+    if (cleanUser) {
+      inlineKeyboard.push([{ text: `Открыть профиль @${cleanUser}`, url: `https://t.me/${cleanUser}` }]);
+    }
+
+    let sentCount = 0;
+    for (const adminId of adminTargets) {
+      try {
+        await bot.telegram.sendMessage(adminId, messageHtml, {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: inlineKeyboard
+          }
+        });
+        sentCount++;
+        console.log(`[AdminBot] Order notification sent to admin (${adminId}) for code ${code}`);
+      } catch (err) {
+        if (err.message && err.message.includes('chat not found')) {
+          console.warn(`[AdminBot] Admin (${adminId}) hasn't pressed /start on @Tashcare_bot yet.`);
+        } else {
+          console.error(`[AdminBot] Failed to send order notification to admin ${adminId}:`, err.message);
+        }
+      }
+    }
+    return sentCount > 0;
+  }
+
   return {
     bot,
-    notifyAdminNewUser
+    notifyAdminNewUser,
+    notifyAdminNewOrder
   };
 }
 

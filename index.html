@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 
 <body>
@@ -660,11 +660,86 @@
           </p>
         </div>
 
-        <!-- Shop Grid -->
+        <!-- Shop Grid (New Items & Prices: Футболка 7500, Кружка 5000, Ручка 3000, Стикерпак 2000, 1 кг мусора 100) -->
         <div class="shop-grid" id="shopGrid">
-          <!-- Card 1: Stickers -->
-          <div class="shop-card" data-item="stickers" data-price="30">
+          <!-- Card 1: Футболка (7 500 TashCoin) -->
+          <div class="shop-card" data-item="tshirt" data-price="7500">
             <div class="shop-card-category" data-i18n="shopItem1Cat">Эко-Мерч</div>
+            <div class="shop-card-visual">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a2 2 0 0 0 2 1.67H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10.83h1.14a2 2 0 0 0 2-1.67l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                <path d="M12 2v4" />
+                <path d="m9 10 3 3 3-3" />
+              </svg>
+            </div>
+            <h3 class="shop-card-title" data-i18n="shopItem1Title">Футболка TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem1Desc">Фирменная хлопковая футболка сообщества из 100% органического эко-хлопка с логотипом.</p>
+            <div class="shop-card-footer">
+              <div class="shop-price-tag">
+                <span class="price-val">7 500</span>
+                <span class="price-currency">TashCoin</span>
+              </div>
+              <button class="btn-shop-buy" onclick="handleShopBuy('tshirt', 7500, 'Футболка TashCare')">
+                <span data-i18n="btnExchange">Обменять</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: Кружка (5 000 TashCoin) -->
+          <div class="shop-card" data-item="mug" data-price="5000">
+            <div class="shop-card-category" data-i18n="shopItem2Cat">Посуда & Мерч</div>
+            <div class="shop-card-visual">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                <line x1="6" x2="6" y1="2" y2="4" />
+                <line x1="10" x2="10" y1="2" y2="4" />
+                <line x1="14" x2="14" y1="2" y2="4" />
+              </svg>
+            </div>
+            <h3 class="shop-card-title" data-i18n="shopItem2Title">Кружка TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem2Desc">Качественная керамическая кружка для чая и кофе с фирменным эко-дизайном сообщества.</p>
+            <div class="shop-card-footer">
+              <div class="shop-price-tag">
+                <span class="price-val">5 000</span>
+                <span class="price-currency">TashCoin</span>
+              </div>
+              <button class="btn-shop-buy" onclick="handleShopBuy('mug', 5000, 'Кружка TashCare')">
+                <span data-i18n="btnExchange">Обменять</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: Ручка (3 000 TashCoin) -->
+          <div class="shop-card" data-item="pen" data-price="3000">
+            <div class="shop-card-category" data-i18n="shopItem3Cat">Канцелярия</div>
+            <div class="shop-card-visual">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 2 4 4-12 12-4-4Z" />
+                <path d="m14 6 4 4" />
+                <path d="M6 18l-4 4" />
+                <path d="m2 22 4-1" />
+              </svg>
+            </div>
+            <h3 class="shop-card-title" data-i18n="shopItem3Title">Эко-ручка TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem3Desc">Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.</p>
+            <div class="shop-card-footer">
+              <div class="shop-price-tag">
+                <span class="price-val">3 000</span>
+                <span class="price-currency">TashCoin</span>
+              </div>
+              <button class="btn-shop-buy" onclick="handleShopBuy('pen', 3000, 'Эко-ручка TashCare')">
+                <span data-i18n="btnExchange">Обменять</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 4: Стикерпак (2 000 TashCoin) -->
+          <div class="shop-card" data-item="stickers" data-price="2000">
+            <div class="shop-card-category" data-i18n="shopItem4Cat">Эко-Мерч</div>
             <div class="shop-card-visual">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -673,112 +748,38 @@
                 <path d="M21 8.5l-2.5-2.5a2.12 2.12 0 0 0-3 0l-1 1 5.5 5.5 1-1a2.12 2.12 0 0 0 0-3z" />
               </svg>
             </div>
-            <h3 class="shop-card-title" data-i18n="shopItem1Title">Фирменный эко-стикерпак</h3>
-            <p class="shop-card-desc" data-i18n="shopItem1Desc">Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.</p>
+            <h3 class="shop-card-title" data-i18n="shopItem4Title">Стикерпак TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem4Desc">Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.</p>
             <div class="shop-card-footer">
               <div class="shop-price-tag">
-                <span class="price-val">30</span>
+                <span class="price-val">2 000</span>
                 <span class="price-currency">TashCoin</span>
               </div>
-              <button class="btn-shop-buy" onclick="handleShopBuy('stickers', 30, 'Фирменный эко-стикерпак')">
+              <button class="btn-shop-buy" onclick="handleShopBuy('stickers', 2000, 'Стикерпак TashCare')">
                 <span data-i18n="btnExchange">Обменять</span>
               </button>
             </div>
           </div>
 
-          <!-- Card 2: Metal Pin -->
-          <div class="shop-card" data-item="pin" data-price="60">
-            <div class="shop-card-category" data-i18n="shopItem2Cat">Аксессуар</div>
+          <!-- Card 5: 1 кг мусора (100 TashCoin) -->
+          <div class="shop-card" data-item="waste1kg" data-price="100">
+            <div class="shop-card-category" data-i18n="shopItem5Cat">Эко-Вклад</div>
             <div class="shop-card-visual">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="6" />
-                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                <path d="M4 8h16l-1.5 12a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 8z" />
+                <path d="M2 5h20M9 2h6" />
+                <path d="M12 11v6M9 14h6" />
               </svg>
             </div>
-            <h3 class="shop-card-title" data-i18n="shopItem2Title">Металлический значок TashCare</h3>
-            <p class="shop-card-desc" data-i18n="shopItem2Desc">Памятный значок волонтера с эмалью «Хранитель природы Ташкента» на одежду или рюкзак.</p>
+            <h3 class="shop-card-title" data-i18n="shopItem5Title">1 кг мусора</h3>
+            <p class="shop-card-desc" data-i18n="shopItem5Desc">Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.</p>
             <div class="shop-card-footer">
               <div class="shop-price-tag">
-                <span class="price-val">60</span>
+                <span class="price-val">100</span>
                 <span class="price-currency">TashCoin</span>
               </div>
-              <button class="btn-shop-buy" onclick="handleShopBuy('pin', 60, 'Металлический значок TashCare')">
-                <span data-i18n="btnExchange">Обменять</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 3: Shopper Tote -->
-          <div class="shop-card" data-item="shopper" data-price="120">
-            <div class="shop-card-category" data-i18n="shopItem3Cat">Эко-Товары</div>
-            <div class="shop-card-visual">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                <path d="M3 6h18" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-            </div>
-            <h3 class="shop-card-title" data-i18n="shopItem3Title">Хлопковый шоппер TashCare</h3>
-            <p class="shop-card-desc" data-i18n="shopItem3Desc">Вместительная сумка из плотного 100% органического хлопка для экологичных покупок без пакетов.</p>
-            <div class="shop-card-footer">
-              <div class="shop-price-tag">
-                <span class="price-val">120</span>
-                <span class="price-currency">TashCoin</span>
-              </div>
-              <button class="btn-shop-buy" onclick="handleShopBuy('shopper', 120, 'Хлопковый шоппер TashCare')">
-                <span data-i18n="btnExchange">Обменять</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 4: Thermal Bottle -->
-          <div class="shop-card" data-item="bottle" data-price="200">
-            <div class="shop-card-category" data-i18n="shopItem4Cat">Эко-Товары</div>
-            <div class="shop-card-visual">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10 2h4" />
-                <path d="M10 5h4" />
-                <path d="M9 5v3l-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V10l-2-2V5" />
-                <line x1="12" y1="12" x2="12" y2="16" />
-              </svg>
-            </div>
-            <h3 class="shop-card-title" data-i18n="shopItem4Title">Термобутылка для воды 500 мл</h3>
-            <p class="shop-card-desc" data-i18n="shopItem4Desc">Вакуумная нержавеющая бутылка, удерживающая температуру напитков на субботниках и эко-выездах.</p>
-            <div class="shop-card-footer">
-              <div class="shop-price-tag">
-                <span class="price-val">200</span>
-                <span class="price-currency">TashCoin</span>
-              </div>
-              <button class="btn-shop-buy" onclick="handleShopBuy('bottle', 200, 'Термобутылка для воды 500 мл')">
-                <span data-i18n="btnExchange">Обменять</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 5: Volunteer Certificate -->
-          <div class="shop-card" data-item="cert" data-price="300">
-            <div class="shop-card-category" data-i18n="shopItem5Cat">Документы</div>
-            <div class="shop-card-visual">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M7 7h10" />
-                <path d="M7 12h10" />
-                <path d="M7 17h6" />
-                <circle cx="17" cy="17" r="2" />
-              </svg>
-            </div>
-            <h3 class="shop-card-title" data-i18n="shopItem5Title">Именной сертификат волонтера</h3>
-            <p class="shop-card-desc" data-i18n="shopItem5Desc">Официальный бумажный и цифровой сертификат почетного волонтера с печатью сообщества для школы и вуза.</p>
-            <div class="shop-card-footer">
-              <div class="shop-price-tag">
-                <span class="price-val">300</span>
-                <span class="price-currency">TashCoin</span>
-              </div>
-              <button class="btn-shop-buy" onclick="handleShopBuy('cert', 300, 'Именной сертификат волонтера')">
+              <button class="btn-shop-buy" onclick="handleShopBuy('waste1kg', 100, '1 кг собранного мусора')">
                 <span data-i18n="btnExchange">Обменять</span>
               </button>
             </div>
@@ -910,7 +911,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=10"></script>
 </body>
 
 </html>

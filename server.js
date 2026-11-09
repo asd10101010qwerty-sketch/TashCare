@@ -249,6 +249,66 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+/**
+ * Redeem Shop Reward Order Endpoint
+ * POST /api/redeem-order
+ * Body: { itemId, title, price, code, username }
+ */
+app.post(['/api/redeem-order', '/api/orders'], async (req, res) => {
+  try {
+    const { itemId, title, price, code, username } = req.body;
+
+    if (!code || !title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required order details (code and title are required).'
+      });
+    }
+
+    const cleanUsername = username ? String(username).trim().replace(/^@/, '') : null;
+    const clientIp = (req.headers && req.headers['x-forwarded-for']) || (req.socket && req.socket.remoteAddress) || '127.0.0.1';
+    const userAgent = (req.headers && req.headers['user-agent']) || null;
+
+    // 1. Save order to storage
+    const newOrder = await storage.saveOrder({
+      itemId: itemId || 'reward',
+      title,
+      price: Number(price) || 0,
+      code: String(code).trim(),
+      username: cleanUsername,
+      ip: clientIp,
+      userAgent
+    });
+
+    console.log(`[Shop Order] New order redeemed: ${title} (${price} TashCoin) by @${cleanUsername || 'unknown'} - Voucher: ${code}`);
+
+    // 2. Dispatch notification with «✅ Готово» button to all authorized admins via Admin Bot
+    if (adminBotInstance && typeof adminBotInstance.notifyAdminNewOrder === 'function') {
+      adminBotInstance.notifyAdminNewOrder({
+        itemId,
+        title,
+        price,
+        code: String(code).trim(),
+        username: cleanUsername,
+        date: newOrder.createdAt
+      }).catch(err => {
+        console.error('[Notification] Error dispatching order notification to admin bot:', err.message);
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      order: newOrder
+    });
+  } catch (error) {
+    console.error('Redeem order error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'An internal error occurred while processing the order.'
+    });
+  }
+});
+
 // Serve frontend fallback for SPA
 app.use((req, res, next) => {
   if (req.method === 'GET' && !req.path.startsWith('/api/')) {

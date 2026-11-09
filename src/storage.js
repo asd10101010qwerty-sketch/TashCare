@@ -9,6 +9,7 @@ const DATA_DIR = isVercel ? path.join('/tmp', 'tashcare_data') : LOCAL_DATA_DIR;
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
 const STATE_FILE = path.join(DATA_DIR, 'state.json');
+const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 
 // Upstash Redis / Vercel KV REST API configuration
 const UPSTASH_URL = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '').replace(/\/$/, '');
@@ -19,7 +20,8 @@ const hasRedis = Boolean(UPSTASH_URL && UPSTASH_TOKEN);
 const memoryCache = {
   users: null,
   subscribers: null,
-  state: null
+  state: null,
+  orders: null
 };
 
 // Ensure data directory exists and seed from local if on Vercel
@@ -31,7 +33,7 @@ function ensureDirAndSeed() {
 
     if (isVercel && fs.existsSync(LOCAL_DATA_DIR)) {
       // Seed files from local project data to /tmp if not already present
-      ['users.json', 'subscribers.json', 'state.json'].forEach((filename) => {
+      ['users.json', 'subscribers.json', 'state.json', 'orders.json'].forEach((filename) => {
         const srcFile = path.join(LOCAL_DATA_DIR, filename);
         const destFile = path.join(DATA_DIR, filename);
         if (fs.existsSync(srcFile) && !fs.existsSync(destFile)) {
@@ -308,6 +310,66 @@ async function clearPendingAction(chatId) {
   }
 }
 
+// --- Orders Management ---
+async function getOrders() {
+  if (memoryCache.orders) return memoryCache.orders;
+  if (hasRedis) {
+    const redisOrders = await redisGet('tashcare:orders');
+    if (Array.isArray(redisOrders)) {
+      memoryCache.orders = redisOrders;
+      return redisOrders;
+    }
+  }
+  const orders = readJSON(ORDERS_FILE, []);
+  memoryCache.orders = orders;
+  return orders;
+}
+
+async function saveOrder(orderData) {
+  const orders = await getOrders();
+  const newOrder = {
+    id: `ORD-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+    itemId: orderData.itemId || 'custom',
+    title: orderData.title,
+    price: Number(orderData.price) || 0,
+    code: orderData.code,
+    username: orderData.username || null,
+    status: 'pending', // 'pending' | 'completed'
+    createdAt: new Date().toISOString(),
+    completedAt: null,
+    completedBy: null,
+    ip: orderData.ip || null,
+    userAgent: orderData.userAgent || null
+  };
+
+  orders.push(newOrder);
+  memoryCache.orders = orders;
+  writeJSON(ORDERS_FILE, orders);
+
+  if (hasRedis) {
+    redisSet('tashcare:orders', orders).catch(() => {});
+  }
+  return newOrder;
+}
+
+async function markOrderCompleted(code, adminInfo) {
+  const orders = await getOrders();
+  const order = orders.find(o => o.code === code);
+  if (!order) return null;
+
+  order.status = 'completed';
+  order.completedAt = new Date().toISOString();
+  order.completedBy = adminInfo || 'admin';
+
+  memoryCache.orders = orders;
+  writeJSON(ORDERS_FILE, orders);
+
+  if (hasRedis) {
+    redisSet('tashcare:orders', orders).catch(() => {});
+  }
+  return order;
+}
+
 module.exports = {
   isVercel,
   hasRedis,
@@ -323,5 +385,8 @@ module.exports = {
   isChatAdmin,
   setPendingAction,
   getPendingAction,
-  clearPendingAction
+  clearPendingAction,
+  getOrders,
+  saveOrder,
+  markOrderCompleted
 };
