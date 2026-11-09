@@ -14,7 +14,7 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
   });
 
   // List of all authorized admin IDs
-  const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603'];
+  const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603', '7539181730'];
   const envAdminIds = String(defaultAdminChatId || '')
     .split(',')
     .map(s => s.trim())

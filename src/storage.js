@@ -202,11 +202,11 @@ async function addSubscriber(chatId, userInfo = {}) {
 }
 
 // --- STATE MANAGEMENT (Active Admin, Sessions, Pending Actions) ---
-const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603'];
+const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603', '7539181730'];
 
 const DEFAULT_STATE = {
   activeAdminChatId: 6712132603,
-  authenticatedAdmins: ['6546050709', '5026059343', '6712132603'],
+  authenticatedAdmins: ['6546050709', '5026059343', '6712132603', '7539181730'],
   pendingActions: {},
   updatedAt: new Date().toISOString()
 };
@@ -247,7 +247,7 @@ async function setActiveAdminChatId(chatId) {
   const numId = Number(chatId);
   state.activeAdminChatId = numId;
   if (!Array.isArray(state.authenticatedAdmins)) {
-    state.authenticatedAdmins = ['6546050709', '5026059343', '6712132603'];
+    state.authenticatedAdmins = ['6546050709', '5026059343', '6712132603', '7539181730'];
   }
   const strId = String(chatId);
   if (!state.authenticatedAdmins.includes(strId)) {
