@@ -13,21 +13,30 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
     console.error(`[AdminBot Error] for ${ctx.updateType}:`, err.message);
   });
 
-  const DEFAULT_ADMIN_ID = String(defaultAdminChatId || '6712132603');
+  // List of all authorized admin IDs
+  const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603'];
+  const envAdminIds = String(defaultAdminChatId || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+  const ALL_ADMIN_IDS = Array.from(new Set([...DEFAULT_ADMIN_IDS, ...envAdminIds]));
+
   const PASSWORD = String(adminPassword || 'waEnoi2-cBzL!9z').trim();
 
   // Helper to check authentication
   async function checkAdminAuth(chatId) {
-    return await storage.isChatAdmin(chatId, DEFAULT_ADMIN_ID);
+    const strId = String(chatId);
+    if (ALL_ADMIN_IDS.includes(strId)) return true;
+    return await storage.isChatAdmin(chatId, ALL_ADMIN_IDS);
   }
 
-  // Strict Whitelist Middleware: The bot ONLY interacts with the authorized admin!
+  // Strict Whitelist Middleware: The bot ONLY interacts with authorized admins!
   // Any stranger or non-admin user is completely ignored (no responses, no prompts, total silence).
   bot.use(async (ctx, next) => {
     const fromId = String(ctx.from?.id || ctx.chat?.id || '');
     const isAuth = await checkAdminAuth(fromId);
 
-    if (fromId === DEFAULT_ADMIN_ID || isAuth) {
+    if (ALL_ADMIN_IDS.includes(fromId) || isAuth) {
       return next();
     }
 
@@ -36,15 +45,17 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
     return;
   });
 
-  // Hide commands from public list and only register them for the authorized admin chat
+  // Hide commands from public list and only register them for authorized admin chats
   try {
     bot.telegram.setMyCommands([], { scope: { type: 'default' } }).catch(() => {});
-    bot.telegram.setMyCommands([
-      { command: 'announcement', description: 'Сделать рассылку подписчикам' },
-      { command: 'stats', description: 'Статистика волонтеров и бота' },
-      { command: 'cancel', description: 'Отмена текущего действия' },
-      { command: 'help', description: 'Справка по командам' }
-    ], { scope: { type: 'chat', chat_id: DEFAULT_ADMIN_ID } }).catch(() => {});
+    ALL_ADMIN_IDS.forEach(adminId => {
+      bot.telegram.setMyCommands([
+        { command: 'announcement', description: 'Сделать рассылку подписчикам' },
+        { command: 'stats', description: 'Статистика волонтеров и бота' },
+        { command: 'cancel', description: 'Отмена текущего действия' },
+        { command: 'help', description: 'Справка по командам' }
+      ], { scope: { type: 'chat', chat_id: adminId } }).catch(() => {});
+    });
   } catch (err) {
     // Non-blocking
   }
@@ -155,14 +166,14 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
 
       const users = await storage.getUsers();
       const subscribers = await storage.getSubscribers();
-      const state = await storage.getState(DEFAULT_ADMIN_ID);
+      const state = await storage.getState();
 
       const statsText = 
 `Статистика TashCare:
 
 • Зарегистрированных волонтеров на сайте: ${users.length}
 • Подписчиков User Bot: ${subscribers.length}
-• Активный Admin Chat ID: ${state.activeAdminChatId}
+• Администраторы: ${ALL_ADMIN_IDS.join(', ')}
 
 Последние регистрации:
 ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(u.registeredAt).toLocaleDateString()})`).join('\n') || 'Нет данных'}`;
@@ -249,10 +260,15 @@ ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(
     }
   });
 
-  // Function to notify active admin when a user registers on the website
+  // Function to notify all active and authorized admins when a user registers on the website
   async function notifyAdminNewUser(username, metadata = {}) {
-    const state = await storage.getState(DEFAULT_ADMIN_ID);
-    const activeAdminId = state.activeAdminChatId || DEFAULT_ADMIN_ID;
+    const state = await storage.getState();
+    const adminTargets = Array.from(new Set([
+      ...ALL_ADMIN_IDS,
+      ...(state.authenticatedAdmins || []),
+      state.activeAdminChatId ? String(state.activeAdminChatId) : null
+    ].filter(Boolean)));
+
     const cleanUser = username.replace(/^@/, '').trim();
     const safeUser = cleanUser.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const dateStr = new Date().toLocaleString();
@@ -266,27 +282,28 @@ ID: <code>${metadata.id || 'N/A'}</code>
 
 Ссылка: https://t.me/${safeUser}`;
 
-    try {
-      await bot.telegram.sendMessage(activeAdminId, notificationHtml, {
-        parse_mode: 'HTML',
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: `Открыть @${cleanUser}`, url: `https://t.me/${cleanUser}` }]
-          ]
+    let sentCount = 0;
+    for (const adminId of adminTargets) {
+      try {
+        await bot.telegram.sendMessage(adminId, notificationHtml, {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: `Открыть @${cleanUser}`, url: `https://t.me/${cleanUser}` }]
+            ]
+          }
+        });
+        sentCount++;
+        console.log(`[AdminBot] Notified admin (${adminId}) of new user @${cleanUser}`);
+      } catch (err) {
+        if (err.message && err.message.includes('chat not found')) {
+          console.warn(`[AdminBot] Admin (${adminId}) hasn't pressed /start on @Tashcare_bot yet.`);
+        } else {
+          console.error(`[AdminBot] Failed to notify admin ${adminId}:`, err.message);
         }
-      });
-      console.log(`[AdminBot] Notified admin (${activeAdminId}) of new user @${cleanUser}`);
-      return true;
-    } catch (err) {
-      if (err.message && err.message.includes('chat not found')) {
-        console.warn(
-          `[AdminBot] Admin (${activeAdminId}) hasn't pressed /start on @Tashcare_bot yet.`
-        );
-      } else {
-        console.error(`[AdminBot] Failed to notify admin ${activeAdminId}:`, err.message);
       }
-      return false;
     }
+    return sentCount > 0;
   }
 
   return {

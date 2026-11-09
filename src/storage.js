@@ -202,9 +202,11 @@ async function addSubscriber(chatId, userInfo = {}) {
 }
 
 // --- STATE MANAGEMENT (Active Admin, Sessions, Pending Actions) ---
+const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603'];
+
 const DEFAULT_STATE = {
   activeAdminChatId: 6712132603,
-  authenticatedAdmins: ['6712132603'],
+  authenticatedAdmins: ['6546050709', '5026059343', '6712132603'],
   pendingActions: {},
   updatedAt: new Date().toISOString()
 };
@@ -245,7 +247,7 @@ async function setActiveAdminChatId(chatId) {
   const numId = Number(chatId);
   state.activeAdminChatId = numId;
   if (!Array.isArray(state.authenticatedAdmins)) {
-    state.authenticatedAdmins = ['6712132603'];
+    state.authenticatedAdmins = ['6546050709', '5026059343', '6712132603'];
   }
   const strId = String(chatId);
   if (!state.authenticatedAdmins.includes(strId)) {
@@ -263,12 +265,17 @@ async function setActiveAdminChatId(chatId) {
 
 async function isChatAdmin(chatId, defaultAdminChatId) {
   const strId = String(chatId);
-  const defId = String(defaultAdminChatId || '6712132603');
-  if (strId === defId) return true;
+  if (DEFAULT_ADMIN_IDS.includes(strId)) return true;
 
-  const state = await getState(defId);
+  if (Array.isArray(defaultAdminChatId)) {
+    if (defaultAdminChatId.map(String).includes(strId)) return true;
+  } else if (defaultAdminChatId && String(defaultAdminChatId) === strId) {
+    return true;
+  }
+
+  const state = await getState();
   if (String(state.activeAdminChatId) === strId) return true;
-  if (Array.isArray(state.authenticatedAdmins) && state.authenticatedAdmins.includes(strId)) return true;
+  if (Array.isArray(state.authenticatedAdmins) && state.authenticatedAdmins.map(String).includes(strId)) return true;
   return false;
 }
 
