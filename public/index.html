@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 
 <body>
@@ -282,6 +282,8 @@
             </div>
 
             <form id="regForm" autocomplete="off">
+              <!-- Security Honeypot: catches spam bots silently -->
+              <input type="text" name="_gotcha" id="_gotcha" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true">
               <div class="form-group">
                 <label for="usernameInput" class="form-label" data-i18n="labelUsername">
                   Put YOUR username:
@@ -911,7 +913,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=10"></script>
+  <script src="script.js?v=11"></script>
 </body>
 
 </html>

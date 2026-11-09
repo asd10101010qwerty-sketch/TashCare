@@ -600,10 +600,38 @@ function playErrorBuzzer() {
   }
 }
 
+// Cryptographic-Style Signature for Coin Balance (Anti-Cheating & Anti-Tamper)
+const COIN_SIG_KEY = 'tashcare_coin_sig';
+const COIN_SALT = 'tashcare_sec_salt_2026_9x!kL';
+
+function computeCoinSig(coins, cleaned) {
+  let hash = 0x811c9dc5;
+  const str = `${coins}:${cleaned}:${COIN_SALT}`;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16);
+}
+
 // Coins state helpers
 function getStoredCoins() {
   const val = parseInt(localStorage.getItem(COIN_STORAGE_KEY), 10);
-  return isNaN(val) ? 0 : Math.max(0, val);
+  const cleaned = getCleanedCount();
+  const rawCoins = isNaN(val) ? 0 : Math.max(0, val);
+
+  // If user has stored coins, verify anti-tamper signature
+  if (rawCoins > 0) {
+    const storedSig = localStorage.getItem(COIN_SIG_KEY);
+    const expectedSig = computeCoinSig(rawCoins, cleaned);
+    if (!storedSig || storedSig !== expectedSig) {
+      console.warn('[Security] Coin balance signature mismatch. Resetting tampered balance to 0.');
+      localStorage.setItem(COIN_STORAGE_KEY, '0');
+      localStorage.setItem(COIN_SIG_KEY, computeCoinSig(0, cleaned));
+      return 0;
+    }
+  }
+  return rawCoins;
 }
 
 function getCleanedCount() {
@@ -908,11 +936,22 @@ regForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  if (cleanUsername.length < 3) {
-    showAlert('error', t.shortUsernameError);
+  // Strict Telegram Username Validation: letters, numbers and underscores only (3 to 32 chars)
+  const TELEGRAM_USERNAME_REGEX = /^[a-zA-Z0-9_]{3,32}$/;
+  if (!TELEGRAM_USERNAME_REGEX.test(cleanUsername)) {
+    const errorMsg = currentLang === 'en'
+      ? 'Username must be 3-32 characters (letters, numbers and _ only).'
+      : (currentLang === 'uz'
+        ? 'Username 3-32 ta belgidan iborat bo\'lishi kerak (faqat harflar, raqamlar va _).'
+        : 'Имя пользователя должно содержать от 3 до 32 символов (только латиница, цифры и _).');
+    showAlert('error', errorMsg);
     usernameInput.focus();
     return;
   }
+
+  // Anti-Spam Honeypot Bot Check
+  const gotchaEl = document.getElementById('_gotcha');
+  const gotchaVal = gotchaEl ? gotchaEl.value : '';
 
   // Set loading state
   submitBtn.classList.add('loading');
@@ -926,7 +965,7 @@ regForm.addEventListener('submit', async (e) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username: cleanUsername })
+      body: JSON.stringify({ username: cleanUsername, _gotcha: gotchaVal })
     });
 
     const data = await response.json();
@@ -956,10 +995,11 @@ regForm.addEventListener('submit', async (e) => {
 function addCoins(amount = 1) {
   const current = getStoredCoins();
   const next = current + amount;
-  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
-
   const cleaned = getCleanedCount() + amount;
+
+  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
   localStorage.setItem(STAT_CLEANED_KEY, cleaned.toString());
+  localStorage.setItem(COIN_SIG_KEY, computeCoinSig(next, cleaned));
 
   updateCoinDisplays();
   updateCleanlinessProgress();
@@ -969,7 +1009,10 @@ function spendCoins(amount) {
   const current = getStoredCoins();
   if (current < amount) return false;
   const next = current - amount;
+  const cleaned = getCleanedCount();
+
   localStorage.setItem(COIN_STORAGE_KEY, next.toString());
+  localStorage.setItem(COIN_SIG_KEY, computeCoinSig(next, cleaned));
   updateCoinDisplays();
   return true;
 }
@@ -1319,12 +1362,23 @@ if (respawnTrashBtn) {
   });
 }
 
+// Locked & Verified Shop Catalog (Anti-Tamper)
+const VERIFIED_CATALOG_PRICES = Object.freeze({
+  'tshirt': 7500,
+  'mug': 5000,
+  'pen': 3000,
+  'stickers': 2000,
+  'waste1kg': 100
+});
+
 // Coin Shop Handlers
 window.handleShopBuy = function(itemId, price, title) {
+  // Enforce authentic catalog price even if client tampering occurred
+  const verifiedPrice = VERIFIED_CATALOG_PRICES[itemId] !== undefined ? VERIFIED_CATALOG_PRICES[itemId] : price;
   const currentCoins = getStoredCoins();
 
-  if (currentCoins < price) {
-    const diff = price - currentCoins;
+  if (currentCoins < verifiedPrice) {
+    const diff = verifiedPrice - currentCoins;
     const msg = currentLang === 'en'
       ? `You need ${diff.toLocaleString()} more TashCoin! Clean up more trash in the park meadow to earn coins.`
       : (currentLang === 'uz'
@@ -1334,8 +1388,8 @@ window.handleShopBuy = function(itemId, price, title) {
     return;
   }
 
-  // Deduct coins
-  const success = spendCoins(price);
+  // Deduct coins securely
+  const success = spendCoins(verifiedPrice);
   if (!success) return;
 
   // Generate unique redemption promo voucher

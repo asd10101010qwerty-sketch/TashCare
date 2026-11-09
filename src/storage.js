@@ -352,6 +352,12 @@ async function saveOrder(orderData) {
   return newOrder;
 }
 
+async function getOrderByCode(code) {
+  if (!code) return null;
+  const orders = await getOrders();
+  return orders.find(o => o.code === code) || null;
+}
+
 async function markOrderCompleted(code, adminInfo) {
   const orders = await getOrders();
   const order = orders.find(o => o.code === code);
@@ -387,6 +393,7 @@ module.exports = {
   getPendingAction,
   clearPendingAction,
   getOrders,
+  getOrderByCode,
   saveOrder,
   markOrderCompleted
 };

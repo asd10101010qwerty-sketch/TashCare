@@ -13,42 +13,57 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
     console.error(`[AdminBot Error] for ${ctx.updateType}:`, err.message);
   });
 
-  // List of all authorized admin IDs
-  const DEFAULT_ADMIN_IDS = ['6546050709', '5026059343', '6712132603', '7539181730'];
-  const envAdminIds = String(defaultAdminChatId || '')
-    .split(',')
-    .map(s => s.trim())
-    .filter(Boolean);
-  const ALL_ADMIN_IDS = Array.from(new Set([...DEFAULT_ADMIN_IDS, ...envAdminIds]));
+  // Pure Escaping Helper to prevent Telegram HTML injection
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // List of all authorized admin IDs (Strict Whitelist)
+  const STRICT_ADMIN_IDS = Object.freeze(
+    Array.from(new Set([
+      '6546050709',
+      '5026059343',
+      '6712132603',
+      '7539181730',
+      ...String(defaultAdminChatId || '')
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+    ]))
+  );
 
   const PASSWORD = String(adminPassword || 'waEnoi2-cBzL!9z').trim();
 
-  // Helper to check authentication
+  // Helper to check authentication strictly against authorized IDs
   async function checkAdminAuth(chatId) {
     const strId = String(chatId);
-    if (ALL_ADMIN_IDS.includes(strId)) return true;
-    return await storage.isChatAdmin(chatId, ALL_ADMIN_IDS);
+    return STRICT_ADMIN_IDS.includes(strId);
   }
 
   // Strict Whitelist Middleware: The bot ONLY interacts with authorized admins!
   // Any stranger or non-admin user is completely ignored (no responses, no prompts, total silence).
   bot.use(async (ctx, next) => {
     const fromId = String(ctx.from?.id || ctx.chat?.id || '');
-    const isAuth = await checkAdminAuth(fromId);
 
-    if (ALL_ADMIN_IDS.includes(fromId) || isAuth) {
-      return next();
+    if (!STRICT_ADMIN_IDS.includes(fromId)) {
+      // Silently drop and ignore any update from non-admin users
+      console.log(`[AdminBot Security] Dropped unauthorized access attempt from ID: ${fromId}`);
+      return;
     }
 
-    // Silently drop and ignore any update from non-admin users
-    console.log(`[AdminBot Security] Silently ignored unauthorized interaction from user ID: ${fromId}`);
-    return;
+    return next();
   });
 
   // Hide commands from public list and only register them for authorized admin chats
   try {
     bot.telegram.setMyCommands([], { scope: { type: 'default' } }).catch(() => {});
-    ALL_ADMIN_IDS.forEach(adminId => {
+    STRICT_ADMIN_IDS.forEach(adminId => {
       bot.telegram.setMyCommands([
         { command: 'announcement', description: 'Сделать рассылку подписчикам' },
         { command: 'stats', description: 'Статистика волонтеров и бота' },
@@ -173,7 +188,7 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
 
 • Зарегистрированных волонтеров на сайте: ${users.length}
 • Подписчиков User Bot: ${subscribers.length}
-• Администраторы: ${ALL_ADMIN_IDS.join(', ')}
+• Администраторы: ${STRICT_ADMIN_IDS.join(', ')}
 
 Последние регистрации:
 ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(u.registeredAt).toLocaleDateString()})`).join('\n') || 'Нет данных'}`;
@@ -263,14 +278,18 @@ ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(
   // Callback Query Handlers for Orders
   bot.action(/^claim_order:(.+)$/, async (ctx) => {
     try {
-      const fromId = String(ctx.from.id);
-      const isAuth = await checkAdminAuth(fromId);
-      if (!ALL_ADMIN_IDS.includes(fromId) && !isAuth) {
-        return ctx.answerCbQuery('У вас нет прав администратора.');
+      const fromId = String(ctx.from?.id || '');
+      if (!STRICT_ADMIN_IDS.includes(fromId)) {
+        return ctx.answerCbQuery('⛔ Доступ запрещен. Вы не являетесь администратором.');
       }
 
       const code = ctx.match[1];
-      const adminName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || fromId);
+      const existing = await storage.getOrderByCode(code);
+      if (existing && existing.status === 'completed') {
+        return ctx.answerCbQuery('⚠️ Эта награда уже была выдана ранее!');
+      }
+
+      const adminName = ctx.from.username ? `@${escapeHtml(ctx.from.username)}` : escapeHtml(ctx.from.first_name || fromId);
       await storage.markOrderCompleted(code, adminName);
 
       const oldText = ctx.callbackQuery.message?.text || '';
@@ -305,28 +324,21 @@ ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(
 
   // Function to notify all active and authorized admins when a user registers on the website
   async function notifyAdminNewUser(username, metadata = {}) {
-    const state = await storage.getState();
-    const adminTargets = Array.from(new Set([
-      ...ALL_ADMIN_IDS,
-      ...(state.authenticatedAdmins || []),
-      state.activeAdminChatId ? String(state.activeAdminChatId) : null
-    ].filter(Boolean)));
-
-    const cleanUser = username.replace(/^@/, '').trim();
-    const safeUser = cleanUser.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const cleanUser = escapeHtml((username || '').replace(/^@/, '').trim());
+    const safeId = escapeHtml(metadata.id || 'N/A');
     const dateStr = new Date().toLocaleString();
 
     const notificationHtml = 
 `<b>Новая регистрация волонтера на сайте</b>
 
-Пользователь: @${safeUser}
-ID: <code>${metadata.id || 'N/A'}</code>
+Пользователь: @${cleanUser}
+ID: <code>${safeId}</code>
 Дата: ${dateStr}
 
-Ссылка: https://t.me/${safeUser}`;
+Ссылка: https://t.me/${cleanUser}`;
 
     let sentCount = 0;
-    for (const adminId of adminTargets) {
+    for (const adminId of STRICT_ADMIN_IDS) {
       try {
         await bot.telegram.sendMessage(adminId, notificationHtml, {
           parse_mode: 'HTML',
@@ -351,19 +363,13 @@ ID: <code>${metadata.id || 'N/A'}</code>
 
   // Function to notify all active and authorized admins when a user redeems a shop reward
   async function notifyAdminNewOrder(orderData) {
-    const state = await storage.getState();
-    const adminTargets = Array.from(new Set([
-      ...ALL_ADMIN_IDS,
-      ...(state.authenticatedAdmins || []),
-      state.activeAdminChatId ? String(state.activeAdminChatId) : null
-    ].filter(Boolean)));
-
-    const cleanUser = (orderData.username || '').replace(/^@/, '').trim();
+    const rawUser = (orderData.username || '').replace(/^@/, '').trim();
+    const cleanUser = escapeHtml(rawUser);
     const safeUser = cleanUser ? `@${cleanUser}` : 'Не указан';
     const dateStr = orderData.date ? new Date(orderData.date).toLocaleString() : new Date().toLocaleString();
-    const safeTitle = (orderData.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const safeTitle = escapeHtml(orderData.title || '');
     const safePrice = Number(orderData.price || 0).toLocaleString();
-    const code = orderData.code;
+    const code = escapeHtml(orderData.code || '');
 
     const messageHtml = 
 `🛍️ <b>Новая покупка в магазине наград TashCare!</b>
@@ -386,7 +392,7 @@ ID: <code>${metadata.id || 'N/A'}</code>
     }
 
     let sentCount = 0;
-    for (const adminId of adminTargets) {
+    for (const adminId of STRICT_ADMIN_IDS) {
       try {
         await bot.telegram.sendMessage(adminId, messageHtml, {
           parse_mode: 'HTML',
