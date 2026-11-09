@@ -25,6 +25,7 @@ const WEBHOOK_SECRET = crypto.createHash('sha256').update(ADMIN_BOT_TOKEN + ':' 
 const VERIFIED_CATALOG = Object.freeze({
   'tshirt': { title: 'Футболка TashCare', price: 7500 },
   'mug': { title: 'Кружка TashCare', price: 5000 },
+  'cap': { title: 'Кепка TashCare', price: 4000 },
   'pen': { title: 'Эко-ручка TashCare', price: 3000 },
   'stickers': { title: 'Стикерпак TashCare', price: 2000 },
   'waste1kg': { title: '1 кг мусора', price: 100 }

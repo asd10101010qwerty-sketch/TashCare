@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 
 <body>
@@ -662,7 +662,7 @@
           </p>
         </div>
 
-        <!-- Shop Grid (New Items & Prices: Футболка 7500, Кружка 5000, Ручка 3000, Стикерпак 2000, 1 кг мусора 100) -->
+        <!-- Shop Grid (Футболка 7500, Кружка 5000, Кепка 4000, Ручка 3000, Стикерпак 2000, 1 кг мусора 100) -->
         <div class="shop-grid" id="shopGrid">
           <!-- Card 1: Футболка (7 500 TashCoin) -->
           <div class="shop-card" data-item="tshirt" data-price="7500">
@@ -714,9 +714,34 @@
             </div>
           </div>
 
-          <!-- Card 3: Ручка (3 000 TashCoin) -->
+          <!-- Card 3: Кепка (4 000 TashCoin) -->
+          <div class="shop-card" data-item="cap" data-price="4000">
+            <div class="shop-card-category" data-i18n="shopItem3Cat">Эко-Мерч</div>
+            <div class="shop-card-visual">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                <path d="M2 15h14c3.5 0 6 1 6 3s-2.5 3-6 3H4a2 2 0 0 1-2-2v-4z" />
+                <circle cx="12" cy="6" r="1" fill="currentColor" />
+                <path d="M7 14c.5-2.5 2.5-4.5 5-5" />
+              </svg>
+            </div>
+            <h3 class="shop-card-title" data-i18n="shopItem3Title">Кепка TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem3Desc">Фирменная хлопковая кепка с вышитым эко-логотипом TashCare и регулируемым ремешком.</p>
+            <div class="shop-card-footer">
+              <div class="shop-price-tag">
+                <span class="price-val">4 000</span>
+                <span class="price-currency">TashCoin</span>
+              </div>
+              <button class="btn-shop-buy" onclick="handleShopBuy('cap', 4000, 'Кепка TashCare')">
+                <span data-i18n="btnExchange">Обменять</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 4: Ручка (3 000 TashCoin) -->
           <div class="shop-card" data-item="pen" data-price="3000">
-            <div class="shop-card-category" data-i18n="shopItem3Cat">Канцелярия</div>
+            <div class="shop-card-category" data-i18n="shopItem4Cat">Канцелярия</div>
             <div class="shop-card-visual">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -726,8 +751,8 @@
                 <path d="m2 22 4-1" />
               </svg>
             </div>
-            <h3 class="shop-card-title" data-i18n="shopItem3Title">Эко-ручка TashCare</h3>
-            <p class="shop-card-desc" data-i18n="shopItem3Desc">Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.</p>
+            <h3 class="shop-card-title" data-i18n="shopItem4Title">Эко-ручка TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem4Desc">Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.</p>
             <div class="shop-card-footer">
               <div class="shop-price-tag">
                 <span class="price-val">3 000</span>
@@ -739,9 +764,9 @@
             </div>
           </div>
 
-          <!-- Card 4: Стикерпак (2 000 TashCoin) -->
+          <!-- Card 5: Стикерпак (2 000 TashCoin) -->
           <div class="shop-card" data-item="stickers" data-price="2000">
-            <div class="shop-card-category" data-i18n="shopItem4Cat">Эко-Мерч</div>
+            <div class="shop-card-category" data-i18n="shopItem5Cat">Эко-Мерч</div>
             <div class="shop-card-visual">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -750,8 +775,8 @@
                 <path d="M21 8.5l-2.5-2.5a2.12 2.12 0 0 0-3 0l-1 1 5.5 5.5 1-1a2.12 2.12 0 0 0 0-3z" />
               </svg>
             </div>
-            <h3 class="shop-card-title" data-i18n="shopItem4Title">Стикерпак TashCare</h3>
-            <p class="shop-card-desc" data-i18n="shopItem4Desc">Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.</p>
+            <h3 class="shop-card-title" data-i18n="shopItem5Title">Стикерпак TashCare</h3>
+            <p class="shop-card-desc" data-i18n="shopItem5Desc">Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.</p>
             <div class="shop-card-footer">
               <div class="shop-price-tag">
                 <span class="price-val">2 000</span>
@@ -763,9 +788,9 @@
             </div>
           </div>
 
-          <!-- Card 5: 1 кг мусора (100 TashCoin) -->
+          <!-- Card 6: 1 кг мусора (100 TashCoin) -->
           <div class="shop-card" data-item="waste1kg" data-price="100">
-            <div class="shop-card-category" data-i18n="shopItem5Cat">Эко-Вклад</div>
+            <div class="shop-card-category" data-i18n="shopItem6Cat">Эко-Вклад</div>
             <div class="shop-card-visual">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -774,8 +799,8 @@
                 <path d="M12 11v6M9 14h6" />
               </svg>
             </div>
-            <h3 class="shop-card-title" data-i18n="shopItem5Title">1 кг мусора</h3>
-            <p class="shop-card-desc" data-i18n="shopItem5Desc">Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.</p>
+            <h3 class="shop-card-title" data-i18n="shopItem6Title">1 кг мусора</h3>
+            <p class="shop-card-desc" data-i18n="shopItem6Desc">Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.</p>
             <div class="shop-card-footer">
               <div class="shop-price-tag">
                 <span class="price-val">100</span>
@@ -913,7 +938,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=11"></script>
+  <script src="script.js?v=12"></script>
 </body>
 
 </html>

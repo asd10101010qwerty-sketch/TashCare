@@ -112,17 +112,21 @@ const TRANSLATIONS = {
     shopItem2Title: 'Кружка TashCare',
     shopItem2Desc: 'Качественная керамическая кружка для чая и кофе с фирменным эко-дизайном сообщества.',
 
-    shopItem3Cat: 'Канцелярия',
-    shopItem3Title: 'Эко-ручка TashCare',
-    shopItem3Desc: 'Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.',
+    shopItem3Cat: 'Эко-Мерч',
+    shopItem3Title: 'Кепка TashCare',
+    shopItem3Desc: 'Фирменная хлопковая кепка с вышитым эко-логотипом TashCare и регулируемым ремешком.',
 
-    shopItem4Cat: 'Эко-Мерч',
-    shopItem4Title: 'Стикерпак TashCare',
-    shopItem4Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
+    shopItem4Cat: 'Канцелярия',
+    shopItem4Title: 'Эко-ручка TashCare',
+    shopItem4Desc: 'Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.',
 
-    shopItem5Cat: 'Эко-Вклад',
-    shopItem5Title: '1 кг мусора',
-    shopItem5Desc: 'Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.',
+    shopItem5Cat: 'Эко-Мерч',
+    shopItem5Title: 'Стикерпак TashCare',
+    shopItem5Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
+
+    shopItem6Cat: 'Эко-Вклад',
+    shopItem6Title: '1 кг мусора',
+    shopItem6Desc: 'Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.',
 
     btnExchange: 'Обменять',
     modalSuccessTitle: 'Награда успешно оформлена!',
@@ -240,17 +244,21 @@ const TRANSLATIONS = {
     shopItem2Title: 'TashCare Ceramic Mug',
     shopItem2Desc: 'High-quality ceramic mug for coffee or tea with official TashCare eco-design.',
 
-    shopItem3Cat: 'Eco-Stationery',
-    shopItem3Title: 'TashCare Eco-Pen',
-    shopItem3Desc: 'Eco-friendly ballpoint pen made from recycled kraft paper and biodegradable materials.',
+    shopItem3Cat: 'Eco-Merch',
+    shopItem3Title: 'TashCare Cap',
+    shopItem3Desc: 'Official TashCare branded cotton baseball cap with embroidered eco-logo and adjustable strap.',
 
-    shopItem4Cat: 'Eco-Merch',
-    shopItem4Title: 'TashCare Sticker Pack',
-    shopItem4Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
+    shopItem4Cat: 'Eco-Stationery',
+    shopItem4Title: 'TashCare Eco-Pen',
+    shopItem4Desc: 'Eco-friendly ballpoint pen made from recycled kraft paper and biodegradable materials.',
 
-    shopItem5Cat: 'Eco-Action',
-    shopItem5Title: '1 kg of Trash',
-    shopItem5Desc: 'Official credit voucher for submitting 1 kg of sorted recyclable trash from Tashkent parks.',
+    shopItem5Cat: 'Eco-Merch',
+    shopItem5Title: 'TashCare Sticker Pack',
+    shopItem5Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
+
+    shopItem6Cat: 'Eco-Action',
+    shopItem6Title: '1 kg of Trash',
+    shopItem6Desc: 'Official credit voucher for submitting 1 kg of sorted recyclable trash from Tashkent parks.',
 
     btnExchange: 'Redeem',
     modalSuccessTitle: 'Reward Claimed Successfully!',
@@ -368,17 +376,21 @@ const TRANSLATIONS = {
     shopItem2Title: 'TashCare krujkasi',
     shopItem2Desc: 'TashCare ramzi tushirilgan choy va kofe uchun sifatli sopol krujka.',
 
-    shopItem3Cat: 'Kanselyariya',
-    shopItem3Title: 'TashCare eko-ruchkasi',
-    shopItem3Desc: 'Qayta ishlangan kraft qog\'oz va bio-parchalanuvchi materiallardan tayyorlangan sharikli ruchka.',
+    shopItem3Cat: 'Eko-Merch',
+    shopItem3Title: 'TashCare kepkasi',
+    shopItem3Desc: 'TashCare kashtalangan eko-logotipi tushirilgan paxtali qulay brend kepka.',
 
-    shopItem4Cat: 'Eko-Merch',
-    shopItem4Title: 'TashCare stikerlar to\'plami',
-    shopItem4Desc: 'Noutbuk, telefon va termoslar uchun suvga chidamli yorqin stikerlar to\'plami.',
+    shopItem4Cat: 'Kanselyariya',
+    shopItem4Title: 'TashCare eko-ruchkasi',
+    shopItem4Desc: 'Qayta ishlangan kraft qog\'oz va bio-parchalanuvchi materiallardan tayyorlangan sharikli ruchka.',
 
-    shopItem5Cat: 'Eko-Hissa',
-    shopItem5Title: '1 kg chiqindi',
-    shopItem5Desc: 'Toshkent parklaridan 1 kg saralangan chiqindini qayta ishlashga topshirish sertifikati.',
+    shopItem5Cat: 'Eko-Merch',
+    shopItem5Title: 'TashCare stikerlar to\'plami',
+    shopItem5Desc: 'Noutbuk, telefon va termoslar uchun suvga chidamli yorqin stikerlar to\'plami.',
+
+    shopItem6Cat: 'Eko-Hissa',
+    shopItem6Title: '1 kg chiqindi',
+    shopItem6Desc: 'Toshkent parklaridan 1 kg saralangan chiqindini qayta ishlashga topshirish sertifikati.',
 
     btnExchange: 'Almashtirish',
     modalSuccessTitle: 'Sovrin muvaffaqiyatli rasmiylashtirildi!',
@@ -1366,6 +1378,7 @@ if (respawnTrashBtn) {
 const VERIFIED_CATALOG_PRICES = Object.freeze({
   'tshirt': 7500,
   'mug': 5000,
+  'cap': 4000,
   'pen': 3000,
   'stickers': 2000,
   'waste1kg': 100
