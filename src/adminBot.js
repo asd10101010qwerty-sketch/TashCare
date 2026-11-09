@@ -21,14 +21,47 @@ function createAdminBot(token, defaultAdminChatId, adminPassword, broadcastFunct
     return await storage.isChatAdmin(chatId, DEFAULT_ADMIN_ID);
   }
 
-  // Command /start: ask for password
+  // Strict Whitelist Middleware: The bot ONLY interacts with the authorized admin!
+  // Any stranger or non-admin user is completely ignored (no responses, no prompts, total silence).
+  bot.use(async (ctx, next) => {
+    const fromId = String(ctx.from?.id || ctx.chat?.id || '');
+    const isAuth = await checkAdminAuth(fromId);
+
+    if (fromId === DEFAULT_ADMIN_ID || isAuth) {
+      return next();
+    }
+
+    // Silently drop and ignore any update from non-admin users
+    console.log(`[AdminBot Security] Silently ignored unauthorized interaction from user ID: ${fromId}`);
+    return;
+  });
+
+  // Hide commands from public list and only register them for the authorized admin chat
+  try {
+    bot.telegram.setMyCommands([], { scope: { type: 'default' } }).catch(() => {});
+    bot.telegram.setMyCommands([
+      { command: 'announcement', description: 'Сделать рассылку подписчикам' },
+      { command: 'stats', description: 'Статистика волонтеров и бота' },
+      { command: 'cancel', description: 'Отмена текущего действия' },
+      { command: 'help', description: 'Справка по командам' }
+    ], { scope: { type: 'chat', chat_id: DEFAULT_ADMIN_ID } }).catch(() => {});
+  } catch (err) {
+    // Non-blocking
+  }
+
+  // Command /start: welcome the admin
   bot.start(async (ctx) => {
     try {
       const chatId = String(ctx.chat.id);
-      await storage.setPendingAction(chatId, 'awaiting_password');
+      await storage.setActiveAdminChatId(chatId);
       await ctx.reply(
-        'TashCare Admin Portal\n\n' +
-        'Пожалуйста, введите пароль администратора для авторизации:'
+        '👋 Добро пожаловать в панель администратора TashCare!\n\n' +
+        '🔒 Бот работает в строго приватном режиме (для всех остальных пользователей он отключен и не отвечает).\n\n' +
+        'Уведомления о новых волонтерах с сайта приходят в этот чат.\n\n' +
+        'Доступные команды:\n' +
+        '📢 /announcement — сделать рассылку всем подписчикам\n' +
+        '📊 /stats — статистика волонтеров и подписчиков\n' +
+        '❓ /help — справка по командам'
       );
     } catch (err) {
       console.error('Error handling /start in Admin Bot:', err.message);
@@ -209,8 +242,8 @@ ${users.slice(-5).reverse().map((u, i) => `${i + 1}. @${u.username} (${new Date(
         return;
       }
 
-      // 4. Any other text from unauthenticated user
-      await ctx.reply('Для авторизации введите команду /start');
+      // 4. Any other text from unauthenticated user: do nothing
+      return;
     } catch (err) {
       console.error('Error processing text in Admin Bot:', err.message);
     }
