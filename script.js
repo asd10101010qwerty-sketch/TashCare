@@ -1,1576 +1,1068 @@
 // ===================================================================
-// TashCare Platform - Interactive Frontend Script
+// TashCare — frontend
 // ===================================================================
-
-const ICONS = {
-  sun: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
-  moon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
-  check: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-  alert: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`
-};
-
-const TRANSLATIONS = {
-  ru: {
-    heroBadge: 'Официальное волонтерское сообщество • Ташкент',
-    heroTitle: 'Вместе делаем Ташкент <span class="highlight">добрее и чище</span>',
-    heroSubtitle: 'TashCare объединяет неравнодушных жителей столицы: совместная высадка деревьев с движением «Yashil Makon», помощь приютам для животных, благотворительные акции и официальные справки для школьников и студентов.',
-    btnRegisterHero: 'Стать волонтером',
-    btnChannelHero: 'Telegram Канал',
-    stat1Number: '500+',
-    stat1Label: 'Деревьев высажено с Yashil Makon',
-    stat2Number: '100%',
-    stat2Label: 'Бесплатные справки учащимся',
-    stat3Number: '24/7',
-    stat3Label: 'Поддержка приютов и добрых дел',
-    regBadge: 'Электронный пропуск волонтера',
-    regTitle: 'Регистрация волонтера',
-    regSubtitle: 'Укажите ваш Telegram username для связи и участия в волонтерских проектах TashCare.',
-    labelUsername: 'Put YOUR username:',
-    inputPlaceholder: 'username (без @)',
-    btnSubmit: 'Зарегистрироваться',
-    submitting: 'Отправка...',
-    formHelper: 'Ваш username будет доступен только активным администраторам сообщества.',
-    successMessage: 'Регистрация завершена! Перейдите в TG бот, чтобы увидеть свежие новости.',
-    openBotBtn: 'Перейти в Telegram Bot',
-    emptyUsernameError: 'Пожалуйста, укажите ваш Telegram username.',
-    shortUsernameError: 'Имя пользователя должно содержать не менее 3 символов.',
-    generalError: 'Не удалось подключиться к серверу. Попробуйте снова чуть позже.',
-
-    // Channel Spotlight
-    spotlightBadge: 'Канал сообщества @tashcareuz',
-    spotlightTitle: 'О волонтерском сообществе TashCare',
-    spotlightQuote: '«Добро пожаловать в наше волонтерское сообщество! Здесь мы объединяем людей, которые хотят делать добрые дела, помогать окружающим и менять мир к лучшему.»',
-    meta1: 'Экологические проекты и высадка деревьев совместно с «Yashil Makon»',
-    meta2: 'Помощь приютам для бездомных животных (приют «Второй Шанс»)',
-    meta3: 'Официальные справки и сертификаты для школьников и студентов',
-    meta4: 'Адресная социальная помощь пожилым людям и семьям',
-    btnJoinTgChannel: 'Перейти в канал @tashcareuz',
-
-    // Preview post
-    postHeader: 'TashCare',
-    postSubheader: 'Официальный канал сообщества',
-    postTag: 'Экологическая инициатива',
-    postSnippet: 'Приглашаем принять участие в высадке деревьев совместно с организацией «Yashil Makon»! Для школьников и студентов предоставляются официальные справки. Регистрация участников: @Amisha_SSlando (Амирбек). Присоединяйтесь к доброму делу!',
-    postBtn: 'Открыть пост в Telegram',
-
-    // Initiatives
-    pillarsTitle: 'Ключевые направления деятельности',
-    pillarsSubtitle: 'Реальные проекты, в которых каждый житель Ташкента может принять участие.',
-    pillar1Title: 'Эко-клуб и Yashil Makon',
-    pillar1Desc: 'Масштабная высадка саженцев, субботники и озеленение столичных парков и дворов.',
-    pillar2Title: 'Помощь приютам животных',
-    pillar2Desc: 'Закупка кормов, ветеринарная помощь и поддержка приютов (в том числе «Второй Шанс»).',
-    pillar3Title: 'Справки для учащихся',
-    pillar3Desc: 'Выдача подтверждающих справок и благодарностей для школьников и студентов за участие.',
-    pillar4Title: 'Социальная помощь',
-    pillar4Desc: 'Адресная поддержка ветеранов, многодетных семей и людей в трудной жизненной ситуации.',
-
-    bannerTitle: 'Подпишитесь на канал TashCare',
-    bannerSubtitle: 'Официальные анонсы выездов, фотоотчеты, опросы и теплая атмосфера единомышленников.',
-    bannerBtn: 'Открыть канал @tashcareuz',
-    navChannel: 'Telegram Канал',
-    footerRights: 'Все права защищены.',
-
-    // Eco Game & Shop Translations
-    gameNavLabel: 'Игра',
-    btnBackHome: 'Наверх к сообществу',
-    gameBalanceLabel: 'Баланс:',
-    gameBadge: 'Эко-игра TashCare • Сортируй мусор',
-    gameTitle: 'Убери мусор — сохрани парки Ташкента!',
-    gameSubtitle: 'Зажимай и перетаскивай мусор с поляны прямо в подходящий ящик внизу. За каждый утилизированный предмет ты получаешь <strong>+1 TashCoin</strong>. Трать накопленные коины в магазине наград прямо под игрой!',
-    gameStatTrash: 'Мусора на поляне',
-    gameStatCleaned: 'Собрано предметов',
-    gameStatCleanliness: 'Чистота парка',
-    btnRespawn: 'Новый мусор',
-    arenaTag: 'Парковая зона «Tashkent EcoPark»',
-    arenaTip: 'Зажми мусор и тащи его в ящик внизу 👇',
-    binsDockTitle: 'Ящики раздельного сбора (тащите мусор сюда):',
-
-    binPlasticTag: '🔵 Синий ящик',
-    binPlasticTitle: 'Пластик',
-    binPlasticHint: 'Бутылки, пакеты',
-
-    binGlassTag: '🟢 Зеленый ящик',
-    binGlassTitle: 'Стекло & Металл',
-    binGlassHint: 'Бутылки, банки',
-
-    binPaperTag: '🟡 Желтый ящик',
-    binPaperTitle: 'Бумага & Прочее',
-    binPaperHint: 'Стаканы, фантики',
-
-    binDropTarget: 'Бросай сюда',
-
-    shopBadge: 'Награды за эко-коины',
-    shopTitle: 'Магазин волонтерских наград',
-    shopSubtitle: 'Обменивайте заработанные TashCoin на памятный мерч, полезные эко-товары и именные справки. <em>(Цены и список товаров настраиваются администратором).</em>',
-
-    shopItem1Cat: 'Эко-Мерч',
-    shopItem1Title: 'Футболка TashCare',
-    shopItem1Desc: 'Фирменная хлопковая футболка сообщества из 100% органического эко-хлопка с логотипом.',
-
-    shopItem2Cat: 'Посуда & Мерч',
-    shopItem2Title: 'Кружка TashCare',
-    shopItem2Desc: 'Качественная керамическая кружка для чая и кофе с фирменным эко-дизайном сообщества.',
-
-    shopItem3Cat: 'Эко-Мерч',
-    shopItem3Title: 'Кепка TashCare',
-    shopItem3Desc: 'Фирменная хлопковая кепка с вышитым эко-логотипом TashCare и регулируемым ремешком.',
-
-    shopItem4Cat: 'Канцелярия',
-    shopItem4Title: 'Эко-ручка TashCare',
-    shopItem4Desc: 'Экологичная шариковая ручка из переработанного крафт-картона и биоразлагаемых материалов.',
-
-    shopItem5Cat: 'Эко-Мерч',
-    shopItem5Title: 'Стикерпак TashCare',
-    shopItem5Desc: 'Набор глянцевых влагостойких виниловых наклеек TashCare для ноутбука, бутылки и чехла.',
-
-    shopItem6Cat: 'Эко-Вклад',
-    shopItem6Title: '1 кг мусора',
-    shopItem6Desc: 'Сертификат сдачи 1 кг раздельного мусора на переработку и вклад в очистку парков Ташкента.',
-
-    btnExchange: 'Обменять',
-    modalSuccessTitle: 'Награда успешно оформлена!',
-    modalSuccessDesc: 'Вы обменяли коины на',
-    modalContactDesc: 'Для получения награды покажите этот код нашему координатору <strong>@Amisha_SSlando</strong> в Telegram для согласования получения приза в Ташкенте.',
-    modalCloseBtn: 'Понятно, закрыть',
-    modalScreenshotHeading: 'Теперь заскриньте и киньте @Amisha_SSlando',
-    modalScreenshotSub: 'Сделайте скриншот этого окна и скиньте нашему координатору @Amisha_SSlando в Telegram для получения приза.',
-    modalItemLabel: 'Товар / Награда:',
-    modalCoordLabel: 'Координатор:',
-    modalUserLabel: 'Ваш Telegram:',
-    modalStatusLabel: 'Статус:',
-    modalStatusPending: 'Ожидает выдачи',
-    modalBtnSend: 'Кинуть @Amisha_SSlando'
-  },
-  en: {
-    heroBadge: 'Official Volunteering Community • Tashkent',
-    heroTitle: 'Empowering Volunteers, <span class="highlight">Transforming Tashkent</span>',
-    heroSubtitle: 'TashCare unites passionate people in Tashkent: tree-planting eco-drives with Yashil Makon, animal shelter support, community aid, and student volunteer certificates.',
-    btnRegisterHero: 'Register as Volunteer',
-    btnChannelHero: 'Join Telegram Channel',
-    stat1Number: '500+',
-    stat1Label: 'Trees Planted with Yashil Makon',
-    stat2Number: '100%',
-    stat2Label: 'Free Student Certificates',
-    stat3Number: '24/7',
-    stat3Label: 'Animal Shelter Aid & Community Care',
-    regBadge: 'Volunteer Pass Application',
-    regTitle: 'Volunteer Registration',
-    regSubtitle: 'Enter your Telegram username to connect with the TashCare volunteer community.',
-    labelUsername: 'Put YOUR username:',
-    inputPlaceholder: 'username (without @)',
-    btnSubmit: 'Register as Volunteer',
-    submitting: 'Submitting...',
-    formHelper: 'Your username will be shared only with active community administrators.',
-    successMessage: 'Registration complete! Go to TG bot to see latest news.',
-    openBotBtn: 'Open Telegram Bot',
-    emptyUsernameError: 'Please enter your Telegram username.',
-    shortUsernameError: 'Username must be at least 3 characters long.',
-    generalError: 'Could not connect to the server. Please try again later.',
-
-    // Channel Spotlight
-    spotlightBadge: 'Official Channel @tashcareuz',
-    spotlightTitle: 'Inside the TashCare Community',
-    spotlightQuote: '«Welcome to our volunteering community! Here we unite people who want to do good deeds, help others, and make Tashkent a greener and kinder city.»',
-    meta1: 'Tree planting campaigns in collaboration with «Yashil Makon»',
-    meta2: 'Shelter assistance & care for rescued animals (Vtoroy Shans)',
-    meta3: 'Official certificates & excuse letters for school and university students',
-    meta4: 'Direct community assistance for families and elders in need',
-    btnJoinTgChannel: 'Visit @tashcareuz on Telegram',
-
-    // Preview post
-    postHeader: 'TashCare',
-    postSubheader: 'Official Community Updates',
-    postTag: 'Ecological Action',
-    postSnippet: 'Tree Planting Campaign! In partnership with the nationwide ecological organization «Yashil Makon», we are planting trees across Tashkent. Official certificates provided for all participants! Join our channel to register with coordinator @Amisha_SSlando.',
-    postBtn: 'Open Post in Telegram',
-
-    // Initiatives
-    pillarsTitle: 'Our Main Activities in Tashkent',
-    pillarsSubtitle: 'Real initiatives organized by our team and community volunteers.',
-    pillar1Title: 'Yashil Makon Eco-Drives',
-    pillar1Desc: 'Joint tree planting, greening avenues, park cleanups, and ecological drives across Tashkent districts.',
-    pillar2Title: 'Animal Shelters & Rescue',
-    pillar2Desc: 'Food deliveries, medical support, and hands-on help for local Tashkent animal shelters like «Vtoroy Shans».',
-    pillar3Title: 'Student Volunteering',
-    pillar3Desc: 'Official certificates and participation letters for school and university students to validate their volunteering.',
-    pillar4Title: 'Community Aid',
-    pillar4Desc: 'Targeted social support, essential supplies, and warmth for families and elderly residents.',
-
-    bannerTitle: 'Stay Updated with TashCare',
-    bannerSubtitle: 'Follow announcements, view live photo reports from weekend drives, and chat with local volunteers.',
-    bannerBtn: 'Open @tashcareuz Channel',
-    navChannel: 'Telegram Channel',
-    footerRights: 'All rights reserved.',
-
-    // Eco Game & Shop Translations
-    gameNavLabel: 'Game',
-    btnBackHome: 'Back to Community',
-    gameBalanceLabel: 'Balance:',
-    gameBadge: 'TashCare Eco-Game • Sort Trash',
-    gameTitle: 'Clean Up Tashkent Parks & Earn Coins!',
-    gameSubtitle: 'Hold and drag trash items from the park meadow directly into the correct recycling bin below. Each recycled item earns <strong>+1 TashCoin</strong>. Spend your coins on exclusive rewards in the shop!',
-    gameStatTrash: 'Trash in Meadow',
-    gameStatCleaned: 'Items Cleaned',
-    gameStatCleanliness: 'Park Cleanliness',
-    btnRespawn: 'Spawn Trash',
-    arenaTag: 'Park Area «Tashkent EcoPark»',
-    arenaTip: 'Hold trash and drag it into the matching bin below 👇',
-    binsDockTitle: 'Recycling Bins (drag and drop trash here):',
-
-    binPlasticTag: '🔵 Blue Bin',
-    binPlasticTitle: 'Plastic',
-    binPlasticHint: 'Bottles, bags',
-
-    binGlassTag: '🟢 Green Bin',
-    binGlassTitle: 'Glass & Metal',
-    binGlassHint: 'Bottles, cans',
-
-    binPaperTag: '🟡 Yellow Bin',
-    binPaperTitle: 'Paper & Other',
-    binPaperHint: 'Cups, wrappers',
-
-    binDropTarget: 'Drop here',
-
-    shopBadge: 'Eco-Coin Rewards',
-    shopTitle: 'Volunteer Reward Shop',
-    shopSubtitle: 'Exchange your earned TashCoins for exclusive community merch, eco-friendly goods, and official certificates.',
-
-    shopItem1Cat: 'Eco-Merch',
-    shopItem1Title: 'TashCare T-Shirt',
-    shopItem1Desc: 'Official 100% organic eco-cotton branded community T-shirt with TashCare logo.',
-
-    shopItem2Cat: 'Ceramics & Merch',
-    shopItem2Title: 'TashCare Ceramic Mug',
-    shopItem2Desc: 'High-quality ceramic mug for coffee or tea with official TashCare eco-design.',
-
-    shopItem3Cat: 'Eco-Merch',
-    shopItem3Title: 'TashCare Cap',
-    shopItem3Desc: 'Official TashCare branded cotton baseball cap with embroidered eco-logo and adjustable strap.',
-
-    shopItem4Cat: 'Eco-Stationery',
-    shopItem4Title: 'TashCare Eco-Pen',
-    shopItem4Desc: 'Eco-friendly ballpoint pen made from recycled kraft paper and biodegradable materials.',
-
-    shopItem5Cat: 'Eco-Merch',
-    shopItem5Title: 'TashCare Sticker Pack',
-    shopItem5Desc: 'Set of waterproof glossy vinyl stickers for laptops, bottles, and phone cases.',
-
-    shopItem6Cat: 'Eco-Action',
-    shopItem6Title: '1 kg of Trash',
-    shopItem6Desc: 'Official credit voucher for submitting 1 kg of sorted recyclable trash from Tashkent parks.',
-
-    btnExchange: 'Redeem',
-    modalSuccessTitle: 'Reward Claimed Successfully!',
-    modalSuccessDesc: 'You have exchanged coins for',
-    modalContactDesc: 'To claim your reward, show this code to our coordinator <strong>@Amisha_SSlando</strong> on Telegram to arrange pickup in Tashkent.',
-    modalCloseBtn: 'Got it, close',
-    modalScreenshotHeading: 'Now take a screenshot and send to @Amisha_SSlando',
-    modalScreenshotSub: 'Take a screenshot of this window and send it to coordinator @Amisha_SSlando on Telegram to claim your prize.',
-    modalItemLabel: 'Item / Reward:',
-    modalCoordLabel: 'Coordinator:',
-    modalUserLabel: 'Your Telegram:',
-    modalStatusLabel: 'Status:',
-    modalStatusPending: 'Pending claim',
-    modalBtnSend: 'Send to @Amisha_SSlando'
-  },
-  uz: {
-    heroBadge: 'Rasmiy ko\'ngillilar jamoasi • Toshkent',
-    heroTitle: 'Toshkentni birgalikda <span class="highlight">yanada yaxshiroq</span> qilamiz',
-    heroSubtitle: 'TashCare Toshkentdagi faol insonlarni birlashtiradi: «Yashil Makon» bilan daraxt ekish, hayvonlar boshpanalariga ko\'mak va talabalar uchun rasmiy ma\'lumotnomalar.',
-    btnRegisterHero: 'Ko\'ngilli bo\'lish',
-    btnChannelHero: 'Telegram Kanal',
-    stat1Number: '500+',
-    stat1Label: 'Yashil Makon bilan ekilgan daraxtlar',
-    stat2Number: '100%',
-    stat2Label: 'O\'quvchilar uchun bepul ma\'lumotnoma',
-    stat3Number: '24/7',
-    stat3Label: 'Boshpanalarga ko\'mak va ezgu ishlar',
-    regBadge: 'Ko\'ngilli a\'zolik arizasi',
-    regTitle: 'Ko\'ngillilar ro\'yxatdan o\'tishi',
-    regSubtitle: 'TashCare loyihalarida ishtirok etish uchun Telegram username-ingizni kiriting.',
-    labelUsername: 'Put YOUR username:',
-    inputPlaceholder: 'username (@ siz)',
-    btnSubmit: 'Ro\'yxatdan o\'tish',
-    submitting: 'Yuborilmoqda...',
-    formHelper: 'Sizning username faqat faol ma\'murlarimizga xabar qilinadi.',
-    successMessage: 'Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi! So\'nggi yangiliklarni ko\'rish uchun TG botiga o\'ting.',
-    openBotBtn: 'Telegram Botni ochish',
-    emptyUsernameError: 'Iltimos, Telegram username-ingizni kiriting.',
-    shortUsernameError: 'Username kamida 3 ta belgidan iborat bo\'lishi kerak.',
-    generalError: 'Serverga ulanib bo\'lmadi. Iltimos, keyinroq qayta urinib ko\'ring.',
-
-    // Channel Spotlight
-    spotlightBadge: 'Rasmiy kanal @tashcareuz',
-    spotlightTitle: 'TashCare jamoasi haqida',
-    spotlightQuote: '«Bizning ko\'ngillilar jamoamizga xush kelibsiz! Bu yerda biz ezgu ishlar qilishni, atrofimizdagilarga yordam berishni va dunyoni yaxshi tomonga o\'zgartirishni istagan insonlarni birlashtiramiz.»',
-    meta1: '«Yashil Makon» tashkiloti bilan hamkorlikda daraxt ekish tadbirlari',
-    meta2: 'Boshpanasiz hayvonlarga ko\'mak («Ikkinchi Imkon» boshpanasi)',
-    meta3: 'Maktab va universitet o\'quvchilari uchun rasmiy ma\'lumotnomalar',
-    meta4: 'Keksalar va kam ta\'minlangan oilalarga ijtimoiy ko\'mak',
-    btnJoinTgChannel: '@tashcareuz kanaliga o\'tish',
-
-    // Preview post
-    postHeader: 'TashCare',
-    postSubheader: 'Rasmiy kanal yangiliklari',
-    postTag: 'Ekologik aksiya',
-    postSnippet: '«Yashil Makon» tashkiloti bilan birgalikda daraxt ekish tadbiriga barchani taklif qilamiz! O\'quvchi va talabalar uchun rasmiy ma\'lumotnomalar beriladi. Ro\'yxatdan o\'tish: @Amisha_SSlando (Amirbek). Ezgu ishning bir qismi bo\'ling!',
-    postBtn: 'Telegramda postni ochish',
-
-    // Initiatives
-    pillarsTitle: 'Bizning asosiy faoliyatimiz',
-    pillarsSubtitle: 'Toshkent shahrida o\'tkaziladigan xayriya va ekologik tashabbuslar.',
-    pillar1Title: 'Yashil Makon va Eko-klub',
-    pillar1Desc: 'Daraxt ko\'chatlarini ekish, hasharotlar va poytaxt parklarini ko\'kalamzorlashtirish.',
-    pillar2Title: 'Hayvonlarga g\'amxo\'rlik',
-    pillar2Desc: 'Boshpanalarga ozuqa yetkazib berish, davolash va yordam ko\'rsatish.',
-    pillar3Title: 'O\'quvchilar uchun sertifikatlar',
-    pillar3Desc: 'Ko\'ngillilik faoliyati uchun maktab va oliygohlarga taqdim etiladigan rasmiy ma\'lumotnomalar.',
-    pillar4Title: 'Ijtimoiy ko\'mak',
-    pillar4Desc: 'Yordamga muhtoj keksalar va oilalarga manzilli oziq-ovqat va moddiy yordam.',
-
-    bannerTitle: 'TashCare kanaliga obuna bo\'ling',
-    bannerSubtitle: 'Barcha yangiliklar, hashar e\'lonlari va hisobotlar Telegram kanalimizda.',
-    bannerBtn: '@tashcareuz kanalini ochish',
-    navChannel: 'Telegram Kanal',
-    footerRights: 'Barcha huquqlar himoyalangan.',
-
-    // Eco Game & Shop Translations
-    gameNavLabel: 'O\'yin',
-    btnBackHome: 'Tepaga / Jamiyatga',
-    gameBalanceLabel: 'Balans:',
-    gameBadge: 'TashCare Eko-o\'yini • Chiqindilarni saralash',
-    gameTitle: 'Chiqindilarni tozalang va parklarni asrang!',
-    gameSubtitle: 'Maydondagi chiqindilarni ushlab, quyidagi to\'g\'ri qutiga tortib tashlang. Har bir saralangan buyum uchun <strong>+1 TashCoin</strong> olasiz. Tangalarni sovrinlar do\'konida sarflang!',
-    gameStatTrash: 'Maydondagi chiqindi',
-    gameStatCleaned: 'Yig\'ilgan buyumlar',
-    gameStatCleanliness: 'Park tozaligi',
-    btnRespawn: 'Yangi chiqindi',
-    arenaTag: '«Toshkent EkoPark» hududi',
-    arenaTip: 'Chiqindini ushlab, pastdagi qutiga torting 👇',
-    binsDockTitle: 'Saralash qutilari (chiqindini shu yerga tashlang):',
-
-    binPlasticTag: '🔵 Ko\'k quti',
-    binPlasticTitle: 'Plastik',
-    binPlasticHint: 'Butilkalar, paketlar',
-
-    binGlassTag: '🟢 Yashil quti',
-    binGlassTitle: 'Shisha va Metall',
-    binGlassHint: 'Butilkalar, bankalar',
-
-    binPaperTag: '🟡 Sariq quti',
-    binPaperTitle: 'Qog\'oz va Boshqa',
-    binPaperHint: 'Stakanlar, o\'ramlar',
-
-    binDropTarget: 'Shu yerga tashlang',
-
-    shopBadge: 'Eko-tanga sovrinlari',
-    shopTitle: 'Ko\'ngillilar sovrinlar do\'koni',
-    shopSubtitle: 'To\'plangan TashCoin tangalarini esdalik sovg\'alar, eko-mahsulotlar va rasmiy ma\'lumotnomalarga almashtiring.',
-
-    shopItem1Cat: 'Eko-Merch',
-    shopItem1Title: 'TashCare futbolkasi',
-    shopItem1Desc: 'TashCare logotipi tushirilgan 100% tabiiy organik paxtadan tikilgan jamoaviy futbolka.',
-
-    shopItem2Cat: 'Idish-tovoq',
-    shopItem2Title: 'TashCare krujkasi',
-    shopItem2Desc: 'TashCare ramzi tushirilgan choy va kofe uchun sifatli sopol krujka.',
-
-    shopItem3Cat: 'Eko-Merch',
-    shopItem3Title: 'TashCare kepkasi',
-    shopItem3Desc: 'TashCare kashtalangan eko-logotipi tushirilgan paxtali qulay brend kepka.',
-
-    shopItem4Cat: 'Kanselyariya',
-    shopItem4Title: 'TashCare eko-ruchkasi',
-    shopItem4Desc: 'Qayta ishlangan kraft qog\'oz va bio-parchalanuvchi materiallardan tayyorlangan sharikli ruchka.',
-
-    shopItem5Cat: 'Eko-Merch',
-    shopItem5Title: 'TashCare stikerlar to\'plami',
-    shopItem5Desc: 'Noutbuk, telefon va termoslar uchun suvga chidamli yorqin stikerlar to\'plami.',
-
-    shopItem6Cat: 'Eko-Hissa',
-    shopItem6Title: '1 kg chiqindi',
-    shopItem6Desc: 'Toshkent parklaridan 1 kg saralangan chiqindini qayta ishlashga topshirish sertifikati.',
-
-    btnExchange: 'Almashtirish',
-    modalSuccessTitle: 'Sovrin muvaffaqiyatli rasmiylashtirildi!',
-    modalSuccessDesc: 'Siz tangalaringizni quyidagiga almashtirdingiz:',
-    modalContactDesc: 'Sovrinni olish uchun ushbu kodni Telegram orqali koordinatormiz <strong>@Amisha_SSlando</strong> ga yuboring.',
-    modalCloseBtn: 'Tushunarli, yopish',
-    modalScreenshotHeading: 'Endi skrinshot qiling va @Amisha_SSlando ga tashlang',
-    modalScreenshotSub: 'Ushbu oynani skrinshot qiling va sovg\'ani olish uchun koordinator @Amisha_SSlando ga yuboring.',
-    modalItemLabel: 'Sovrin:',
-    modalCoordLabel: 'Koordinator:',
-    modalUserLabel: 'Sizning Telegramingiz:',
-    modalStatusLabel: 'Holat:',
-    modalStatusPending: 'Berilishi kutilmoqda',
-    modalBtnSend: '@Amisha_SSlando ga tashlash'
-  }
-};
-
-// Global state
-let currentLang = localStorage.getItem('tashcare_lang') || 'ru';
-let currentTheme = localStorage.getItem('tashcare_theme') || 'light';
-
-const COIN_STORAGE_KEY = 'tashcare_coins';
-const STAT_CLEANED_KEY = 'tashcare_cleaned_count';
-const BINS_STORAGE_KEY = 'tashcare_bin_counts';
-const ORDERS_STORAGE_KEY = 'tashcare_redeem_orders';
-
-// DOM Elements for Routing & Game
-const landingView = document.getElementById('landingView');
-const gameView = document.getElementById('game') || document.getElementById('gameView');
-const gameNavBtn = document.getElementById('gameNavBtn');
-const gameMobileNavBtn = document.getElementById('gameMobileNavBtn');
-const drawerGameLink = document.getElementById('drawerGameLink');
-const brandLogoLink = document.getElementById('brandLogoLink');
-const btnBackHome = document.getElementById('btnBackHome');
-
-// Coin and stats displays
-const gameCoinBalance = document.getElementById('gameCoinBalance');
-const navCoinPill = document.getElementById('navCoinPill');
-const mobileCoinPill = document.getElementById('mobileCoinPill');
-const drawerCoinBadge = document.getElementById('drawerCoinBadge');
-
-const trashCountVal = document.getElementById('trashCountVal');
-const parkCleanVal = document.getElementById('parkCleanVal');
-const cleanlinessVal = document.getElementById('cleanlinessVal');
-const respawnTrashBtn = document.getElementById('respawnTrashBtn');
-const parkArena = document.getElementById('parkArena');
-const trashContainer = document.getElementById('trashContainer');
-
-// Shop & Modal elements
-const shopModal = document.getElementById('shopModal');
-const shopModalTitle = document.getElementById('shopModalTitle');
-const shopModalSubtitle = document.getElementById('shopModalSubtitle');
-const voucherCodeDisplay = document.getElementById('voucherCodeDisplay');
-const copyVoucherBtn = document.getElementById('copyVoucherBtn');
-const copyVoucherTxt = document.getElementById('copyVoucherTxt');
-
-// Trash Items with Categories & Pure SVGs (Rule 5 compliant)
-const TRASH_TYPES = [
-  // 🔵 Blue: Plastic
-  {
-    type: 'plastic-bottle',
-    nameRu: 'Пластиковая бутылка',
-    nameEn: 'Plastic Bottle',
-    nameUz: 'Plastik shisha',
-    bin: 'plastic',
-    color: 'blue',
-    badgeRu: '🔵 Синий (Пластик)',
-    badgeEn: '🔵 Blue (Plastic)',
-    badgeUz: '🔵 Ko\'k (Plastik)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10 2h4v3h-4z"/>
-      <path d="M8 5h8v2l-1 2v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9L8 7V5z"/>
-      <line x1="8" y1="12" x2="16" y2="12"/>
-      <line x1="8" y1="16" x2="16" y2="16"/>
-    </svg>`
-  },
-  {
-    type: 'plastic-bag',
-    nameRu: 'Пластиковый пакет',
-    nameEn: 'Plastic Bag',
-    nameUz: 'Polietilen paket',
-    bin: 'plastic',
-    color: 'blue',
-    badgeRu: '🔵 Синий (Пакет)',
-    badgeEn: '🔵 Blue (Bag)',
-    badgeUz: '🔵 Ko\'k (Paket)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 8l-2 12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L18 8"/>
-      <path d="M9 8V5a3 3 0 0 1 6 0v3"/>
-      <path d="M10 12a2 2 0 0 0 4 0"/>
-    </svg>`
-  },
-  // 🟢 Green: Glass & Metal
-  {
-    type: 'glass-bottle',
-    nameRu: 'Стеклянная бутылка',
-    nameEn: 'Glass Bottle',
-    nameUz: 'Shisha butilka',
-    bin: 'glass-metal',
-    color: 'green',
-    badgeRu: '🟢 Зеленый (Стекло)',
-    badgeEn: '🟢 Green (Glass)',
-    badgeUz: '🟢 Yashil (Shisha)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 2h2v4l2 3v11a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V9l2-3V2z"/>
-      <line x1="11" y1="13" x2="13" y2="13"/>
-    </svg>`
-  },
-  {
-    type: 'soda-can',
-    nameRu: 'Жестяная банка',
-    nameEn: 'Soda Can',
-    nameUz: 'Konserva bankasi',
-    bin: 'glass-metal',
-    color: 'green',
-    badgeRu: '🟢 Зеленый (Банка)',
-    badgeEn: '🟢 Green (Can)',
-    badgeUz: '🟢 Yashil (Banka)',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <ellipse cx="12" cy="5" rx="6" ry="3"/>
-      <path d="M6 5v14c0 1.66 2.69 3 6 3s6-1.34 6-3V5"/>
-      <line x1="6" y1="12" x2="18" y2="12"/>
-    </svg>`
-  },
-  // 🟡 Yellow: Paper & Other
-  {
-    type: 'coffee-cup',
-    nameRu: 'Бумажный стаканчик',
-    nameEn: 'Paper Coffee Cup',
-    nameUz: 'Qog\'oz stakan',
-    bin: 'paper-other',
-    color: 'yellow',
-    badgeRu: '🟡 Желтый (Бумага)',
-    badgeEn: '🟡 Yellow (Paper)',
-    badgeUz: '🟡 Sariq (Qog\'oz)',
-    svg: `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-      <path d="M4 8h14v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z"/>
-      <line x1="6" y1="2" x2="6" y2="5"/>
-      <line x1="10" y1="2" x2="10" y2="5"/>
-      <line x1="14" y1="2" x2="14" y2="5"/>
-    </svg>`
-  },
-  {
-    type: 'snack-wrapper',
-    nameRu: 'Обертка / Фантик',
-    nameEn: 'Snack Wrapper',
-    nameUz: 'Konfet o\'rami',
-    bin: 'paper-other',
-    color: 'yellow',
-    badgeRu: '🟡 Желтый (Обертка)',
-    badgeEn: '🟡 Yellow (Wrapper)',
-    badgeUz: '🟡 Sariq (O\'ram)',
-    svg: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/>
-    </svg>`
-  }
-];
-
-// Pure SVG Coin HTML for consistent crisp rendering (Rule 5 compliant)
-const COIN_SVG_HTML = `<svg class="coin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#coinGrad)" stroke="#b45309" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="#fef3c7" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M12 7v10M9 9.5h5a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h5" stroke="#78350f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-// Web Audio API Synthesizer for collect chime & wrong bin buzzer
-let audioCtx = null;
-function playCollectChime() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioCtx) audioCtx = new AudioContextClass();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sine';
-    // Friendly rising chime (587Hz D5 -> 880Hz A5)
-    osc.frequency.setValueAtTime(587.33, now);
-    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.12);
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.32);
-  } catch (e) {
-    // Audio context may be restricted by browser policy
-  }
-}
-
-function playErrorBuzzer() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioCtx) audioCtx = new AudioContextClass();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.linearRampToValueAtTime(85, now + 0.28);
-
-    gain.gain.setValueAtTime(0.22, now);
-    gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.28);
-  } catch (e) {
-    // Audio context may be restricted by browser policy
-  }
-}
-
-// Cryptographic-Style Signature for Coin Balance (Anti-Cheating & Anti-Tamper)
-const COIN_SIG_KEY = 'tashcare_coin_sig';
-const COIN_SALT = 'tashcare_sec_salt_2026_9x!kL';
-
-function computeCoinSig(coins, cleaned) {
-  let hash = 0x811c9dc5;
-  const str = `${coins}:${cleaned}:${COIN_SALT}`;
-  for (let i = 0; i < str.length; i++) {
-    hash ^= str.charCodeAt(i);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16);
-}
-
-// Coins state helpers
-function getStoredCoins() {
-  const val = parseInt(localStorage.getItem(COIN_STORAGE_KEY), 10);
-  const cleaned = getCleanedCount();
-  const rawCoins = isNaN(val) ? 0 : Math.max(0, val);
-
-  // If user has stored coins, verify anti-tamper signature
-  if (rawCoins > 0) {
-    const storedSig = localStorage.getItem(COIN_SIG_KEY);
-    const expectedSig = computeCoinSig(rawCoins, cleaned);
-    if (!storedSig || storedSig !== expectedSig) {
-      console.warn('[Security] Coin balance signature mismatch. Resetting tampered balance to 0.');
-      localStorage.setItem(COIN_STORAGE_KEY, '0');
-      localStorage.setItem(COIN_SIG_KEY, computeCoinSig(0, cleaned));
-      return 0;
+(function () {
+  'use strict';
+
+  // -----------------------------------------------------------------
+  // Translations
+  // -----------------------------------------------------------------
+  const T = {
+    ru: {
+      pageTitle: 'TashCare — Волонтерское сообщество Ташкента',
+      navAbout: 'О нас', navPillars: 'Направления', navGame: 'Эко-игра', navShop: 'Магазин', navJoin: 'Стать волонтером',
+
+      heroBadge: 'Волонтерское сообщество • Ташкент',
+      heroTitle: 'Делаем Ташкент <em>добрее</em> и&nbsp;<span class="mark">зеленее</span>',
+      heroSubtitle: 'TashCare объединяет неравнодушных жителей столицы: высадка деревьев с движением «Yashil Makon», помощь приютам для животных, благотворительные акции и официальные справки для школьников и студентов.',
+      btnRegisterHero: 'Стать волонтером',
+      btnChannelHero: 'Telegram канал',
+      stat1Label: 'деревьев высажено с Yashil Makon',
+      stat2Label: 'бесплатные справки учащимся',
+      stat3Label: 'поддержка приютов и добрых дел',
+      chip1: 'эко-акции по выходным',
+      chip2Title: '«Второй Шанс»',
+      chip2: 'помощь приюту',
+
+      mq1: 'Высадка деревьев', mq2: 'Помощь приютам', mq3: 'Справки для учащихся', mq4: 'Добрые дела',
+
+      spotlightBadge: 'Канал @tashcareuz',
+      spotlightTitle: 'Сообщество людей, которые меняют город',
+      spotlightQuote: '«Добро пожаловать в наше волонтерское сообщество! Здесь мы объединяем людей, которые хотят делать добрые дела, помогать окружающим и менять мир к лучшему.»',
+      meta1: 'Экологические проекты и высадка деревьев с «Yashil Makon»',
+      meta2: 'Помощь приютам для бездомных животных («Второй Шанс»)',
+      meta3: 'Официальные справки для школьников и студентов',
+      meta4: 'Адресная помощь пожилым людям и семьям',
+      btnJoinTgChannel: 'Перейти в канал',
+      postSubheader: 'официальный канал',
+      postTag: 'Эко-акция',
+      postSnippet: 'Приглашаем на высадку деревьев вместе с «Yashil Makon»! Школьникам и студентам — официальные справки. Регистрация: @Amisha_SSlando (Амирбек). Присоединяйтесь к доброму делу! 🌱',
+      postBtn: 'Открыть в Telegram',
+
+      pillarsKicker: 'Направления',
+      pillarsTitle: 'Чем мы занимаемся',
+      pillarsSubtitle: 'Реальные проекты, в которых может принять участие каждый житель Ташкента.',
+      pillar1Title: 'Эко-клуб и Yashil Makon',
+      pillar1Desc: 'Масштабная высадка саженцев, субботники и озеленение парков и дворов столицы вместе с национальным движением «Yashil Makon».',
+      pillar2Title: 'Помощь приютам',
+      pillar2Desc: 'Корма, ветеринарная помощь и руки для приютов — в том числе «Второй Шанс».',
+      pillar3Title: 'Справки для учащихся',
+      pillar3Desc: 'Подтверждающие справки и благодарности школьникам и студентам за участие.',
+      pillar4Title: 'Социальная помощь',
+      pillar4Desc: 'Адресная поддержка ветеранов, многодетных семей и людей в трудной жизненной ситуации: продукты, вещи и человеческое тепло.',
+
+      regKicker: 'Регистрация',
+      regTitle: 'Получите пропуск волонтера',
+      regSubtitle: 'Укажите ваш Telegram username — координаторы свяжутся с вами и пригласят на ближайшие акции.',
+      regStep1: 'Введите свой Telegram username',
+      regStep2: 'Откройте бота @Tashcare_user_bot',
+      regStep3: 'Получайте анонсы и приходите на акции',
+      passLabel: 'Пропуск волонтера',
+      passHolder: 'Владелец',
+      passCity: 'Ташкент',
+      passStatusPending: 'Ожидает',
+      passStatusActive: 'Активен',
+      labelUsername: 'Ваш Telegram username',
+      inputPlaceholder: 'username',
+      btnSubmit: 'Получить',
+      submitting: 'Отправка…',
+      formHelper: 'Username видят только администраторы сообщества.',
+      successMessage: 'Готово! Вы зарегистрированы. Откройте нашего бота, чтобы получать свежие новости.',
+      openBotBtn: 'Открыть Telegram-бота',
+      emptyUsernameError: 'Пожалуйста, укажите ваш Telegram username.',
+      formatError: 'Username: от 3 до 32 символов — латиница, цифры и _.',
+      generalError: 'Не удалось подключиться к серверу. Попробуйте чуть позже.',
+
+      gameKicker: 'Эко-игра',
+      gameTitle: 'Убери мусор — сохрани парки Ташкента',
+      gameSubtitle: 'Перетащи мусор с поляны в подходящий ящик (или нажми на предмет, а затем на ящик). Каждый верно отсортированный предмет — <strong>+1 TashCoin</strong>.',
+      gameBalanceLabel: 'Баланс',
+      gameStatTrash: 'Мусора на поляне',
+      gameStatCleaned: 'Собрано всего',
+      gameStatCleanliness: 'Чистота парка',
+      btnRespawn: 'Новый мусор',
+      arenaTag: 'Tashkent EcoPark',
+      arenaTip: 'Тащи мусор в ящик 👇',
+      cleanDone: 'Поляна чистая! ✨',
+      binPlasticTitle: 'Пластик', binPlasticHint: 'Бутылки, пакеты',
+      binGlassTitle: 'Стекло и металл', binGlassHint: 'Бутылки, банки',
+      binPaperTitle: 'Бумага и прочее', binPaperHint: 'Стаканы, обертки',
+      wrongBin: 'Не тот ящик! Нужен: {bin}',
+      sorted: 'Отлично!',
+
+      shopKicker: 'Награды',
+      shopTitle: 'Магазин волонтерских наград',
+      shopSubtitle: 'Обменивайте заработанные TashCoin на мерч сообщества и эко-награды.',
+      shopYouHave: 'У вас',
+      shopItem1Cat: 'Мерч', shopItem1Title: 'Футболка TashCare', shopItem1Desc: 'Хлопковая футболка сообщества с логотипом.',
+      shopItem2Cat: 'Мерч', shopItem2Title: 'Кружка TashCare', shopItem2Desc: 'Керамическая кружка для чая и кофе с эко-дизайном.',
+      shopItem3Cat: 'Мерч', shopItem3Title: 'Кепка TashCare', shopItem3Desc: 'Кепка с вышитым логотипом и регулируемым ремешком.',
+      shopItem4Cat: 'Канцелярия', shopItem4Title: 'Эко-ручка TashCare', shopItem4Desc: 'Ручка из переработанного крафт-картона.',
+      shopItem5Cat: 'Мерч', shopItem5Title: 'Стикерпак TashCare', shopItem5Desc: 'Виниловые наклейки для ноутбука, бутылки и чехла.',
+      shopItem6Cat: 'Эко-вклад', shopItem6Title: '1 кг мусора', shopItem6Desc: 'Сертификат сдачи 1 кг раздельного мусора на переработку.',
+      btnExchange: 'Обменять',
+      btnConfirm: 'Точно?',
+      needMore: 'Не хватает {n} TashCoin. Убери еще мусора на поляне! 🌿',
+
+      modalTitle: 'Вы обменяли: {item}',
+      modalCharged: 'С баланса списано {n} TashCoin.',
+      modalScreenshotHeading: 'Сделайте скриншот и отправьте @Amisha_SSlando',
+      modalScreenshotSub: 'Координатор проверит код и договорится с вами о выдаче приза в Ташкенте.',
+      modalItemLabel: 'Награда',
+      modalCoordLabel: 'Координатор',
+      modalUserLabel: 'Ваш Telegram',
+      modalStatusLabel: 'Статус',
+      modalStatusPending: 'Ожидает выдачи',
+      modalCodeLabel: 'Код выдачи',
+      modalBtnSend: 'Написать @Amisha_SSlando',
+      modalCloseBtn: 'Закрыть',
+      notSpecified: 'не указан',
+      copy: 'Копировать', copied: 'Скопировано!',
+
+      bannerTitle: 'Будьте в курсе всех акций',
+      bannerSubtitle: 'Анонсы выездов, фотоотчеты, опросы и теплая атмосфера единомышленников — в нашем Telegram-канале.',
+      bannerBtn: 'Открыть @tashcareuz',
+      footerTagline: 'Волонтерское сообщество Ташкента. Сажаем деревья, помогаем животным и людям.',
+      footerNav: 'Навигация', footerSocial: 'Мы в сети',
+      footerCity: 'Ташкент, Узбекистан',
+      footerRights: 'Все права защищены.'
+    },
+
+    uz: {
+      pageTitle: 'TashCare — Toshkent ko\'ngillilar jamoasi',
+      navAbout: 'Biz haqimizda', navPillars: 'Yo\'nalishlar', navGame: 'Eko-o\'yin', navShop: 'Do\'kon', navJoin: 'Ko\'ngilli bo\'lish',
+
+      heroBadge: 'Ko\'ngillilar jamoasi • Toshkent',
+      heroTitle: 'Toshkentni <em>mehribonroq</em> va&nbsp;<span class="mark">yashilroq</span> qilamiz',
+      heroSubtitle: 'TashCare poytaxtning faol insonlarini birlashtiradi: «Yashil Makon» bilan daraxt ekish, hayvonlar boshpanalariga ko\'mak, xayriya aksiyalari va o\'quvchilar uchun rasmiy ma\'lumotnomalar.',
+      btnRegisterHero: 'Ko\'ngilli bo\'lish',
+      btnChannelHero: 'Telegram kanal',
+      stat1Label: 'Yashil Makon bilan ekilgan daraxtlar',
+      stat2Label: 'o\'quvchilar uchun bepul ma\'lumotnoma',
+      stat3Label: 'boshpanalarga ko\'mak va ezgu ishlar',
+      chip1: 'har dam olish kuni eko-aksiyalar',
+      chip2Title: '«Ikkinchi Imkon»',
+      chip2: 'boshpanaga yordam',
+
+      mq1: 'Daraxt ekish', mq2: 'Boshpanalarga yordam', mq3: 'O\'quvchilarga ma\'lumotnoma', mq4: 'Ezgu ishlar',
+
+      spotlightBadge: '@tashcareuz kanali',
+      spotlightTitle: 'Shaharni o\'zgartirayotgan insonlar jamoasi',
+      spotlightQuote: '«Bizning ko\'ngillilar jamoamizga xush kelibsiz! Bu yerda ezgu ishlar qilishni, atrofdagilarga yordam berishni va dunyoni yaxshi tomonga o\'zgartirishni istagan insonlarni birlashtiramiz.»',
+      meta1: '«Yashil Makon» bilan ekologik loyihalar va daraxt ekish',
+      meta2: 'Boshpanasiz hayvonlarga ko\'mak («Ikkinchi Imkon»)',
+      meta3: 'O\'quvchi va talabalar uchun rasmiy ma\'lumotnomalar',
+      meta4: 'Keksalar va oilalarga manzilli yordam',
+      btnJoinTgChannel: 'Kanalga o\'tish',
+      postSubheader: 'rasmiy kanal',
+      postTag: 'Eko-aksiya',
+      postSnippet: '«Yashil Makon» bilan birgalikda daraxt ekishga taklif qilamiz! O\'quvchi va talabalarga rasmiy ma\'lumotnomalar beriladi. Ro\'yxatdan o\'tish: @Amisha_SSlando (Amirbek). Ezgu ishga qo\'shiling! 🌱',
+      postBtn: 'Telegramda ochish',
+
+      pillarsKicker: 'Yo\'nalishlar',
+      pillarsTitle: 'Biz nima qilamiz',
+      pillarsSubtitle: 'Toshkentning har bir aholisi ishtirok eta oladigan haqiqiy loyihalar.',
+      pillar1Title: 'Eko-klub va Yashil Makon',
+      pillar1Desc: 'Milliy «Yashil Makon» harakati bilan birgalikda ko\'chat ekish, hasharlar va poytaxt parklari hamda hovlilarini ko\'kalamzorlashtirish.',
+      pillar2Title: 'Boshpanalarga yordam',
+      pillar2Desc: 'Ozuqa, veterinariya yordami va boshpanalarga, jumladan «Ikkinchi Imkon»ga ko\'mak.',
+      pillar3Title: 'O\'quvchilar uchun ma\'lumotnoma',
+      pillar3Desc: 'Ishtirok uchun o\'quvchi va talabalarga tasdiqlovchi ma\'lumotnomalar va tashakkurnomalar.',
+      pillar4Title: 'Ijtimoiy ko\'mak',
+      pillar4Desc: 'Faxriylar, ko\'p bolali oilalar va qiyin vaziyatdagi insonlarga manzilli yordam: oziq-ovqat, kiyim va insoniy iliqlik.',
+
+      regKicker: 'Ro\'yxatdan o\'tish',
+      regTitle: 'Ko\'ngilli propuskini oling',
+      regSubtitle: 'Telegram username-ingizni kiriting — koordinatorlar siz bilan bog\'lanib, yaqin aksiyalarga taklif qilishadi.',
+      regStep1: 'Telegram username-ingizni kiriting',
+      regStep2: '@Tashcare_user_bot botini oching',
+      regStep3: 'E\'lonlarni oling va aksiyalarga keling',
+      passLabel: 'Ko\'ngilli propuski',
+      passHolder: 'Egasi',
+      passCity: 'Toshkent',
+      passStatusPending: 'Kutilmoqda',
+      passStatusActive: 'Faol',
+      labelUsername: 'Telegram username-ingiz',
+      inputPlaceholder: 'username',
+      btnSubmit: 'Olish',
+      submitting: 'Yuborilmoqda…',
+      formHelper: 'Username faqat jamoa ma\'murlariga ko\'rinadi.',
+      successMessage: 'Tayyor! Siz ro\'yxatdan o\'tdingiz. Yangiliklarni olish uchun botimizni oching.',
+      openBotBtn: 'Telegram botni ochish',
+      emptyUsernameError: 'Iltimos, Telegram username-ingizni kiriting.',
+      formatError: 'Username: 3–32 belgi — lotin harflari, raqamlar va _.',
+      generalError: 'Serverga ulanib bo\'lmadi. Keyinroq urinib ko\'ring.',
+
+      gameKicker: 'Eko-o\'yin',
+      gameTitle: 'Chiqindini yig\'ing — Toshkent parklarini asrang',
+      gameSubtitle: 'Chiqindini maydondan mos qutiga torting (yoki buyumni, keyin qutini bosing). Har bir to\'g\'ri saralangan buyum — <strong>+1 TashCoin</strong>.',
+      gameBalanceLabel: 'Balans',
+      gameStatTrash: 'Maydondagi chiqindi',
+      gameStatCleaned: 'Jami yig\'ilgan',
+      gameStatCleanliness: 'Park tozaligi',
+      btnRespawn: 'Yangi chiqindi',
+      arenaTag: 'Toshkent EcoPark',
+      arenaTip: 'Chiqindini qutiga torting 👇',
+      cleanDone: 'Maydon toza! ✨',
+      binPlasticTitle: 'Plastik', binPlasticHint: 'Butilkalar, paketlar',
+      binGlassTitle: 'Shisha va metall', binGlassHint: 'Butilkalar, bankalar',
+      binPaperTitle: 'Qog\'oz va boshqa', binPaperHint: 'Stakanlar, o\'ramlar',
+      wrongBin: 'Noto\'g\'ri quti! Kerak: {bin}',
+      sorted: 'Zo\'r!',
+
+      shopKicker: 'Sovrinlar',
+      shopTitle: 'Ko\'ngillilar sovrinlar do\'koni',
+      shopSubtitle: 'To\'plangan TashCoin tangalarini jamoa merchi va eko-sovrinlarga almashtiring.',
+      shopYouHave: 'Sizda',
+      shopItem1Cat: 'Merch', shopItem1Title: 'TashCare futbolkasi', shopItem1Desc: 'Logotipli paxta jamoa futbolkasi.',
+      shopItem2Cat: 'Merch', shopItem2Title: 'TashCare krujkasi', shopItem2Desc: 'Eko-dizayndagi choy va kofe uchun sopol krujka.',
+      shopItem3Cat: 'Merch', shopItem3Title: 'TashCare kepkasi', shopItem3Desc: 'Kashtalangan logotipli, sozlanadigan kepka.',
+      shopItem4Cat: 'Kanselyariya', shopItem4Title: 'TashCare eko-ruchkasi', shopItem4Desc: 'Qayta ishlangan kraft kartondan ruchka.',
+      shopItem5Cat: 'Merch', shopItem5Title: 'TashCare stikerlari', shopItem5Desc: 'Noutbuk, butilka va g\'ilof uchun vinil stikerlar.',
+      shopItem6Cat: 'Eko-hissa', shopItem6Title: '1 kg chiqindi', shopItem6Desc: '1 kg saralangan chiqindini qayta ishlashga topshirish sertifikati.',
+      btnExchange: 'Almashtirish',
+      btnConfirm: 'Aniqmi?',
+      needMore: 'Yana {n} TashCoin yetishmayapti. Maydonda ko\'proq chiqindi yig\'ing! 🌿',
+
+      modalTitle: 'Siz almashtirdingiz: {item}',
+      modalCharged: 'Balansdan {n} TashCoin yechildi.',
+      modalScreenshotHeading: 'Skrinshot qiling va @Amisha_SSlando ga yuboring',
+      modalScreenshotSub: 'Koordinator kodni tekshiradi va Toshkentda sovrinni topshirish haqida kelishadi.',
+      modalItemLabel: 'Sovrin',
+      modalCoordLabel: 'Koordinator',
+      modalUserLabel: 'Telegramingiz',
+      modalStatusLabel: 'Holat',
+      modalStatusPending: 'Berilishi kutilmoqda',
+      modalCodeLabel: 'Berish kodi',
+      modalBtnSend: '@Amisha_SSlando ga yozish',
+      modalCloseBtn: 'Yopish',
+      notSpecified: 'ko\'rsatilmagan',
+      copy: 'Nusxalash', copied: 'Nusxalandi!',
+
+      bannerTitle: 'Barcha aksiyalardan xabardor bo\'ling',
+      bannerSubtitle: 'Hashar e\'lonlari, fotohisobotlar, so\'rovnomalar va hamfikrlar — Telegram kanalimizda.',
+      bannerBtn: '@tashcareuz ni ochish',
+      footerTagline: 'Toshkent ko\'ngillilar jamoasi. Daraxt ekamiz, hayvonlar va insonlarga yordam beramiz.',
+      footerNav: 'Navigatsiya', footerSocial: 'Ijtimoiy tarmoqlar',
+      footerCity: 'Toshkent, O\'zbekiston',
+      footerRights: 'Barcha huquqlar himoyalangan.'
+    },
+
+    en: {
+      pageTitle: 'TashCare — Tashkent Volunteering Community',
+      navAbout: 'About', navPillars: 'What we do', navGame: 'Eco-game', navShop: 'Shop', navJoin: 'Volunteer',
+
+      heroBadge: 'Volunteering community • Tashkent',
+      heroTitle: 'Making Tashkent <em>kinder</em> &amp;&nbsp;<span class="mark">greener</span>',
+      heroSubtitle: 'TashCare unites caring people across the capital: tree planting with «Yashil Makon», animal shelter support, charity drives and official volunteer certificates for students.',
+      btnRegisterHero: 'Become a volunteer',
+      btnChannelHero: 'Telegram channel',
+      stat1Label: 'trees planted with Yashil Makon',
+      stat2Label: 'free certificates for students',
+      stat3Label: 'shelter support & good deeds',
+      chip1: 'eco-drives every weekend',
+      chip2Title: '«Second Chance»',
+      chip2: 'animal shelter aid',
+
+      mq1: 'Tree planting', mq2: 'Shelter support', mq3: 'Student certificates', mq4: 'Good deeds',
+
+      spotlightBadge: 'Channel @tashcareuz',
+      spotlightTitle: 'A community of people changing the city',
+      spotlightQuote: '«Welcome to our volunteering community! Here we unite people who want to do good deeds, help others and make the world a better place.»',
+      meta1: 'Eco projects & tree planting with «Yashil Makon»',
+      meta2: 'Support for animal shelters («Second Chance»)',
+      meta3: 'Official certificates for school & university students',
+      meta4: 'Direct help for elderly people and families',
+      btnJoinTgChannel: 'Open the channel',
+      postSubheader: 'official channel',
+      postTag: 'Eco-drive',
+      postSnippet: 'Join our tree planting with «Yashil Makon»! Official certificates for school and university students. Sign up with @Amisha_SSlando (Amirbek). Be part of something good! 🌱',
+      postBtn: 'Open in Telegram',
+
+      pillarsKicker: 'What we do',
+      pillarsTitle: 'Our main activities',
+      pillarsSubtitle: 'Real projects anyone in Tashkent can take part in.',
+      pillar1Title: 'Eco-club & Yashil Makon',
+      pillar1Desc: 'Large-scale tree planting, clean-ups and greening of Tashkent parks and courtyards together with the national «Yashil Makon» movement.',
+      pillar2Title: 'Animal shelters',
+      pillar2Desc: 'Food, vet care and helping hands for local shelters, including «Second Chance».',
+      pillar3Title: 'Student certificates',
+      pillar3Desc: 'Official participation letters and certificates for school and university students.',
+      pillar4Title: 'Community aid',
+      pillar4Desc: 'Targeted support for veterans, large families and people in hardship: food, essentials and human warmth.',
+
+      regKicker: 'Sign up',
+      regTitle: 'Get your volunteer pass',
+      regSubtitle: 'Enter your Telegram username — our coordinators will reach out and invite you to upcoming drives.',
+      regStep1: 'Enter your Telegram username',
+      regStep2: 'Open the bot @Tashcare_user_bot',
+      regStep3: 'Get announcements and join the drives',
+      passLabel: 'Volunteer pass',
+      passHolder: 'Holder',
+      passCity: 'Tashkent',
+      passStatusPending: 'Pending',
+      passStatusActive: 'Active',
+      labelUsername: 'Your Telegram username',
+      inputPlaceholder: 'username',
+      btnSubmit: 'Get pass',
+      submitting: 'Sending…',
+      formHelper: 'Your username is visible only to community admins.',
+      successMessage: 'Done! You\'re registered. Open our bot to get the latest news.',
+      openBotBtn: 'Open Telegram bot',
+      emptyUsernameError: 'Please enter your Telegram username.',
+      formatError: 'Username: 3–32 characters — letters, numbers and _ only.',
+      generalError: 'Could not reach the server. Please try again later.',
+
+      gameKicker: 'Eco-game',
+      gameTitle: 'Clean the park, save Tashkent\'s green',
+      gameSubtitle: 'Drag trash from the meadow into the right bin (or tap an item, then a bin). Every correctly sorted item earns <strong>+1 TashCoin</strong>.',
+      gameBalanceLabel: 'Balance',
+      gameStatTrash: 'Trash in meadow',
+      gameStatCleaned: 'Total collected',
+      gameStatCleanliness: 'Park cleanliness',
+      btnRespawn: 'New trash',
+      arenaTag: 'Tashkent EcoPark',
+      arenaTip: 'Drag trash into a bin 👇',
+      cleanDone: 'Meadow is clean! ✨',
+      binPlasticTitle: 'Plastic', binPlasticHint: 'Bottles, bags',
+      binGlassTitle: 'Glass & metal', binGlassHint: 'Bottles, cans',
+      binPaperTitle: 'Paper & other', binPaperHint: 'Cups, wrappers',
+      wrongBin: 'Wrong bin! It goes in: {bin}',
+      sorted: 'Nice!',
+
+      shopKicker: 'Rewards',
+      shopTitle: 'Volunteer reward shop',
+      shopSubtitle: 'Exchange your TashCoins for community merch and eco rewards.',
+      shopYouHave: 'You have',
+      shopItem1Cat: 'Merch', shopItem1Title: 'TashCare T-shirt', shopItem1Desc: 'Cotton community T-shirt with the TashCare logo.',
+      shopItem2Cat: 'Merch', shopItem2Title: 'TashCare mug', shopItem2Desc: 'Ceramic mug for tea or coffee with an eco design.',
+      shopItem3Cat: 'Merch', shopItem3Title: 'TashCare cap', shopItem3Desc: 'Cap with embroidered logo and adjustable strap.',
+      shopItem4Cat: 'Stationery', shopItem4Title: 'TashCare eco-pen', shopItem4Desc: 'Pen made from recycled kraft board.',
+      shopItem5Cat: 'Merch', shopItem5Title: 'TashCare sticker pack', shopItem5Desc: 'Vinyl stickers for laptops, bottles and phone cases.',
+      shopItem6Cat: 'Eco-action', shopItem6Title: '1 kg of trash', shopItem6Desc: 'Certificate for handing in 1 kg of sorted recyclables.',
+      btnExchange: 'Redeem',
+      btnConfirm: 'Sure?',
+      needMore: 'You need {n} more TashCoin. Clean up more trash in the park! 🌿',
+
+      modalTitle: 'You redeemed: {item}',
+      modalCharged: '{n} TashCoin charged from your balance.',
+      modalScreenshotHeading: 'Take a screenshot and send it to @Amisha_SSlando',
+      modalScreenshotSub: 'The coordinator will verify the code and arrange the prize pickup in Tashkent.',
+      modalItemLabel: 'Reward',
+      modalCoordLabel: 'Coordinator',
+      modalUserLabel: 'Your Telegram',
+      modalStatusLabel: 'Status',
+      modalStatusPending: 'Pending pickup',
+      modalCodeLabel: 'Pickup code',
+      modalBtnSend: 'Message @Amisha_SSlando',
+      modalCloseBtn: 'Close',
+      notSpecified: 'not specified',
+      copy: 'Copy', copied: 'Copied!',
+
+      bannerTitle: 'Never miss a drive',
+      bannerSubtitle: 'Announcements, photo reports, polls and a warm community of like-minded people — on our Telegram channel.',
+      bannerBtn: 'Open @tashcareuz',
+      footerTagline: 'Tashkent\'s volunteering community. We plant trees and help animals and people.',
+      footerNav: 'Navigate', footerSocial: 'Follow us',
+      footerCity: 'Tashkent, Uzbekistan',
+      footerRights: 'All rights reserved.'
     }
-  }
-  return rawCoins;
-}
-
-function getCleanedCount() {
-  const val = parseInt(localStorage.getItem(STAT_CLEANED_KEY), 10);
-  return isNaN(val) ? 0 : Math.max(0, val);
-}
-
-function getBinCounts() {
-  try {
-    return JSON.parse(localStorage.getItem(BINS_STORAGE_KEY) || '{}');
-  } catch (e) {
-    return {};
-  }
-}
-
-function incrementBinCount(binType) {
-  const counts = getBinCounts();
-  counts[binType] = (counts[binType] || 0) + 1;
-  localStorage.setItem(BINS_STORAGE_KEY, JSON.stringify(counts));
-  updateBinDisplays();
-}
-
-function updateBinDisplays() {
-  const counts = getBinCounts();
-  const plasticCount = document.getElementById('binPlasticCount');
-  const glassCount = document.getElementById('binGlassCount');
-  const paperCount = document.getElementById('binPaperCount');
-
-  if (plasticCount) plasticCount.textContent = (counts['plastic'] || 0).toLocaleString();
-  if (glassCount) glassCount.textContent = (counts['glass-metal'] || 0).toLocaleString();
-  if (paperCount) paperCount.textContent = (counts['paper-other'] || 0).toLocaleString();
-}
-
-function updateCoinDisplays() {
-  const coins = getStoredCoins();
-  const cleaned = getCleanedCount();
-
-  if (gameCoinBalance) gameCoinBalance.textContent = coins.toLocaleString();
-  if (navCoinPill) navCoinPill.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
-  if (mobileCoinPill) mobileCoinPill.textContent = coins.toLocaleString();
-  if (drawerCoinBadge) drawerCoinBadge.innerHTML = `${coins.toLocaleString()} ${COIN_SVG_HTML}`;
-  if (parkCleanVal) parkCleanVal.textContent = cleaned.toLocaleString();
-  updateBinDisplays();
-}
-
-
-// DOM Elements
-const themeToggleBtn = document.getElementById('themeToggleBtn');
-const themeToggleMobileBtn = document.getElementById('themeToggleMobileBtn');
-const langSelect = document.getElementById('langSelect');
-const regForm = document.getElementById('regForm');
-const usernameInput = document.getElementById('usernameInput');
-const submitBtn = document.getElementById('submitBtn');
-const submitBtnText = document.getElementById('submitBtnText');
-const alertBox = document.getElementById('alertBox');
-const alertIcon = document.getElementById('alertIcon');
-const alertMessage = document.getElementById('alertMessage');
-const alertAction = document.getElementById('alertAction');
-
-// Mobile Drawer Elements
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const mobileDrawer = document.getElementById('mobileDrawer');
-const drawerBackdrop = document.getElementById('drawerBackdrop');
-const closeDrawerBtn = document.getElementById('closeDrawerBtn');
-const drawerRegLink = document.getElementById('drawerRegLink');
-const drawerLangBtns = document.querySelectorAll('.drawer-lang-btn');
-
-// --- THEME MANAGEMENT ---
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('tashcare_theme', theme);
-  currentTheme = theme;
-  const icon = theme === 'dark' ? ICONS.sun : ICONS.moon;
-  const title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
-
-  if (themeToggleBtn) {
-    themeToggleBtn.innerHTML = icon;
-    themeToggleBtn.setAttribute('title', title);
-    themeToggleBtn.setAttribute('aria-label', title);
-  }
-  if (themeToggleMobileBtn) {
-    themeToggleMobileBtn.innerHTML = icon;
-    themeToggleMobileBtn.setAttribute('title', title);
-    themeToggleMobileBtn.setAttribute('aria-label', title);
-  }
-}
-
-function toggleTheme() {
-  const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  applyTheme(nextTheme);
-}
-
-// Check system preference if no stored theme
-if (!localStorage.getItem('tashcare_theme')) {
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(prefersDark ? 'dark' : 'light');
-} else {
-  applyTheme(currentTheme);
-}
-
-if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-if (themeToggleMobileBtn) themeToggleMobileBtn.addEventListener('click', toggleTheme);
-
-// --- MOBILE DRAWER MANAGEMENT ---
-function openDrawer() {
-  if (!mobileDrawer) return;
-  mobileDrawer.classList.add('open');
-  mobileDrawer.setAttribute('aria-hidden', 'false');
-  if (hamburgerBtn) {
-    hamburgerBtn.classList.add('active');
-    hamburgerBtn.setAttribute('aria-expanded', 'true');
-  }
-  document.body.style.overflow = 'hidden';
-}
-
-function closeDrawer() {
-  if (!mobileDrawer) return;
-  mobileDrawer.classList.remove('open');
-  mobileDrawer.setAttribute('aria-hidden', 'true');
-  if (hamburgerBtn) {
-    hamburgerBtn.classList.remove('active');
-    hamburgerBtn.setAttribute('aria-expanded', 'false');
-  }
-  document.body.style.overflow = '';
-}
-
-if (hamburgerBtn) {
-  hamburgerBtn.addEventListener('click', () => {
-    if (mobileDrawer.classList.contains('open')) {
-      closeDrawer();
-    } else {
-      openDrawer();
-    }
-  });
-}
-
-if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
-if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
-
-if (drawerRegLink) {
-  drawerRegLink.addEventListener('click', () => {
-    closeDrawer();
-  });
-}
-
-// --- MULTI-LANGUAGE MANAGEMENT ---
-const gameLangSelect = document.getElementById('gameLangSelect');
-
-function getTrashName(itemData, lang) {
-  if (lang === 'en') return itemData.nameEn || itemData.name;
-  if (lang === 'uz') return itemData.nameUz || itemData.name;
-  return itemData.nameRu || itemData.name;
-}
-
-function getBadgeText(itemData, lang) {
-  if (lang === 'en') return itemData.badgeEn || 'Blue';
-  if (lang === 'uz') return itemData.badgeUz || 'Ko\'k';
-  return itemData.badgeRu || 'Синий';
-}
-
-function updateLanguage(lang) {
-  if (!TRANSLATIONS[lang]) lang = 'ru';
-  currentLang = lang;
-  localStorage.setItem('tashcare_lang', lang);
-  if (langSelect) langSelect.value = lang;
-  if (gameLangSelect) gameLangSelect.value = lang;
-
-  // Sync drawer buttons active state
-  drawerLangBtns.forEach(btn => {
-    if (btn.getAttribute('data-lang') === lang) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  const t = TRANSLATIONS[lang];
-
-  // Update text nodes with data-i18n attributes
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key]) {
-      el.innerHTML = t[key];
-    }
-  });
-
-  // Update placeholders
-  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (t[key]) {
-      el.placeholder = t[key];
-    }
-  });
-
-  // Update active alert message if present
-  if (alertBox && alertBox.style.display !== 'none' && alertBox.classList.contains('alert-success')) {
-    alertMessage.textContent = t.successMessage;
-  }
-
-  // Update existing trash items on meadow so badges match new language immediately!
-  document.querySelectorAll('.trash-item').forEach(itemEl => {
-    const itemType = itemEl.dataset.type;
-    const itemData = TRASH_TYPES.find(item => item.type === itemType);
-    const badgeEl = itemEl.querySelector('.trash-color-badge');
-    if (itemData && badgeEl) {
-      badgeEl.textContent = getBadgeText(itemData, lang);
-      itemEl.setAttribute('title', `${lang === 'en' ? 'Drag and drop' : (lang === 'uz' ? 'Tortib tashlang' : 'Зажми и тащи')}: ${getTrashName(itemData, lang)}`);
-    }
-  });
-
-  // Update coin displays to keep SVG coin intact
-  updateCoinDisplays();
-}
-
-if (langSelect) {
-  langSelect.addEventListener('change', (e) => {
-    updateLanguage(e.target.value);
-  });
-}
-
-if (gameLangSelect) {
-  gameLangSelect.addEventListener('change', (e) => {
-    updateLanguage(e.target.value);
-  });
-}
-
-drawerLangBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const lang = btn.getAttribute('data-lang');
-    updateLanguage(lang);
-  });
-});
-
-// Initialize Language
-updateLanguage(currentLang);
-
-// --- SCROLL REVEAL OBSERVER ---
-// Immediately reveal hero elements so they are never blank
-document.querySelectorAll('.hero .reveal-on-scroll').forEach(el => {
-  el.classList.add('revealed');
-});
-
-const revealObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      observer.unobserve(entry.target);
-    }
-  });
-}, {
-  threshold: 0.08,
-  rootMargin: '0px 0px -20px 0px'
-});
-
-document.querySelectorAll('.reveal-on-scroll:not(.revealed)').forEach((el) => {
-  revealObserver.observe(el);
-});
-
-// --- REGISTRATION FORM HANDLING ---
-function showAlert(type, message, showBotLink = false) {
-  alertBox.style.display = 'block';
-  alertBox.className = `alert-box alert-${type}`;
-  alertIcon.innerHTML = type === 'success' ? ICONS.check : ICONS.alert;
-  alertMessage.textContent = message;
-
-  if (showBotLink) {
-    const t = TRANSLATIONS[currentLang];
-    alertAction.innerHTML = `
-      <a href="https://t.me/Tashcare_user_bot" target="_blank" rel="noopener noreferrer" class="btn-bot-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-        </svg>
-        <span>${t.openBotBtn}</span>
-      </a>
-    `;
-  } else {
-    alertAction.innerHTML = '';
-  }
-
-  alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function clearAlert() {
-  alertBox.style.display = 'none';
-  alertBox.className = 'alert-box';
-  alertIcon.innerHTML = '';
-  alertMessage.textContent = '';
-  alertAction.innerHTML = '';
-}
-
-regForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearAlert();
-
-  const rawUsername = usernameInput.value.trim();
-  const cleanUsername = rawUsername.replace(/^@/, '').trim();
-  const t = TRANSLATIONS[currentLang];
-
-  if (!cleanUsername) {
-    showAlert('error', t.emptyUsernameError);
-    usernameInput.focus();
-    return;
-  }
-
-  // Strict Telegram Username Validation: letters, numbers and underscores only (3 to 32 chars)
-  const TELEGRAM_USERNAME_REGEX = /^[a-zA-Z0-9_]{3,32}$/;
-  if (!TELEGRAM_USERNAME_REGEX.test(cleanUsername)) {
-    const errorMsg = currentLang === 'en'
-      ? 'Username must be 3-32 characters (letters, numbers and _ only).'
-      : (currentLang === 'uz'
-        ? 'Username 3-32 ta belgidan iborat bo\'lishi kerak (faqat harflar, raqamlar va _).'
-        : 'Имя пользователя должно содержать от 3 до 32 символов (только латиница, цифры и _).');
-    showAlert('error', errorMsg);
-    usernameInput.focus();
-    return;
-  }
-
-  // Anti-Spam Honeypot Bot Check
-  const gotchaEl = document.getElementById('_gotcha');
-  const gotchaVal = gotchaEl ? gotchaEl.value : '';
-
-  // Set loading state
-  submitBtn.classList.add('loading');
-  submitBtn.disabled = true;
-  submitBtnText.innerHTML = `<span class="spinner"></span> ${t.submitting}`;
-
-  try {
-    const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
-    const response = await fetch(`${apiBase}/api/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username: cleanUsername, _gotcha: gotchaVal })
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      usernameInput.value = '';
-      localStorage.setItem('tashcare_registered_user', cleanUsername);
-      // Display required clear success message in the selected language
-      showAlert('success', t.successMessage, true);
-    } else {
-      showAlert('error', data.error || t.generalError);
-    }
-  } catch (err) {
-    console.error('Fetch error:', err);
-    showAlert('error', t.generalError);
-  } finally {
-    submitBtn.classList.remove('loading');
-    submitBtn.disabled = false;
-    submitBtnText.textContent = t.btnSubmit;
-  }
-});
-
-// ===================================================================
-// Eco Trash Cleanup Mini-Game & Coin Shop Logic
-// ===================================================================
-
-function addCoins(amount = 1) {
-  const current = getStoredCoins();
-  const next = current + amount;
-  const cleaned = getCleanedCount() + amount;
-
-  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
-  localStorage.setItem(STAT_CLEANED_KEY, cleaned.toString());
-  localStorage.setItem(COIN_SIG_KEY, computeCoinSig(next, cleaned));
-
-  updateCoinDisplays();
-  updateCleanlinessProgress();
-}
-
-function spendCoins(amount) {
-  const current = getStoredCoins();
-  if (current < amount) return false;
-  const next = current - amount;
-  const cleaned = getCleanedCount();
-
-  localStorage.setItem(COIN_STORAGE_KEY, next.toString());
-  localStorage.setItem(COIN_SIG_KEY, computeCoinSig(next, cleaned));
-  updateCoinDisplays();
-  return true;
-}
-
-// Router between Landing Page and Mini-Game View (smooth scroll without hiding main website)
-function scrollToGame() {
-  const gameElem = document.getElementById('game') || document.getElementById('gameView');
-  if (gameElem) {
-    if (gameElem.style.display === 'none') {
-      gameElem.style.display = 'block';
-    }
-    gameElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-  if (gameNavBtn) gameNavBtn.classList.add('active');
-  if (trashContainer && trashContainer.children.length === 0) {
-    spawnInitialTrash(8);
-  }
-  if (typeof closeDrawer === 'function') {
-    closeDrawer();
-  }
-}
-
-function scrollToHome() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (gameNavBtn) gameNavBtn.classList.remove('active');
-  if (typeof closeDrawer === 'function') {
-    closeDrawer();
-  }
-}
-
-function switchView(target) {
-  const isGame = target === 'game' || window.location.hash === '#game';
-  if (isGame) {
-    scrollToGame();
-  } else {
-    scrollToHome();
-  }
-}
-
-window.addEventListener('hashchange', () => {
-  if (window.location.hash === '#game') {
-    scrollToGame();
-  } else {
-    scrollToHome();
-  }
-});
-
-// Home links
-if (brandLogoLink) {
-  brandLogoLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.pushState(null, '', window.location.pathname);
-    scrollToHome();
-  });
-}
-
-if (btnBackHome) {
-  btnBackHome.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.pushState(null, '', window.location.pathname);
-    scrollToHome();
-  });
-}
-
-// Game navigation buttons
-[gameNavBtn, gameMobileNavBtn, drawerGameLink].forEach(btn => {
-  if (btn) {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      history.pushState(null, '', '#game');
-      scrollToGame();
-    });
-  }
-});
-
-// Park Trash Game Mechanics
-function updateCleanlinessProgress() {
-  const cleaned = getCleanedCount();
-  const pct = Math.min(100, Math.round((cleaned / (cleaned + 10)) * 100));
-  if (cleanlinessVal) cleanlinessVal.textContent = `${pct}%`;
-  if (trashCountVal && trashContainer) {
-    trashCountVal.textContent = trashContainer.children.length;
-  }
-}
-
-// Drag & Drop Trash Item Creator with Colors and Badges
-function spawnTrashItem() {
-  const container = trashContainer || document.getElementById('trashContainer');
-  if (!container) return;
-
-  const itemData = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
-  const itemEl = document.createElement('div');
-  itemEl.className = 'trash-item';
-  itemEl.dataset.type = itemData.type;
-  itemEl.setAttribute('role', 'button');
-  itemEl.setAttribute('tabindex', '0');
-  itemEl.setAttribute('title', `${currentLang === 'en' ? 'Drag and drop' : (currentLang === 'uz' ? 'Tortib tashlang' : 'Зажми и тащи')}: ${getTrashName(itemData, currentLang)}`);
-
-  itemEl.innerHTML = `
-    <div class="trash-svg-wrapper">
-      ${itemData.svg}
-    </div>
-    <div class="trash-color-badge badge-${itemData.color}">
-      ${getBadgeText(itemData, currentLang)}
-    </div>
-  `;
-
-  // Random position within safe arena grass bounds
-  const left = Math.floor(6 + Math.random() * 76);
-  const top = Math.floor(10 + Math.random() * 52);
-  const rotation = Math.floor(-25 + Math.random() * 50);
-
-  itemEl.style.left = `${left}%`;
-  itemEl.style.top = `${top}%`;
-  itemEl.style.transform = `rotate(${rotation}deg)`;
-
-  let isDragging = false;
-  let offsetX = 38;
-  let offsetY = 34;
-
-  const onPointerDown = (e) => {
-    if (itemEl.classList.contains('sucked-in')) return;
-    if (e.button !== undefined && e.button !== 0) return; // Primary pointer only
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    isDragging = true;
-    itemEl.classList.add('dragging');
-
-    // Show awaiting glow on all bins
-    const bins = document.querySelectorAll('.drop-zone-bin');
-    bins.forEach(b => b.classList.add('awaiting-drop'));
-
-    const itemRect = itemEl.getBoundingClientRect();
-    offsetX = e.clientX - itemRect.left;
-    offsetY = e.clientY - itemRect.top;
-
-    const arena = parkArena || document.getElementById('parkArena');
-    const arenaRect = arena ? arena.getBoundingClientRect() : { left: 0, top: 0, width: 600, height: 360 };
-
-    const updatePosition = (clientX, clientY) => {
-      const posX = clientX - arenaRect.left - offsetX;
-      const posY = clientY - arenaRect.top - offsetY;
-
-      itemEl.style.left = `${posX}px`;
-      itemEl.style.top = `${posY}px`;
-
-      // Check collision with drop bins
-      let hovered = null;
-      bins.forEach(bin => {
-        const r = bin.getBoundingClientRect();
-        if (clientX >= r.left - 12 && clientX <= r.right + 12 &&
-            clientY >= r.top - 12 && clientY <= r.bottom + 15) {
-          hovered = bin;
-        }
-      });
-
-      bins.forEach(bin => {
-        if (bin === hovered) bin.classList.add('bin-hovered');
-        else bin.classList.remove('bin-hovered');
-      });
-    };
-
-    updatePosition(e.clientX, e.clientY);
-
-    const onPointerMove = (moveEvt) => {
-      if (!isDragging) return;
-      moveEvt.preventDefault();
-      updatePosition(moveEvt.clientX, moveEvt.clientY);
-    };
-
-    const onPointerUp = (upEvt) => {
-      if (!isDragging) return;
-      isDragging = false;
-      itemEl.classList.remove('dragging');
-
-      // Clear bin highlights
-      bins.forEach(b => {
-        b.classList.remove('awaiting-drop');
-        b.classList.remove('bin-hovered');
-      });
-
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('pointercancel', onPointerUp);
-
-      // Check if dropped onto any bin
-      let targetBin = null;
-      bins.forEach(bin => {
-        const r = bin.getBoundingClientRect();
-        if (upEvt.clientX >= r.left - 15 && upEvt.clientX <= r.right + 15 &&
-            upEvt.clientY >= r.top - 15 && upEvt.clientY <= r.bottom + 20) {
-          targetBin = bin;
-        }
-      });
-
-      if (targetBin) {
-        // STRICT FILTER: If item category doesn't match target bin, REJECT!
-        if (itemData.bin !== targetBin.dataset.bin) {
-          handleWrongBin(itemEl, itemData, targetBin, left, top);
-        } else {
-          handleItemRecycled(itemEl, itemData, targetBin);
-        }
-      } else {
-        // Released outside bins: ensure it stays on visible grass
-        const currentArena = parkArena || document.getElementById('parkArena');
-        const currentArenaRect = currentArena ? currentArena.getBoundingClientRect() : { left: 0, top: 0, width: 600, height: 360 };
-        const curX = upEvt.clientX - currentArenaRect.left;
-        const curY = upEvt.clientY - currentArenaRect.top;
-
-        if (curX < 15 || curX > currentArenaRect.width - 50 || curY < 15 || curY > currentArenaRect.height - 50) {
-          // Reset to safe inner bounds
-          itemEl.style.left = `${left}%`;
-          itemEl.style.top = `${top}%`;
-        } else {
-          itemEl.style.left = `${curX - offsetX}px`;
-          itemEl.style.top = `${curY - offsetY}px`;
-        }
-      }
-    };
-
-    window.addEventListener('pointermove', onPointerMove, { passive: false });
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerUp);
   };
 
-  itemEl.addEventListener('pointerdown', onPointerDown);
+  // -----------------------------------------------------------------
+  // Data
+  // -----------------------------------------------------------------
+  const TRASH = [
+    { type: 'plastic-bottle', bin: 'plastic', c: 'c-blue', name: { ru: 'Пластиковая бутылка', uz: 'Plastik butilka', en: 'Plastic bottle' },
+      svg: '<svg viewBox="0 0 48 48"><rect x="19" y="4" width="10" height="6" rx="1.5" fill="#1d4ed8"/><path d="M17 10h14v4l3 5v21a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V19l3-5Z" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2.4" stroke-linejoin="round"/><rect x="14" y="24" width="20" height="9" fill="#3b82f6"/></svg>' },
+    { type: 'plastic-bag', bin: 'plastic', c: 'c-blue', name: { ru: 'Пакет', uz: 'Paket', en: 'Plastic bag' },
+      svg: '<svg viewBox="0 0 48 48"><path d="M10 16h28l-2 24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4Z" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.4" stroke-linejoin="round"/><path d="M17 16v-3a7 7 0 0 1 14 0v3" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round"/><path d="M18 26c2 4 10 4 12 0" fill="none" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/></svg>' },
+    { type: 'glass-bottle', bin: 'glass-metal', c: 'c-green', name: { ru: 'Стеклянная бутылка', uz: 'Shisha butilka', en: 'Glass bottle' },
+      svg: '<svg viewBox="0 0 48 48"><path d="M21 3h6v9l5 7v21a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4V19l5-7Z" fill="#86efac" stroke="#15803d" stroke-width="2.4" stroke-linejoin="round"/><rect x="16" y="24" width="16" height="10" rx="1" fill="#fffdf6" stroke="#15803d" stroke-width="2"/><path d="M19 10V6" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/></svg>' },
+    { type: 'soda-can', bin: 'glass-metal', c: 'c-green', name: { ru: 'Жестяная банка', uz: 'Metall banka', en: 'Soda can' },
+      svg: '<svg viewBox="0 0 48 48"><path d="M13 9h22v31a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4Z" fill="#d1d5db" stroke="#15803d" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="24" cy="9" rx="11" ry="4" fill="#e5e7eb" stroke="#15803d" stroke-width="2.4"/><rect x="13" y="18" width="22" height="14" fill="#22a06b"/><path d="M19 25h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>' },
+    { type: 'coffee-cup', bin: 'paper-other', c: 'c-yellow', name: { ru: 'Бумажный стакан', uz: 'Qog\'oz stakan', en: 'Paper cup' },
+      svg: '<svg viewBox="0 0 48 48"><path d="M11 12h26l-3 30a3 3 0 0 1-3 2H17a3 3 0 0 1-3-2Z" fill="#fde68a" stroke="#b45309" stroke-width="2.4" stroke-linejoin="round"/><rect x="9" y="7" width="30" height="6" rx="2" fill="#fffdf6" stroke="#b45309" stroke-width="2.4"/><rect x="13" y="22" width="22" height="9" fill="#a16207" opacity=".85"/></svg>' },
+    { type: 'snack-wrapper', bin: 'paper-other', c: 'c-yellow', name: { ru: 'Фантик', uz: 'Konfet o\'rami', en: 'Snack wrapper' },
+      svg: '<svg viewBox="0 0 48 48"><path d="M4 16l8 4v8l-8 4 4-8Z" fill="#fbbf24" stroke="#b45309" stroke-width="2.2" stroke-linejoin="round"/><path d="M44 16l-8 4v8l8 4-4-8Z" fill="#fbbf24" stroke="#b45309" stroke-width="2.2" stroke-linejoin="round"/><rect x="12" y="17" width="24" height="14" rx="5" fill="#f59e0b" stroke="#b45309" stroke-width="2.4"/><circle cx="24" cy="24" r="3.5" fill="#fffdf6"/></svg>' }
+  ];
 
-  container.appendChild(itemEl);
-  updateCleanlinessProgress();
-}
+  const BIN_KEYS = { 'plastic': 'binPlasticTitle', 'glass-metal': 'binGlassTitle', 'paper-other': 'binPaperTitle' };
 
-// Handle dropping an item into the wrong bin (Strict Rejection)
-function handleWrongBin(itemEl, itemData, targetBin, startLeft, startTop) {
-  // 1. Play wrong bin buzzer sound
-  playErrorBuzzer();
+  // Prices must match VERIFIED_CATALOG on the server
+  const PRODUCTS = [
+    { id: 'tshirt', n: 1, price: 7500, bg: '#d4f25c',
+      svg: '<svg viewBox="0 0 120 110"><path d="M40 8 14 20 4 44l16 7 6-10v61h68V41l6 10 16-7-10-24L80 8c-4 8-11 12-20 12S44 16 40 8Z" fill="#fffdf6" stroke="#0f3d2e" stroke-width="3" stroke-linejoin="round"/><path d="M48 52c0-10 6-15 15-15 0 9-5 15-15 15Z" fill="#2f8f5b"/><path d="M48 52l8-8" stroke="#0f3d2e" stroke-width="2" stroke-linecap="round"/><text x="60" y="74" text-anchor="middle" font-family="Unbounded,sans-serif" font-size="9" font-weight="700" fill="#0f3d2e">TASHCARE</text></svg>' },
+    { id: 'mug', n: 2, price: 5000, bg: '#ffd9c2',
+      svg: '<svg viewBox="0 0 120 110"><path d="M88 40h8a14 14 0 0 1 0 28h-8" fill="none" stroke="#0f3d2e" stroke-width="7"/><path d="M88 40h8a14 14 0 0 1 0 28h-8" fill="none" stroke="#fffdf6" stroke-width="3"/><path d="M22 26h68v58a14 14 0 0 1-14 14H36a14 14 0 0 1-14-14Z" fill="#fffdf6" stroke="#0f3d2e" stroke-width="3"/><path d="M22 26h68v8H22Z" fill="#e8673c"/><path d="M46 70c0-12 7-18 18-18 0 11-6 18-18 18Z" fill="#2f8f5b"/><path d="M42 6c0 6 6 6 6 12M56 4c0 6 6 6 6 12M70 6c0 6 6 6 6 12" stroke="#0f3d2e" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/></svg>' },
+    { id: 'cap', n: 3, price: 4000, bg: '#c9e3ff',
+      svg: '<svg viewBox="0 0 120 110"><path d="M18 70c0-28 18-46 42-46s42 18 42 46Z" fill="#0f3d2e"/><path d="M60 24v46M38 30c6 12 8 26 8 40M82 30c-6 12-8 26-8 40" stroke="#16503c" stroke-width="2.5"/><circle cx="60" cy="24" r="4" fill="#d4f25c"/><path d="M10 70h100c2 0 3 2 2 4-6 10-28 16-52 16S14 84 8 74c-1-2 0-4 2-4Z" fill="#16503c" stroke="#0f3d2e" stroke-width="3"/><path d="M50 56c0-8 5-12 12-12 0 7-4 12-12 12Z" fill="#d4f25c"/></svg>' },
+    { id: 'pen', n: 4, price: 3000, bg: '#f3e3b5',
+      svg: '<svg viewBox="0 0 120 110"><g transform="rotate(-38 60 55)"><rect x="18" y="45" width="74" height="20" rx="4" fill="#c99a5b" stroke="#0f3d2e" stroke-width="3"/><path d="M92 45l18 10-18 10Z" fill="#fffdf6" stroke="#0f3d2e" stroke-width="3" stroke-linejoin="round"/><path d="M104 52l6 3-6 3Z" fill="#0f3d2e"/><rect x="10" y="45" width="12" height="20" rx="3" fill="#2f8f5b" stroke="#0f3d2e" stroke-width="3"/><path d="M30 34h30v14" fill="none" stroke="#0f3d2e" stroke-width="3" stroke-linecap="round"/><path d="M40 55h40" stroke="#0f3d2e" stroke-width="2" stroke-dasharray="3 4" opacity=".5"/></g></svg>' },
+    { id: 'stickers', n: 5, price: 2000, bg: '#e4d5ff',
+      svg: '<svg viewBox="0 0 120 110"><circle cx="40" cy="44" r="26" fill="#d4f25c" stroke="#0f3d2e" stroke-width="3"/><path d="M28 52c0-12 8-18 20-18 0 12-8 18-20 18Z" fill="#0f3d2e"/><g transform="rotate(12 82 64)"><path d="M82 30l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2Z" fill="#ffb547" stroke="#0f3d2e" stroke-width="3" stroke-linejoin="round"/></g><rect x="34" y="70" width="44" height="26" rx="13" fill="#fffdf6" stroke="#0f3d2e" stroke-width="3" transform="rotate(-8 56 83)"/><text x="56" y="88" text-anchor="middle" font-family="Unbounded,sans-serif" font-size="10" font-weight="700" fill="#0f3d2e" transform="rotate(-8 56 83)">eco!</text></svg>' },
+    { id: 'waste1kg', n: 6, price: 100, bg: '#c4ebd2',
+      svg: '<svg viewBox="0 0 120 110"><path d="M34 34h52l8 58a8 8 0 0 1-8 9H34a8 8 0 0 1-8-9Z" fill="#2f8f5b" stroke="#0f3d2e" stroke-width="3" stroke-linejoin="round"/><path d="M42 34c0-12 4-22 8-22M78 34c0-12-4-22-8-22M50 12c4 6 16 6 20 0" fill="none" stroke="#0f3d2e" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="66" r="20" fill="#fffdf6" stroke="#0f3d2e" stroke-width="3"/><text x="60" y="71" text-anchor="middle" font-family="Unbounded,sans-serif" font-size="13" font-weight="700" fill="#0f3d2e">1kg</text></svg>' }
+  ];
 
-  // 2. Shake bin with red border & glow
-  targetBin.classList.add('bin-rejected');
-  setTimeout(() => {
-    targetBin.classList.remove('bin-rejected');
-  }, 500);
+  // -----------------------------------------------------------------
+  // Helpers
+  // -----------------------------------------------------------------
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const fmt = (n) => Number(n).toLocaleString('ru-RU');
+  const fill = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : ''));
+  const API = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+  const USERNAME_RE = /^[a-zA-Z0-9_]{3,32}$/;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 3. Floating wrong bin error banner
-  let targetColorText = '';
-  if (itemData.bin === 'plastic') {
-    targetColorText = currentLang === 'en' ? 'Blue Bin (Plastic) 🔵' : (currentLang === 'uz' ? 'Ko\'k quti (Plastik) 🔵' : 'Синий ящик (Пластик) 🔵');
-  } else if (itemData.bin === 'glass-metal') {
-    targetColorText = currentLang === 'en' ? 'Green Bin (Glass/Metal) 🟢' : (currentLang === 'uz' ? 'Yashil quti (Shisha/Bankalar) 🟢' : 'Зеленый ящик (Стекло/Банки) 🟢');
-  } else {
-    targetColorText = currentLang === 'en' ? 'Yellow Bin (Paper/Other) 🟡' : (currentLang === 'uz' ? 'Sariq quti (Qog\'oz/Boshqa) 🟡' : 'Желтый ящик (Бумага/Прочее) 🟡');
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  let lang = store.get('tashcare_lang');
+  if (!T[lang]) lang = 'ru';
+  const t = (k) => (T[lang] && T[lang][k] !== undefined ? T[lang][k] : T.ru[k] || '');
+
+  // -----------------------------------------------------------------
+  // Coins (same keys + signature scheme as before, so balances carry over)
+  // -----------------------------------------------------------------
+  const COIN_KEY = 'tashcare_coins';
+  const CLEANED_KEY = 'tashcare_cleaned_count';
+  const BINS_KEY = 'tashcare_bin_counts';
+  const ORDERS_KEY = 'tashcare_redeem_orders';
+  const SIG_KEY = 'tashcare_coin_sig';
+  const SALT = 'tashcare_sec_salt_2026_9x!kL';
+
+  function sig(coins, cleaned) {
+    let h = 0x811c9dc5;
+    const s = `${coins}:${cleaned}:${SALT}`;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+    return (h >>> 0).toString(16);
+  }
+  function getCleaned() { const v = parseInt(store.get(CLEANED_KEY), 10); return isNaN(v) ? 0 : Math.max(0, v); }
+  function getCoins() {
+    const v = parseInt(store.get(COIN_KEY), 10);
+    const coins = isNaN(v) ? 0 : Math.max(0, v);
+    if (coins > 0 && store.get(SIG_KEY) !== sig(coins, getCleaned())) {
+      store.set(COIN_KEY, '0');
+      store.set(SIG_KEY, sig(0, getCleaned()));
+      return 0;
+    }
+    return coins;
+  }
+  function setCoins(coins, cleaned) {
+    store.set(COIN_KEY, String(coins));
+    store.set(CLEANED_KEY, String(cleaned));
+    store.set(SIG_KEY, sig(coins, cleaned));
+  }
+  function addCoins(n) { setCoins(getCoins() + n, getCleaned() + n); renderCoins(true); }
+  function spendCoins(n) {
+    const c = getCoins();
+    if (c < n) return false;
+    setCoins(c - n, getCleaned());
+    renderCoins(true);
+    return true;
+  }
+  function getBins() { try { return JSON.parse(store.get(BINS_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function bumpBin(type) { const b = getBins(); b[type] = (b[type] || 0) + 1; store.set(BINS_KEY, JSON.stringify(b)); }
+
+  function renderCoins(animate) {
+    const coins = getCoins();
+    $$('[data-coins]').forEach((el) => { el.textContent = fmt(coins); });
+    const cleanedEl = $('#parkCleanVal');
+    if (cleanedEl) cleanedEl.textContent = fmt(getCleaned());
+    const b = getBins();
+    $('#binPlasticCount').textContent = fmt(b['plastic'] || 0);
+    $('#binGlassCount').textContent = fmt(b['glass-metal'] || 0);
+    $('#binPaperCount').textContent = fmt(b['paper-other'] || 0);
+    if (animate) {
+      $$('.coin-pill, .wallet').forEach((el) => { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); });
+    }
+    updateShopState();
   }
 
-  const alertMsg = currentLang === 'en'
-    ? `❌ Wrong bin! Needs: ${targetColorText}`
-    : (currentLang === 'uz'
-      ? `❌ Noto'g'ri quti! Kerak: ${targetColorText}`
-      : `❌ Не тот ящик! Нужен: ${targetColorText}`);
-
-  const floatAlert = document.createElement('div');
-  floatAlert.className = 'floating-alert-wrong';
-  floatAlert.textContent = alertMsg;
-  targetBin.appendChild(floatAlert);
-
-  setTimeout(() => {
-    if (floatAlert.parentNode) floatAlert.remove();
-  }, 1600);
-
-  // 4. Smoothly spring item back to original meadow grass position
-  itemEl.style.transition = 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
-  itemEl.style.left = `${startLeft}%`;
-  itemEl.style.top = `${startTop}%`;
-  setTimeout(() => {
-    itemEl.style.transition = '';
-  }, 400);
-}
-
-// Handle dropping an item into the correct bin (Success)
-function handleItemRecycled(itemEl, itemData, targetBin) {
-  if (itemEl.classList.contains('sucked-in')) return;
-  itemEl.classList.add('sucked-in');
-
-  // Trigger bounce animation on bin
-  targetBin.classList.add('bin-swallow');
-  setTimeout(() => {
-    targetBin.classList.remove('bin-swallow');
-  }, 450);
-
-  // Play audio chime
-  playCollectChime();
-
-  // Increment bin specific count
-  const binType = targetBin.dataset.bin;
-  incrementBinCount(binType);
-
-  // Spawn floating coin animation out of the bin with SVG coin
-  const arenaCard = document.querySelector('.park-arena-card');
-  if (arenaCard) {
-    const binRect = targetBin.getBoundingClientRect();
-    const cardRect = arenaCard.getBoundingClientRect();
-    const floatEl = document.createElement('div');
-    floatEl.className = 'floating-coin-plus';
-
-    const successText = currentLang === 'en' ? 'Sorted!' : (currentLang === 'uz' ? 'To\'g\'ri!' : 'Идеально!');
-    floatEl.innerHTML = `+1 ${COIN_SVG_HTML} <span style="margin-left: 2px;">${successText}</span>`;
-
-    floatEl.style.left = `${binRect.left - cardRect.left + (binRect.width / 2) - 45}px`;
-    floatEl.style.top = `${binRect.top - cardRect.top - 16}px`;
-
-    arenaCard.appendChild(floatEl);
-    setTimeout(() => {
-      if (floatEl.parentNode) floatEl.remove();
-    }, 850);
+  // -----------------------------------------------------------------
+  // Toasts
+  // -----------------------------------------------------------------
+  function toast(msg, icon = 'i-alert') {
+    const box = $('#toasts');
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `<svg class="ico"><use href="#${icon}"/></svg><span></span>`;
+    el.querySelector('span').textContent = msg;
+    box.appendChild(el);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 3200);
   }
 
-  // Add +1 TashCoin
-  addCoins(1);
+  // -----------------------------------------------------------------
+  // Theme
+  // -----------------------------------------------------------------
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    store.set('tashcare_theme', theme);
+    const meta = $('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#07130e' : '#0f3d2e');
+  }
+  $$('.theme-toggle').forEach((b) => b.addEventListener('click', () => {
+    setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }));
 
-  // Remove trash DOM node after suck-in animation
-  setTimeout(() => {
-    if (itemEl.parentNode) itemEl.remove();
-    updateCleanlinessProgress();
+  // -----------------------------------------------------------------
+  // Language
+  // -----------------------------------------------------------------
+  function applyLang(next) {
+    lang = T[next] ? next : 'ru';
+    store.set('tashcare_lang', lang);
+    document.documentElement.lang = lang;
+    document.title = t('pageTitle');
+    $$('[data-i18n]').forEach((el) => {
+      const v = T[lang][el.getAttribute('data-i18n')];
+      if (v !== undefined) el.innerHTML = v;
+    });
+    $$('[data-i18n-placeholder]').forEach((el) => {
+      const v = T[lang][el.getAttribute('data-i18n-placeholder')];
+      if (v !== undefined) el.setAttribute('placeholder', v);
+    });
+    $$('[data-lang]').forEach((b) => b.classList.toggle('active', b.dataset.lang === lang));
+    $$('.trash').forEach((el) => {
+      const d = TRASH.find((x) => x.type === el.dataset.type);
+      if (d) { el.querySelector('.tname').textContent = d.name[lang]; el.setAttribute('aria-label', d.name[lang]); }
+    });
+    renderShop();
+    refreshPass();
+  }
+  $$('[data-lang]').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 
-    // Spawn replacement trash on grass after a brief pause
-    setTimeout(() => {
-      if (trashContainer && trashContainer.children.length < 10) {
-        spawnTrashItem();
+  // -----------------------------------------------------------------
+  // Nav: hide on scroll, active link, drawer
+  // -----------------------------------------------------------------
+  const nav = $('#nav');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const drawerOpen = $('#drawer').classList.contains('open');
+    nav.classList.toggle('hide', !drawerOpen && y > lastY && y > 300 && !draggingNow);
+    lastY = y;
+  }, { passive: true });
+
+  const navLinks = $$('.nav-links a');
+  const sectionObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        navLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
       }
-    }, 1200);
-  }, 320);
-}
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  ['about', 'pillars', 'join', 'game', 'shop'].forEach((id) => { const s = document.getElementById(id); if (s) sectionObs.observe(s); });
 
-function spawnInitialTrash(count = 8) {
-  const container = trashContainer || document.getElementById('trashContainer');
-  if (!container) return;
-  container.innerHTML = '';
-  for (let i = 0; i < count; i++) {
-    spawnTrashItem();
+  const burger = $('#burger');
+  const drawer = $('#drawer');
+  function setDrawer(open) {
+    drawer.classList.toggle('open', open);
+    drawer.setAttribute('aria-hidden', String(!open));
+    burger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+    nav.classList.remove('hide');
   }
-  updateCleanlinessProgress();
-}
+  burger.addEventListener('click', () => setDrawer(!drawer.classList.contains('open')));
+  $$('.drawer a').forEach((a) => a.addEventListener('click', () => setDrawer(false)));
+  window.addEventListener('resize', () => { if (window.innerWidth > 1100 && drawer.classList.contains('open')) setDrawer(false); });
 
-if (respawnTrashBtn) {
-  respawnTrashBtn.addEventListener('click', () => {
-    spawnInitialTrash(8);
+  // -----------------------------------------------------------------
+  // Reveal on scroll + count-up
+  // -----------------------------------------------------------------
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const siblings = $$('.reveal', el.parentElement);
+      const idx = Math.max(0, siblings.indexOf(el));
+      el.style.transitionDelay = Math.min(idx, 5) * 70 + 'ms';
+      el.classList.add('in');
+      revealObs.unobserve(el);
+      $$('[data-count]', el).forEach(countUp);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  $$('.reveal').forEach((el) => revealObs.observe(el));
+
+  function countUp(el) {
+    const target = parseInt(el.dataset.count, 10);
+    if (reduceMotion) { el.textContent = target; return; }
+    const start = performance.now();
+    const dur = 1600;
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // -----------------------------------------------------------------
+  // Volunteer pass + registration
+  // -----------------------------------------------------------------
+  const regForm = $('#regForm');
+  const input = $('#usernameInput');
+  const submitBtn = $('#submitBtn');
+  const passName = $('#passName');
+  const alertBox = $('#alertBox');
+
+  function passIdFor(name) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return 'TC-' + String(1000 + (h % 9000));
+  }
+  function refreshPass() {
+    const typed = input.value.trim().replace(/^@/, '');
+    const saved = store.get('tashcare_registered_user');
+    const name = typed || saved || '';
+    passName.textContent = '@' + (name || 'username');
+    passName.classList.toggle('empty', !name);
+    $('#passId').textContent = name ? passIdFor(name.toLowerCase()) : 'TC-0000';
+    const active = !!saved && (!typed || typed.toLowerCase() === saved.toLowerCase());
+    const st = $('#passStatus');
+    st.textContent = active ? t('passStatusActive') : t('passStatusPending');
+    st.classList.toggle('ok', active);
+  }
+  input.addEventListener('input', () => {
+    input.value = input.value.replace(/\s/g, '');
+    refreshPass();
   });
-}
 
-// Locked & Verified Shop Catalog (Anti-Tamper)
-const VERIFIED_CATALOG_PRICES = Object.freeze({
-  'tshirt': 7500,
-  'mug': 5000,
-  'cap': 4000,
-  'pen': 3000,
-  'stickers': 2000,
-  'waste1kg': 100
-});
-
-// Coin Shop Handlers
-window.handleShopBuy = function(itemId, price, title) {
-  // Enforce authentic catalog price even if client tampering occurred
-  const verifiedPrice = VERIFIED_CATALOG_PRICES[itemId] !== undefined ? VERIFIED_CATALOG_PRICES[itemId] : price;
-  const currentCoins = getStoredCoins();
-
-  if (currentCoins < verifiedPrice) {
-    const diff = verifiedPrice - currentCoins;
-    const msg = currentLang === 'en'
-      ? `You need ${diff.toLocaleString()} more TashCoin! Clean up more trash in the park meadow to earn coins.`
-      : (currentLang === 'uz'
-        ? `Sizga yana ${diff.toLocaleString()} ta TashCoin yetishmayapti! Tangalar yig'ish uchun parkdagi chiqindilarni tozalang.`
-        : `Вам не хватает ${diff.toLocaleString()} TashCoin! Уберите еще мусора на полянке, чтобы заработать недостающие коины.`);
-    alert(msg);
-    return;
+  function showNotice(type, msg, withBot) {
+    alertBox.hidden = false;
+    alertBox.className = 'notice ' + (type === 'ok' ? 'ok' : 'err');
+    $('#alertIcon use').setAttribute('href', type === 'ok' ? '#i-check' : '#i-alert');
+    $('#alertMessage').textContent = msg;
+    const act = $('#alertAction');
+    act.innerHTML = '';
+    if (withBot) {
+      const a = document.createElement('a');
+      a.href = 'https://t.me/Tashcare_user_bot';
+      a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.innerHTML = '<svg class="ico"><use href="#i-tg"/></svg><span></span>';
+      a.querySelector('span').textContent = t('openBotBtn');
+      act.appendChild(a);
+    }
+  }
+  function fieldError(msg) {
+    showNotice('err', msg);
+    const f = $('.field');
+    f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+    input.focus();
   }
 
-  // Deduct coins securely
-  const success = spendCoins(verifiedPrice);
-  if (!success) return;
+  regForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.hidden = true;
+    const name = input.value.trim().replace(/^@/, '');
+    if (!name) return fieldError(t('emptyUsernameError'));
+    if (!USERNAME_RE.test(name)) return fieldError(t('formatError'));
 
-  // Generate unique redemption promo voucher
-  const randA = Math.floor(1000 + Math.random() * 9000);
-  const randB = Math.floor(1000 + Math.random() * 9000);
-  const voucherCode = `TC-${randA}-${randB}`;
-
-  // Retrieve user's registered username from localStorage or input
-  const storedUser = localStorage.getItem('tashcare_registered_user') || (usernameInput ? usernameInput.value.trim().replace(/^@/, '') : '');
-
-  // Save order to history
-  try {
-    let orders = [];
-    const parsed = JSON.parse(localStorage.getItem(ORDERS_STORAGE_KEY) || '[]');
-    if (Array.isArray(parsed)) orders = parsed;
-    orders.push({
-      id: itemId,
-      title,
-      price,
-      code: voucherCode,
-      username: storedUser,
-      date: new Date().toISOString()
-    });
-    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-  } catch (err) {
-    console.error('Order save error:', err);
-  }
-
-  // Dispatch order to server and Telegram Admin Bot with voucher code and Ready button
-  try {
-    const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
-    fetch(`${apiBase}/api/redeem-order`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        itemId,
-        title,
-        price,
-        code: voucherCode,
-        username: storedUser
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log('[Shop] Order notification delivered to Admin Bot:', data);
-      })
-      .catch(err => {
-        console.warn('[Shop] Notice syncing order to server:', err);
+    const label = $('#submitBtnText');
+    submitBtn.disabled = true;
+    label.innerHTML = `<span class="spinner"></span> ${t('submitting')}`;
+    try {
+      const res = await fetch(`${API}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: name, _gotcha: $('#_gotcha').value })
       });
-  } catch (syncErr) {
-    console.warn('[Shop] Order sync skipped:', syncErr);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        store.set('tashcare_registered_user', name);
+        input.value = '';
+        refreshPass();
+        showNotice('ok', t('successMessage'), true);
+      } else {
+        showNotice('err', data.error || t('generalError'));
+      }
+    } catch (err) {
+      showNotice('err', t('generalError'));
+    } finally {
+      submitBtn.disabled = false;
+      label.textContent = t('btnSubmit');
+    }
+  });
+
+  // -----------------------------------------------------------------
+  // Eco game
+  // -----------------------------------------------------------------
+  const meadow = $('#parkArena');
+  const layer = $('#trashContainer');
+  const binsDock = $('#parkBinsDock');
+  const bins = $$('.bin', binsDock);
+  const MAX_ON_FIELD = 10;
+  let selected = null;
+  let draggingNow = false;
+  let refillTimer = null;
+
+  // --- sounds (WebAudio, no files) ---
+  let ctx = null;
+  function tone(type, f1, f2, dur, vol) {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!ctx) ctx = new AC();
+      if (ctx.state === 'suspended') ctx.resume();
+      const now = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(f1, now);
+      o.frequency.exponentialRampToValueAtTime(f2, now + dur * 0.4);
+      g.gain.setValueAtTime(vol, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(now); o.stop(now + dur);
+    } catch (e) {}
+  }
+  const chime = () => { tone('sine', 660, 990, 0.3, 0.18); setTimeout(() => tone('sine', 990, 1320, 0.25, 0.1), 70); };
+  const buzz = () => tone('sawtooth', 170, 90, 0.28, 0.12);
+
+  function updateFieldStats() {
+    const count = layer.children.length - layer.querySelectorAll('.gone').length;
+    $('#trashCountVal').textContent = count;
+    const pct = Math.round(Math.max(0, Math.min(1, 1 - count / MAX_ON_FIELD)) * 100);
+    $('#cleanlinessVal').textContent = pct + '%';
+    $('#cleanMeter').style.width = pct + '%';
+    return count;
   }
 
-  // Show modal with localized header
-  if (shopModalTitle) {
-    const heading = currentLang === 'en' ? `You redeemed: ${title}` : (currentLang === 'uz' ? `Siz almashtirdingiz: ${title}` : `Вы обменяли: ${title}`);
-    shopModalTitle.textContent = heading;
-  }
-  if (shopModalSubtitle) {
-    const sub = currentLang === 'en' ? `Successfully charged ${price.toLocaleString()} TashCoin from your balance.` : (currentLang === 'uz' ? `Balansingizdan ${price.toLocaleString()} TashCoin muvaffaqiyatli yechildi.` : `С вашего баланса успешно списано ${price.toLocaleString()} TashCoin.`);
-    shopModalSubtitle.textContent = sub;
-  }
-  if (voucherCodeDisplay) voucherCodeDisplay.textContent = voucherCode;
-
-  // Set item title and details in modal
-  const modalItemVal = document.getElementById('modalItemVal');
-  if (modalItemVal) modalItemVal.textContent = title;
-
-  const modalUserVal = document.getElementById('modalUserVal');
-  if (modalUserVal) {
-    modalUserVal.textContent = storedUser ? `@${storedUser}` : (currentLang === 'en' ? '(Not specified)' : (currentLang === 'uz' ? '(Ko\'rsatilmagan)' : '(Не указан)'));
+  function pickSpot() {
+    const existing = $$('.trash:not(.gone)', layer).map((el) => [parseFloat(el.style.left), parseFloat(el.style.top)]);
+    let best = null; let bestD = -1;
+    for (let i = 0; i < 14; i++) {
+      const x = 9 + Math.random() * 82;
+      const y = 22 + Math.random() * 58;
+      const d = existing.reduce((m, [ex, ey]) => Math.min(m, Math.hypot(ex - x, (ey - y) * 0.6)), 999);
+      if (d > bestD) { bestD = d; best = [x, y]; }
+      if (d > 16) break;
+    }
+    return best;
   }
 
-  // Localize modal text
-  const t = TRANSLATIONS[currentLang];
-  const modalScreenshotHeading = document.getElementById('modalScreenshotHeading');
-  if (modalScreenshotHeading && t.modalScreenshotHeading) modalScreenshotHeading.textContent = t.modalScreenshotHeading;
-
-  const modalScreenshotSub = document.getElementById('modalScreenshotSub');
-  if (modalScreenshotSub && t.modalScreenshotSub) modalScreenshotSub.textContent = t.modalScreenshotSub;
-
-  const modalItemLabel = document.getElementById('modalItemLabel');
-  if (modalItemLabel && t.modalItemLabel) modalItemLabel.textContent = t.modalItemLabel;
-
-  const modalCoordLabel = document.getElementById('modalCoordLabel');
-  if (modalCoordLabel && t.modalCoordLabel) modalCoordLabel.textContent = t.modalCoordLabel;
-
-  const modalUserLabel = document.getElementById('modalUserLabel');
-  if (modalUserLabel && t.modalUserLabel) modalUserLabel.textContent = t.modalUserLabel;
-
-  const modalStatusLabel = document.getElementById('modalStatusLabel');
-  if (modalStatusLabel && t.modalStatusLabel) modalStatusLabel.textContent = t.modalStatusLabel;
-
-  const modalStatusVal = document.getElementById('modalStatusVal');
-  if (modalStatusVal && t.modalStatusPending) modalStatusVal.textContent = t.modalStatusPending;
-
-  const btnModalTgText = document.getElementById('btnModalTgText');
-  if (btnModalTgText && t.modalBtnSend) btnModalTgText.textContent = t.modalBtnSend;
-
-  if (shopModal) {
-    shopModal.style.display = 'flex';
-    shopModal.setAttribute('aria-hidden', 'false');
-  }
-};
-
-window.closeShopModal = function() {
-  if (shopModal) {
-    shopModal.style.display = 'none';
-    shopModal.setAttribute('aria-hidden', 'true');
-  }
-};
-
-window.copyVoucherCode = function() {
-  if (!voucherCodeDisplay) return;
-  const text = voucherCodeDisplay.textContent.trim();
-  const copiedLabel = currentLang === 'en' ? 'Copied!' : (currentLang === 'uz' ? 'Nusxalandi!' : 'Скопировано!');
-  const defaultLabel = currentLang === 'en' ? 'Copy' : (currentLang === 'uz' ? 'Nusxalash' : 'Копировать');
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => {
-      if (copyVoucherTxt) copyVoucherTxt.textContent = copiedLabel;
-      setTimeout(() => {
-        if (copyVoucherTxt) copyVoucherTxt.textContent = defaultLabel;
-      }, 2000);
+  function spawnOne() {
+    const d = TRASH[Math.floor(Math.random() * TRASH.length)];
+    const el = document.createElement('div');
+    el.className = 'trash ' + d.c;
+    el.dataset.type = d.type;
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', d.name[lang]);
+    el.innerHTML = d.svg + '<span class="tname"></span>';
+    el.querySelector('.tname').textContent = d.name[lang];
+    const [x, y] = pickSpot();
+    el.style.left = x + '%';
+    el.style.top = y + '%';
+    el.style.setProperty('--rot', (Math.random() * 40 - 20).toFixed(1) + 'deg');
+    el.style.animationDelay = (Math.random() * 0.25).toFixed(2) + 's';
+    attachDrag(el, d);
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(selected === el ? null : el); }
     });
-  } else {
-    // Fallback
-    const input = document.createElement('input');
-    input.value = text;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    input.remove();
-    if (copyVoucherTxt) copyVoucherTxt.textContent = copiedLabel;
+    layer.appendChild(el);
+  }
+
+  function spawnBatch(n = 8) {
+    clearTimeout(refillTimer);
+    layer.innerHTML = '';
+    select(null);
+    $('#cleanBanner').hidden = true;
+    for (let i = 0; i < n; i++) spawnOne();
+    updateFieldStats();
+  }
+
+  function select(el) {
+    if (selected) selected.classList.remove('selected');
+    selected = el;
+    if (el) el.classList.add('selected');
+    binsDock.classList.toggle('awaiting', !!el);
+  }
+
+  function binAt(x, y) {
+    return bins.find((b) => {
+      const r = b.getBoundingClientRect();
+      return x >= r.left - 14 && x <= r.right + 14 && y >= r.top - 18 && y <= r.bottom + 14;
+    }) || null;
+  }
+
+  function attachDrag(el, d) {
+    el.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      if (el.classList.contains('gone')) return;
+      e.preventDefault();
+      el.setPointerCapture && el.setPointerCapture(e.pointerId);
+      const sx = e.clientX; const sy = e.clientY;
+      let moved = false;
+      let hot = null;
+
+      const move = (ev) => {
+        const dx = ev.clientX - sx; const dy = ev.clientY - sy;
+        if (!moved && Math.hypot(dx, dy) < 6) return;
+        if (!moved) {
+          moved = true; draggingNow = true;
+          select(null);
+          el.classList.add('dragging');
+          binsDock.classList.add('awaiting');
+        }
+        el.style.setProperty('--dx', dx + 'px');
+        el.style.setProperty('--dy', dy + 'px');
+        const b = binAt(ev.clientX, ev.clientY);
+        if (b !== hot) { if (hot) hot.classList.remove('hot'); hot = b; if (hot) hot.classList.add('hot'); }
+        // auto-scroll a little when dragging near viewport bottom on small screens
+        if (ev.clientY > window.innerHeight - 40) window.scrollBy(0, 8);
+      };
+
+      const up = (ev) => {
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerup', up);
+        el.removeEventListener('pointercancel', up);
+        draggingNow = false;
+        if (hot) hot.classList.remove('hot');
+        binsDock.classList.remove('awaiting');
+        el.classList.remove('dragging');
+
+        if (!moved) { select(selected === el ? null : el); return; }
+
+        const target = ev.type === 'pointercancel' ? null : binAt(ev.clientX, ev.clientY);
+        if (target) { tryDrop(el, d, target); return; }
+
+        // drop back onto the meadow at the new spot (clamped)
+        const mr = meadow.getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        const cx = ((er.left + er.width / 2 - mr.left) / mr.width) * 100;
+        const cy = ((er.top + er.height / 2 - mr.top) / mr.height) * 100;
+        if (cx < 4 || cx > 96 || cy < 8 || cy > 94) {
+          resetOffset(el);
+        } else {
+          el.style.transition = 'none';
+          el.style.left = cx + '%';
+          el.style.top = cy + '%';
+          el.style.setProperty('--dx', '0px');
+          el.style.setProperty('--dy', '0px');
+          void el.offsetWidth;
+          el.style.transition = '';
+        }
+      };
+
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+    });
+  }
+
+  function resetOffset(el) {
+    el.style.setProperty('--dx', '0px');
+    el.style.setProperty('--dy', '0px');
+  }
+
+  function tryDrop(el, d, bin) {
+    if (d.bin !== bin.dataset.bin) {
+      buzz();
+      bin.classList.remove('nope'); void bin.offsetWidth; bin.classList.add('nope');
+      setTimeout(() => bin.classList.remove('nope'), 600);
+      const msg = document.createElement('div');
+      msg.className = 'fx-nope';
+      msg.textContent = '✕ ' + fill(t('wrongBin'), { bin: t(BIN_KEYS[d.bin]) });
+      bin.appendChild(msg);
+      setTimeout(() => msg.remove(), 1800);
+      resetOffset(el);
+      select(null);
+      return;
+    }
+
+    // success: fly into the bin
+    select(null);
+    const br = bin.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const curDx = parseFloat(el.style.getPropertyValue('--dx')) || 0;
+    const curDy = parseFloat(el.style.getPropertyValue('--dy')) || 0;
+    const binCx = br.left + Math.min(46, br.width / 2);
+    const binCy = br.top + br.height / 2;
+    el.style.setProperty('--dx', curDx + (binCx - (er.left + er.width / 2)) + 'px');
+    el.style.setProperty('--dy', curDy + (binCy - (er.top + er.height / 2)) + 'px');
+    el.classList.add('gone');
+    bin.classList.add('hot');
     setTimeout(() => {
-      if (copyVoucherTxt) copyVoucherTxt.textContent = defaultLabel;
-    }, 2000);
+      bin.classList.remove('hot');
+      bin.classList.remove('gulp'); void bin.offsetWidth; bin.classList.add('gulp');
+    }, 260);
+
+    chime();
+    bumpBin(d.bin);
+    addCoins(1);
+
+    const fx = document.createElement('div');
+    fx.className = 'fx-coin';
+    fx.innerHTML = '+1 <svg><use href="#i-coin"/></svg><span></span>';
+    fx.querySelector('span').textContent = t('sorted');
+    const card = $('#arenaCard').getBoundingClientRect();
+    fx.style.left = (br.left - card.left + br.width / 2) + 'px';
+    fx.style.top = (br.top - card.top - 30) + 'px';
+    $('#arenaCard').appendChild(fx);
+    setTimeout(() => fx.remove(), 1000);
+
+    setTimeout(() => {
+      el.remove();
+      const left = updateFieldStats();
+      if (left === 0) {
+        $('#cleanBanner').hidden = false;
+        refillTimer = setTimeout(() => spawnBatch(8), 2200);
+      }
+    }, 380);
+    updateFieldStats();
   }
-};
 
-// Ensure trash and coins are initialized under all lifecycle conditions
-function ensureGameInitialized() {
-  updateCoinDisplays();
-  updateCleanlinessProgress();
+  // tap-to-select then tap a bin (mobile / keyboard friendly)
+  bins.forEach((b) => {
+    const go = () => {
+      if (!selected) return;
+      const d = TRASH.find((x) => x.type === selected.dataset.type);
+      tryDrop(selected, d, b);
+    };
+    b.addEventListener('click', go);
+    b.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  meadow.addEventListener('pointerdown', (e) => { if (e.target === meadow || e.target.closest('.meadow-deco')) select(null); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') select(null); });
 
-  const container = trashContainer || document.getElementById('trashContainer');
-  if (container && container.children.length === 0) {
-    spawnInitialTrash(8);
+  $('#respawnTrashBtn').addEventListener('click', () => spawnBatch(8));
+
+  // -----------------------------------------------------------------
+  // Shop
+  // -----------------------------------------------------------------
+  const grid = $('#shopGrid');
+  const confirmTimers = {};
+
+  function renderShop() {
+    grid.innerHTML = PRODUCTS.map((p) => `
+      <article class="product" data-id="${p.id}">
+        <div class="product-art" style="--pc:${p.bg}">
+          <span class="product-cat">${t('shopItem' + p.n + 'Cat')}</span>
+          ${p.svg}
+        </div>
+        <div class="product-body">
+          <h3>${t('shopItem' + p.n + 'Title')}</h3>
+          <p>${t('shopItem' + p.n + 'Desc')}</p>
+          <div class="product-progress"><i></i></div>
+          <div class="product-foot">
+            <span class="price"><svg class="coin"><use href="#i-coin"/></svg>${fmt(p.price)}</span>
+            <button type="button" class="btn" data-buy="${p.id}">${t('btnExchange')}</button>
+          </div>
+        </div>
+      </article>`).join('');
+    updateShopState();
   }
-}
 
-// 1. Immediate call
-ensureGameInitialized();
+  function updateShopState() {
+    const coins = getCoins();
+    $$('.product', grid).forEach((card) => {
+      const p = PRODUCTS.find((x) => x.id === card.dataset.id);
+      card.classList.toggle('can', coins >= p.price);
+      card.querySelector('.product-progress i').style.width = Math.min(100, (coins / p.price) * 100) + '%';
+    });
+  }
 
-// 2. DOMContentLoaded call
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', ensureGameInitialized);
-} else {
-  ensureGameInitialized();
-}
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-buy]');
+    if (!btn) return;
+    const p = PRODUCTS.find((x) => x.id === btn.dataset.buy);
+    const coins = getCoins();
+    if (coins < p.price) {
+      toast(fill(t('needMore'), { n: fmt(p.price - coins) }));
+      const card = btn.closest('.product');
+      card.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 320 });
+      return;
+    }
+    // two-step confirm so coins aren't spent by accident
+    if (!btn.classList.contains('confirm')) {
+      btn.classList.add('confirm');
+      btn.textContent = t('btnConfirm');
+      clearTimeout(confirmTimers[p.id]);
+      confirmTimers[p.id] = setTimeout(() => { btn.classList.remove('confirm'); btn.textContent = t('btnExchange'); }, 3000);
+      return;
+    }
+    clearTimeout(confirmTimers[p.id]);
+    btn.classList.remove('confirm');
+    btn.textContent = t('btnExchange');
+    buy(p);
+  });
 
-// 3. Window load call
-window.addEventListener('load', ensureGameInitialized);
+  function buy(p) {
+    if (!spendCoins(p.price)) return;
+    const code = `TC-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const user = store.get('tashcare_registered_user') || input.value.trim().replace(/^@/, '');
+    const title = t('shopItem' + p.n + 'Title');
+    const serverTitle = T.ru['shopItem' + p.n + 'Title'];
 
-if (window.location.hash === '#game') {
-  setTimeout(() => {
-    scrollToGame();
-  }, 150);
-}
+    try {
+      const orders = JSON.parse(store.get(ORDERS_KEY) || '[]');
+      const list = Array.isArray(orders) ? orders : [];
+      list.push({ id: p.id, title: serverTitle, price: p.price, code, username: user, date: new Date().toISOString() });
+      store.set(ORDERS_KEY, JSON.stringify(list));
+    } catch (e) {}
+
+    fetch(`${API}/api/redeem-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itemId: p.id, title: serverTitle, price: p.price, code, username: user })
+    }).catch(() => {});
+
+    $('#shopModalTitle').textContent = fill(t('modalTitle'), { item: title });
+    $('#shopModalSubtitle').textContent = fill(t('modalCharged'), { n: fmt(p.price) });
+    $('#modalItemVal').textContent = title;
+    $('#modalUserVal').textContent = user ? '@' + user : t('notSpecified');
+    $('#voucherCodeDisplay').textContent = code;
+    $('#copyVoucherTxt').textContent = t('copy');
+    openModal();
+  }
+
+  // -----------------------------------------------------------------
+  // Modal
+  // -----------------------------------------------------------------
+  const modal = $('#shopModal');
+  let lastFocus = null;
+  function openModal() {
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $('.modal-x', modal).focus(), 50);
+  }
+  function closeModal() {
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+  $$('[data-close]', modal).forEach((el) => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+  $('#copyVoucherBtn').addEventListener('click', () => {
+    const code = $('#voucherCodeDisplay').textContent.trim();
+    const done = () => {
+      $('#copyVoucherTxt').textContent = t('copied');
+      setTimeout(() => { $('#copyVoucherTxt').textContent = t('copy'); }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(done).catch(() => {});
+    } else {
+      const tmp = document.createElement('textarea');
+      tmp.value = code; document.body.appendChild(tmp); tmp.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      tmp.remove();
+    }
+  });
+
+  // -----------------------------------------------------------------
+  // Init
+  // -----------------------------------------------------------------
+  $('#year').textContent = new Date().getFullYear();
+  $('#passYear').textContent = new Date().getFullYear();
+  applyLang(lang);
+  renderCoins(false);
+  spawnBatch(8);
+})();
