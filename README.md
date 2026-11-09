@@ -13,7 +13,7 @@ TashCare is an active grassroots volunteering and charity community in Tashkent,
 - 🐾 **Animal Shelter Support**: Regular supply runs, medical aid, and hands-on help for local Tashkent animal shelters (including shelter *«Второй Шанс»* / `@vtoroyshansuz`).
 - 🏫 **Official Participation Certificates**: Providing official verification letters and certificates for school and university students taking part in community volunteering events.
 - 🛍️ **Youth Community & Geek-Shop**: TashCare's pop-culture club and merchandise shop ([@geekshopuzz](https://t.me/geekshopuzz)) offering badges, pins, and collectibles supporting community causes.
-- 📩 **Coordination**: Led by community coordinator Amirbek ([@Amisha_SSlando](https://t.me/Amisha_SSlando)).
+- 📩 **Coordination**: Led by community coordinator Amirbek ([@amisha_ecotash](https://t.me/amisha_ecotash)).
 
 ---
 

@@ -113,7 +113,7 @@ Instagram: ${instagramUrl}`;
 
 Официальный Telegram-канал: ${channelUrl}
 Instagram: ${instagramUrl}
-Координатор регистрации: @Amisha_SSlando (Амирбек)`;
+Координатор регистрации: @amisha_ecotash (Амирбек)`;
       await ctx.reply(contactsText, {
         reply_markup: {
           inline_keyboard: [
