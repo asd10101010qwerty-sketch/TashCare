@@ -51,11 +51,13 @@ git push -u origin main
 1. Перейдите на [vercel.com](https://vercel.com) и нажмите **Add New Project**.
 2. Выберите ваш GitHub-репозиторий.
 3. В разделе **Environment Variables** добавьте следующие переменные:
-   - `ADMIN_BOT_TOKEN` = `9058761160:AAHZ_gYGxM6Dgw3tGZ7R1zYxSLvtAsxiXPo`
-   - `ADMIN_CHAT_ID` = `6712132603`
-   - `ADMIN_PASSWORD` = `waEnoi2-cBzL!9z`
-   - `NORMAL_BOT_TOKEN` = `9245077944:AAHOOk-iOIpqeSh1Zo4a5Op3WVoeK9vO9C0`
+   - `ADMIN_BOT_TOKEN` = `<токен @Tashcare_bot от @BotFather>`
+   - `ADMIN_CHAT_ID` = `<Telegram ID администраторов через запятую>`
+   - `ADMIN_PASSWORD` = `<ваш надежный пароль администратора>`
+   - `NORMAL_BOT_TOKEN` = `<токен @Tashcare_user_bot от @BotFather>`
    - `TASHCARE_CHANNEL` = `https://t.me/tashcareuz`
+
+   > ⚠️ Никогда не публикуйте реальные токены и пароли в репозитории — храните их только в Environment Variables Vercel и в локальном файле `.env`.
 4. *(Рекомендуется для вечного сохранения подписчиков)*:
    В панели Vercel перейдите в **Storage** ➔ **Create Database** ➔ **KV / Upstash Redis** и подключите базу к проекту. Переменные `KV_REST_API_URL` и `KV_REST_API_TOKEN` добавятся автоматически!
 5. Нажмите **Deploy**.
@@ -90,15 +92,15 @@ npm run dev
 ## 🤖 Telegram Боты
 
 - **👑 Admin Bot**: `@Tashcare_bot`
-  - Токен: `9058761160:AAHZ_gYGxM6Dgw3tGZ7R1zYxSLvtAsxiXPo`
-  - Пароль: `waEnoi2-cBzL!9z`
-  - ID администратора по умолчанию: `6712132603`
+  - Токен: задается в переменной окружения `ADMIN_BOT_TOKEN`
+  - Пароль: задается в переменной окружения `ADMIN_PASSWORD`
+  - ID администраторов: задаются в переменной окружения `ADMIN_CHAT_ID`
   - Команды: `/start`, `/announcement`, `/stats`, `/cancel`, `/help`
   - Мгновенные уведомления о каждой регистрации волонтера на сайте.
   - Рассылка новостей всем подписчикам User Bot.
 
 - **🤖 Normal Bot**: `@Tashcare_user_bot`
-  - Токен: `9245077944:AAHOOk-iOIpqeSh1Zo4a5Op3WVoeK9vO9C0`
+  - Токен: задается в переменной окружения `NORMAL_BOT_TOKEN`
   - Автоматически приветствует волонтеров и рассказывает об эко-проектах TashCare.
   - Сохраняет подписчиков и принимает рассылки от администраторов.
   - Команды: `/start`, `/about`, `/contacts`, `/help`.
